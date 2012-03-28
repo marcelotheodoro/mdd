@@ -1,5 +1,4 @@
 require "mdd/version"
-require "inflections"
 
 module Mdd
   class Mdd < Rails::Engine
