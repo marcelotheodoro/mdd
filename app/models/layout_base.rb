@@ -18,7 +18,7 @@ class LayoutBase
     self.mapping
   end
   
-  def layout_from_split_elements params
+  def layout_from_split_elements( params )
     puts "/#{params[:namespace]}/#{params[:controller]}##{params[:action]}" if !params[:namespace].nil? and !params[:controller].nil?
     puts "#{params[:controller]}##{params[:action]}" if params[:namespace].nil? and !params[:action].nil?
   end
@@ -41,7 +41,7 @@ class LayoutBase
       @routes_table[route] = layout
     end
     
-    def default_for route
+    def default_for(route)
       
       # salva o layout padrão como sendo o 'application'
       if route == '/*'
