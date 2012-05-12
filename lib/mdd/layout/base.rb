@@ -1,12 +1,12 @@
 module Mdd
   module Layout
 
-    class LayoutBase
+    class Base
       
       attr_accessor :routes_table
 
-      # Define os mapeamentos do layout.
-      # Exemplo de utilização:
+      # Define layout mappings.
+      # For example:
       # 
       # map '/*', 'layout_padraozao'
       # map '/administrator/*', 'layout_administrator'
@@ -21,22 +21,30 @@ module Mdd
         self.mapping
       end
       
-      # Retorna o layout da rota específica
-      def layout route
-        
-        layout = @routes_table[route]
-        if !layout.nil?
-          return layout
+      # returns the corresponding layout of the current route
+      def select_layout(route)
+        # if route is namespaced, corrects the request
+        if !route.rindex('/').nil? and route[0] != '/'
+          route = "/#{route}"
         end
-        
-        return default_for route
-         
+        return layout(route)
       end
       
       # Faz o mapeamento entre uma rota e um layout
       private
         def map(route, layout)
           @routes_table[route] = layout
+        end
+
+        def layout(route)
+        
+          layout = @routes_table[route]
+          if !layout.nil?
+            return layout
+          end
+          
+          return default_for route
+           
         end
         
         def default_for(route)
