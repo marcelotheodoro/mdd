@@ -80,10 +80,28 @@ module Mdd
       end
 
       def models
-
+        if ask_question("Generate models?")
+          copy_file 'app/models/ability.rb', 'app/models/ability.rb'
+          copy_file 'app/models/user.rb', 'app/models/user.rb'
+          copy_file 'app/models/administrator.rb', 'app/models/administrator.rb'
+          copy_file 'app/models/permission.rb', 'app/models/permission.rb'
+        end
       end
 
       def views
+        if ask_question("Generate layouts?")
+          copy_file 'app/views/layouts/login.html.erb', 'app/views/layouts/login.html.erb'
+          copy_file 'app/views/layouts/public.html.erb', 'app/views/layouts/public.html.erb'
+          copy_file 'app/views/layouts/system.html.erb', 'app/views/layouts/system.html.erb'
+        end
+
+        if ask_question("Generate views?")
+          copy_file 'app/views/template/_leftbar.html.erb', 'app/views/template/mdwa/_leftbar.html.erb'
+          directory 'app/views/public', 'app/views/public'
+          directory 'app/views/a/administrators', 'app/views/a/administrators'
+          directory 'app/views/a/home', 'app/views/a/home'
+          directory 'app/views/a/users', 'app/views/a/users'
+        end
       end
 
       def config
@@ -97,9 +115,28 @@ module Mdd
         copy_file 'config/locales/devise.en.yml', 'config/locales/devise.en.yml'
         copy_file 'config/locales/mdwa.en.yml', 'config/locales/mdwa.en.yml'
       end
+
+      def routes
+        if ask_question "Generate routes?"
+          route 'get "public/index"'
+          route 'root :to => "public#index"'
+          route "
+  namespace :a do
+    devise_for :users, :skip => :registrations, :controllers => {:sessions => 'a/users/sessions', :passwords => 'a/users/passwords' }
+   
+    resources :administrators
+    controller :administrators do
+      get '/edit_account' => :edit_own_account
+    end
+    
+    root :to => 'home#index'
+  end
+          "
+        end
+      end
       
       def migrations
-        if ask_question( "Create migrations?" )
+        if ask_question( "Generate migrations?" )
           migration_template 'db/migrate/devise_create_users.rb', 'db/migrate/devise_create_users.rb'
           sleep( 1.0 )
           migration_template 'db/migrate/create_permissions.rb', 'db/migrate/create_permissions.rb'
@@ -125,7 +162,7 @@ module Mdd
       private 
 
         def ask_question(text)
-          return !options.ask_questions? or yes?(text)
+          return (!options.ask_questions? or yes?(text))
         end
 
     end
