@@ -1,0 +1,9 @@
+<div class="welcome">
+	<%= raw t('system.logged_info_user', :user => current_user.name) %>
+</div>
+<div class="logout">
+  <%= link_to t('system.logged_info_logout'), 'a/users/sign_out', :method => :delete %>
+</div>
+<div class="change_password">
+  <%= link_to t('system.logged_info_edit_account'), a_edit_account_path %>
+</div>

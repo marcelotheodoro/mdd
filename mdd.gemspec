@@ -14,12 +14,11 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "mdd"
   
   s.add_dependency 'rails'
+  s.add_dependency 'jquery-rails'
   s.add_dependency 'devise'
   s.add_dependency 'cancan'
-  s.add_dependency 'jquery-rails'
   s.add_dependency 'will_paginate'
-  s.add_dependency 'paperclip'
-  s.add_dependency 'brazilian-rails'
+  s.add_dependency 'nested_form'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

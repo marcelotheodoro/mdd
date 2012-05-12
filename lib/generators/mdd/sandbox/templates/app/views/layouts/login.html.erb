@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	  <title>Login</title>
+	  <%= stylesheet_link_tag "mdwa/login_manifest", :media => "all" %>
+  	  <%= javascript_include_tag "mdwa/login_manifest" %>
+  	  <%= csrf_meta_tags %>
+	</head>
+	<body>
+		
+		<%= render '/template/mdwa/notice', :notice => notice, :alert => alert %>
+		
+		<div id="mainbody">
+			<%= render '/template/mdwa/login_text' %>
+	  		<%= yield %>
+		</div>
+	
+	</body>
+</html>

@@ -1,0 +1,17 @@
+<% unless notice.nil? and alert.nil? %>
+
+  <script type="text/javascript">
+	$(function() {
+		setTimeout(deleteSystemNotice, 3000);
+	});
+
+	function deleteSystemNotice() {
+		$('#system_notice').fadeOut('slow');
+	}
+  </script>
+
+  <div id="system_notice">
+    <%= notice || alert %>
+    <a id="system_notice_close"></a>
+  </div>
+<% end %>

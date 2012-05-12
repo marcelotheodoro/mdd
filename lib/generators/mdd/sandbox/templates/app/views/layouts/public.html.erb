@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	  <title>MDWA Public pages</title>
+	  <%= stylesheet_link_tag "mdwa/public_manifest", :media => "all" %>
+  	  <%= javascript_include_tag "mdwa/public_manifest" %>
+  	  <%= csrf_meta_tags %>
+	</head>
+	<body>
+  		<%= yield %>
+	</body>
+</html>

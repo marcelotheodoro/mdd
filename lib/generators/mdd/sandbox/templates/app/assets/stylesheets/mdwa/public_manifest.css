@@ -1,0 +1,8 @@
+/*
+ * Public screen CSS manifest file
+ *
+ *= require ./template/reset
+ *= require ./template/template
+ *= require ./template/grid
+ *= require_tree ../jquery
+*/

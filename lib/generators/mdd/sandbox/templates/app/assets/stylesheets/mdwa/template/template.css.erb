@@ -1,0 +1,269 @@
+body, input, button, textarea, select, select option {
+  font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;  
+}
+
+body {
+  height:100%;
+  color: #333;
+  background: #fff;
+}
+
+h1              { font-size: 2em; }
+h2              { font-size: 1.5em; }
+h3              { font-size: 1.17em; }
+h4              { font-size: 1em; }
+h5              { font-size: .83em; }
+h6              { font-size: .75em; }
+h1, h2, h3, h4,
+h5, h6, b,
+strong          { font-weight: bolder; }
+
+
+/* Default buttons */
+.button {
+  background: #f8f8f8; /* Old browsers */
+  background: -moz-linear-gradient(top,  #f8f8f8 0%, #d8d8d8 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#d8d8d8)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #f8f8f8 0%,#d8d8d8 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #f8f8f8 0%,#d8d8d8 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #f8f8f8 0%,#d8d8d8 100%); /* IE10+ */
+  background: linear-gradient(top,  #f8f8f8 0%,#d8d8d8 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8f8f8', endColorstr='#d8d8d8',GradientType=0 ); /* IE6-9 */
+
+  border: 1px solid #AAAAAA;
+  border-radius: 5px 5px 5px 5px;
+  box-shadow: 0 0 1px #AAAAAA;
+  cursor: pointer;
+  text-shadow: 0 0 1px #FFFFFF;
+  font-size: 12px;
+  padding: 4px;
+}
+
+.button:hover {
+  background: #d8d8d8; /* Old browsers */
+  background: -moz-linear-gradient(top,  #d8d8d8 0%, #f8f8f8 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d8d8d8), color-stop(100%,#f8f8f8)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #d8d8d8 0%,#f8f8f8 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #d8d8d8 0%,#f8f8f8 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #d8d8d8 0%,#f8f8f8 100%); /* IE10+ */
+  background: linear-gradient(top,  #d8d8d8 0%,#f8f8f8 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d8d8d8', endColorstr='#f8f8f8',GradientType=0 ); /* IE6-9 */
+}
+
+a.cancel {
+  background: none;
+  color: #ff0000;
+  text-decoration:underline;
+  margin: 0 20px;
+  display: inline-block;
+}
+
+a.cancel:hover {
+  text-decoration:none;
+  color: #f10000;
+}
+
+a.add, a.add:hover {
+  background: url(<%= asset_path 'mdwa/icons/add.png' %>) no-repeat scroll 7% 50% #e3e3e3;
+  padding-left: 32px;
+}
+
+a.add span {
+    margin-left: 20px;
+}
+
+a.remove, a.remove:hover {
+  background-image: url(<%= asset_path 'mdwa/icons/delete.png' %>);
+  background-repeat: no-repeat;
+  background-position: 7%;
+}
+
+a.remove span {
+    margin-left: 20px;
+}
+
+/* nested_forms buttons */
+a.add_nested_fields {
+  background: url( <%= asset_path 'mdwa/icons/add.png' %>) no-repeat scroll 0 50% padding-box transparent;
+  padding: 0 0 0 19px;
+}
+
+a.remove_nested_fields {
+  background: url(<%= asset_path 'mdwa/icons/remove-icon.png' %>) no-repeat scroll 0 50% padding-box transparent;
+  padding: 0 0 0 19px;
+  position: relative;
+  top: 20px;
+}
+
+/* Rails errors */
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#error_explanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  margin-bottom: 0px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#error_explanation ul li {
+  font-size: 12px;
+  list-style: square;
+}
+
+
+/* Default data table */
+
+table.list, div.list {
+  width: 100%;
+  border: 0;
+  margin-bottom: 1em;
+  border-collapse: collapse;
+  color: #222;
+}
+
+table.list th {
+
+  background: #e2e2e2;
+  background: -moz-linear-gradient(top, white 0%, #e2e2e2 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(100%,#e2e2e2));
+  background: -webkit-linear-gradient(top, white 0%,#e2e2e2 100%);
+  background: -o-linear-gradient(top, white 0%,#e2e2e2 100%);
+  background: -ms-linear-gradient(top, white 0%,#e2e2e2 100%);
+  background: linear-gradient(top, white 0%,#e2e2e2 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#e2e2e2');
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFF', endColorstr='#e2e2e2')";
+
+  font-size: 13px;
+  font-weight: normal;
+  text-align: left;
+  padding: 10px 10px;
+  border:none;
+  border: 1px solid #E3E3E3;
+}
+
+table.list td, div.list div.line {
+    padding: 10px;
+    border: 1px solid #E3E3E3;
+    text-align:left;
+    font-size: 12px;
+}
+
+div.list div.head {
+	float:left;
+	width:100%;
+	padding: 8px 0;
+}
+
+div.list {
+	padding: 10px 0;
+	float:left;
+}
+
+div.list div.line {
+	padding: 10px 0;
+	float:left;
+	width:100%;
+}
+
+.odd_line {
+    background: white;
+}
+
+.even_line {
+    background: #fafafa;
+}
+
+
+/* Everyday accessors */
+div.clear {
+	clear:both;
+}
+
+.hidden {
+  display: none;
+}
+
+.main_wrapper {
+	width: 960px;
+	max-width: 1200px;
+	text-align: left;
+	margin: 0 auto;
+}
+
+/* Pagination */
+div.pagination {
+  float:left;
+  display: block;
+  margin: 20px 0;
+  text-align: center;
+  width: 100%;
+}
+
+div.pagination a,
+div.pagination span, 
+div.pagination em {
+  background-color: #F3F1EC;
+  border: 1px solid #ccc;
+    cursor: pointer;
+    margin: 0;
+    padding: 4px 10px;
+    color: #373737;
+    text-shadow: 0 1px 0 #FFFFFF;
+}
+
+div.pagination em {
+  font-style: normal;
+  font-weight: bold;
+}
+
+/* Boxed div */
+div.box {
+  background: #f2f2f2;
+  box-shadow: 0px 0px 3px #a2a2a2;
+  border-radius: 3px;
+}
+
+/* Notices and alerts */
+div#system_notice {
+  position:fixed;
+  top: 0;
+  right: 0;
+  display: block;
+  padding: 15px;
+  margin: 10px;
+  background: #fff;
+  box-shadow: 0 0 5px #222;
+  border: 1px solid #000;
+  border-radius: 5px;
+  z-index: 10;
+  cursor:pointer;
+}
+
+a#system_notice_close {
+  background: url(<%= asset_path 'mdwa/notice_close.png' %>) no-repeat;
+  display: block;
+  height: 20px;
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  width: 20px;
+  z-index: 11;
+  cursor:pointer;
+}

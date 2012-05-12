@@ -1,0 +1,8 @@
+/*
+ * Login screen CSS manifest file
+ *
+ *= require_self
+ *= require ./template/reset
+ *= require ./template/template
+ *= require_tree ./login
+*/

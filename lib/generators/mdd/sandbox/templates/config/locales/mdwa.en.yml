@@ -1,0 +1,39 @@
+en:
+  login:
+    email_label: "E-mail:"
+    password_label: "Password:"
+    login_button_label: "Login"
+    login_text_pre_form: "Welcome to system. <br />Please login to access this app."
+
+  system:
+    error: "error"
+    logged_info_user: "Welcome, <span>%{user}</span>."
+    logged_info_logout: "(Logout)"
+    logged_info_edit_account: "My Account"
+    cancel_button: "Cancel"
+
+  administrators:
+    edit_title: "Editing account: %{name}"
+    edit_form_name: "Name"
+    edit_form_email: "E-mail"
+    edit_form_password: "Password"
+    edit_form_password_confirmation: "Confirm your password"
+    edit_form_password_text: "Leave password blank and it won't update."
+    index_title: "System users"
+    index_id: "ID"
+    index_name: "Name"
+    index_email: "Email"
+    index_remove: "Remove?"
+    index_remove_label: "Remove"
+    index_confirm_deletion: "Are you sure?"
+    create_success: "Administrator created."
+    update_success: "Administrator updated."
+    destroy_success: "Administrator deleted."
+    destroy_cant_delete_own_user: "Cannot delete own user"
+    new_title: "Add new administrator"
+
+
+  menu:
+    administrators: "Users"
+    add_administrator: "Add User"
+    settings: "Settings"

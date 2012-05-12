@@ -1,0 +1,18 @@
+<script type="text/javascript">
+  $(function() {
+    $('<%= dom_element %>').autocomplete({
+        minLength: 0,
+        source: [<%= encode_results_to_autocomplete( data, field_name ) %>],
+        focus: function( event, ui ) {
+          $( '<%= dom_element %>' ).val( ui.item.label );
+          return false;
+        },
+        select: function( event, ui ) {
+          $( '<%= dom_element %>' ).val( ui.item.label );
+          $( '<%= dom_element_id %>' ).val( ui.item.value ).trigger('change');
+          return false;
+        }
+    });
+  });
+
+</script>

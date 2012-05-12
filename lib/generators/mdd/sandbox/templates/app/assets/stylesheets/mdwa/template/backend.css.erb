@@ -1,0 +1,165 @@
+body {
+  background: url("<%= asset_path 'mdwa/backend_bg.png' %>");
+}
+
+/* Header */
+#header {
+  height: 65px;
+  background: url(<%= asset_path 'mdwa/headerbg.png' %>);
+  width: 100%;
+}
+
+div#logo {
+  margin: 20px;
+}
+
+div#logo a {
+  color: #fff;
+  text-decoration:none;
+  font-size: 16px;
+}
+
+div#logged_info {
+  float:right;
+  color: #fff;
+  float: right;
+  margin: 10px;
+  text-align: right;
+}
+
+div#logged_info a {
+	color: #fff;
+}
+
+div#logged_info .welcome, div#logged_info .logout {
+  display:inline;
+  margin-left: 5px;
+}
+
+/* Content page header */
+div.page_header {
+  background: #EEEEEE; /* Old browsers */
+  background: -moz-linear-gradient(top,  #FFFFFF 0%, #EEEEEE 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(100%,#EEEEEE)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #FFFFFF 0%,#EEEEEE 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #FFFFFF 0%,#EEEEEE 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #FFFFFF 0%,#EEEEEE 100%); /* IE10+ */
+  background: linear-gradient(top,  #FFFFFF 0%,#EEEEEE 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#EEEEEE',GradientType=0 ); /* IE6-9 */
+
+
+  border-bottom: 1px solid #ccc;
+  padding: 15px 30px;
+  margin: 0;
+  box-shadow: 0 0 5px #aaa;
+}
+
+div.page_header h1 {
+  font-size: 16px;
+  color: #036;
+  color: black;
+  font-weight: normal;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+div.page_header_right_tab {
+  display: inline-block;
+  float: right;
+  position: relative;
+  right: 0;
+  top: -14px;
+  width: auto;
+}
+div.page_header_right_tab a {
+  background: url( <%= asset_path 'mdwa/bt_g.png' %> );
+  padding: 13px;
+  border-radius: 5px 5px 0 0;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+}
+div.page_header_right_tab a:hover {
+  background: url( <%= asset_path 'mdwa/bt_g_inv.png' %>);
+}
+
+/* Content */
+div#content {
+  background: #fff;
+  left: auto;
+    margin-left: 240px;
+    margin-right: 0;
+    min-height: 800px;
+    padding-bottom: 25px;
+    position: relative;
+    top: auto;
+    width: auto;
+    z-index: 15;
+    box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.7);
+}
+
+div.inside {
+  margin:0;
+  padding: 10px;
+}
+
+/* Leftbar */
+#leftbar {
+    display: block;
+    float: left;
+    position: relative;
+    width: 240px;
+    z-index: 16;
+}
+
+#leftbar ul {
+  padding: 0;
+  margin: 0;
+}
+
+#leftbar ul li {
+	width: 100%;
+	border-bottom: 1px solid #4A4A4A;
+  border-top: 1px solid #858585;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+#leftbar ul li a {
+  -moz-box-sizing: border-box;
+  color: #FFFFFF;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: normal;
+  padding: 11px 18px 11px 18px;
+  text-decoration: none;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  width: 100%;
+}
+
+#leftbar ul li a:hover {     
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.075);
+}
+
+#leftbar ul.submenu {
+	background: none repeat scroll 0 0 #555555;
+  box-shadow: 0 0 3px #333333 inset;
+}
+
+#leftbar ul.submenu li {
+	border:none;
+}
+
+#leftbar ul.submenu li a {
+  padding-left: 25px;
+}
+
+#leftbar ul.submenu li a:hover {
+	background: #5D5D5D !important
+}
+
+#leftbar ul.submenu li a span {
+	margin:0;
+}
