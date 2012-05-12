@@ -7,5 +7,6 @@ module Mdd
 
   module Layout
   	autoload :Base, 'mdd/layout/base'
+  	autoload :Helper, 'mdd/layout/helper'
   end
 end
