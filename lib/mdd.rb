@@ -10,3 +10,6 @@ module Mdd
   	autoload :Helper, 'mdd/layout/helper'
   end
 end
+
+# include the layout selector in ApplicationController
+ActionController::Base.send :include, Mdd::Layout::Helper
