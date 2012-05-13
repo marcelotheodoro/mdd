@@ -73,8 +73,8 @@ module Mdd
         end
 
         if ask_question("Include layout selector in ApplicationController?")
-          append_file 'app/controllers/application_controller.rb', :after => 'class ApplicationController < ActionController::Base' do
-             "\n\nlayout :select_layout\n"
+          inject_into_class 'app/controllers/application_controller.rb', ApplicationController do
+             "\n\n  layout :select_layout\n"
           end
         end
       end
@@ -106,10 +106,10 @@ module Mdd
 
       def config
         # initializers
-        copy_file 'config/initializers/devise.rb', 'config/initializers/devise.rb'
-        copy_file 'config/initializers/mdd_inflections.rb', 'config/initializers/mdd_inflections.rb'
-        copy_file 'config/initializers/mdd_layout.rb', 'config/initializers/mdd_layout.rb'
-        copy_file 'config/initializers/will_paginate.rb', 'config/initializers/will_paginte.rb'
+        copy_file 'config/initializers/devise.rb', 'config/initializers/mdwa_devise.rb'
+        copy_file 'config/initializers/mdd_inflections.rb', 'config/initializers/mdwa_inflections.rb'
+        copy_file 'config/initializers/mdd_layout.rb', 'config/initializers/mdwa_layout.rb'
+        copy_file 'config/initializers/will_paginate.rb', 'config/initializers/mdwa_will_paginte.rb'
 
         # language files
         copy_file 'config/locales/devise.en.yml', 'config/locales/devise.en.yml'
@@ -143,20 +143,21 @@ module Mdd
           sleep( 1.0 )
           migration_template 'db/migrate/create_user_permissions.rb', 'db/migrate/create_user_permissions.rb'
           sleep( 1.0 )
-          rake "db:migrate"
+          
+          rake "db:migrate" if ask_question( "Run rake db:migrate?" )
         end
       end
 
       def db_seeds
         if ask_question( "Create DB Seeds?")
           copy_file 'db/seeds/site.rb', 'db/seeds/site.rb'
+          create_file 'db/seeds.rb'
           append_file 'db/seeds.rb' do
              "\nrequire File.expand_path( '../seeds/site', __FILE__ )\n"
           end
         end
-        if ask_question( "Run rake db:seeds?")
-          rake "db:seed"
-        end
+        
+        rake "db:seed" if ask_question( "Run rake db:seeds?" )
       end
 
       private 
