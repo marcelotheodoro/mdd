@@ -27,6 +27,10 @@ module Mdd
         gem 'cancan'
         gem 'will_paginate'
         gem 'nested_form'
+
+        inside Rails.root do
+          run "bundle install"
+        end
       end
 
       def images
