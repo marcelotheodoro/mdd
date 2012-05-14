@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.version     = Mdd::VERSION
   s.authors     = ["Marcelo Theodoro"]
   s.email       = ["marcelo.theodorojr@gmail.com"]
-  s.homepage    = ""
-  s.summary     = %q{Gem para geração de código usando MDD}
-  s.description = %q{Tese de mestrado: Uma abordagem orientada a modelos para desenvolvimento de aplicações Web}
+  s.homepage    = "https://github.com/marcelotheodoro/mdd"
+  s.summary     = %q{MDD-based code generation tools to avoid repetitive tasks in Rails dev.}
+  s.description = %q{Implements a set of tools for code generation for Rails apps. It's based on Theodoro's MDWA approach for web applications.}
 
   s.rubyforge_project = "mdd"
   
