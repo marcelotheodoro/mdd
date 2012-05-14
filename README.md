@@ -14,7 +14,7 @@ MDD is based on top of Rails 3.1, including asset pipeline feature.
 Add it to your Gemfile with:
 
 ```ruby
-gem 'devise'
+gem 'mdd'
 ```
 
 Run the bundle command to install it.
@@ -31,3 +31,16 @@ This generator will setup the clean sandbox environment with:
 * User based authentication with Devise (https://github.com/plataformatec/devise);
 * Login;
 * Public pages - for simple website development.
+
+Check the result:
+
+* Public pages: http://localhost:3000
+* Private area: http://localhost:3000/a
+
+The private area requires user authentication.
+The generator will create a default user:
+
+```console
+User: admin@admin.com
+Password: admin123
+```
