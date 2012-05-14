@@ -30,6 +30,7 @@ module Mdd
 
         inside Rails.root do
           run "bundle install"
+          remove_file 'public/index.html'
         end
       end
 
