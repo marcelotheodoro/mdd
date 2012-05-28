@@ -5,6 +5,10 @@ module Mdd
     config.autoload_paths << File.expand_path("../app", __FILE__)
   end
 
+  module Generators
+  	autoload :ModelAttribute, 'mdd/layout/model_attribute'
+  end
+
   module Layout
   	autoload :Base, 'mdd/layout/base'
   	autoload :Helper, 'mdd/layout/helper'
