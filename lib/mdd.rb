@@ -6,7 +6,7 @@ module Mdd
   end
 
   module Generators
-  	autoload :ModelAttribute, 'mdd/layout/model_attribute'
+  	autoload :ModelAttribute, 'mdd/generators/model_attribute'
   end
 
   module Layout
