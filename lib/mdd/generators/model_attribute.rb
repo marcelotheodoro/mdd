@@ -4,7 +4,7 @@ module Mdd
 		class ModelAttribute
 			attr_accessor :name, :type, :reference, :reference_type
 
-			STATIC_TYPES = [:boolean, :date, :datetime, :decimal, :float, :integer, :string, :text, :time, :timestamp]
+			STATIC_TYPES = [:boolean, :date, :datetime, :decimal, :float, :integer, :string, :text, :time, :timestamp, :file]
 
 			def initialize( arg )
 
@@ -29,17 +29,33 @@ module Mdd
 				end
 			end
 
+			def migration_field
+				@migration_field ||= case self.type.to_sym
+		          when :string, :file		 then 'string'
+		          when :boolean              then 'boolean'
+		          when :date 				 then 'date'
+		          when :datetime             then 'datetime'
+		          when :decimal, :float      then 'decimal'
+		          when :text 				 then 'text'
+		          when :time 				 then 'time'
+		          when :timestamp 			 then 'timestamp'
+		          else
+		            'integer'
+		        end
+			end
+
 			def form_field
 		        @form_field ||= case self.type.to_sym
-		          when :integer              then :number_field
-		          when :float, :decimal      then :text_field
-		          when :time                 then :time_select
-		          when :datetime, :timestamp then :datetime_select
-		          when :date                 then :date_select
-		          when :text                 then :text_area
-		          when :boolean              then :check_box
+		          when :integer              then 'number_field'
+		          when :float, :decimal      then 'text_field'
+		          when :file				 then 'file_field'
+		          when :time                 then 'time_select'
+		          when :datetime, :timestamp then 'datetime_select'
+		          when :date                 then 'date_select'
+		          when :text                 then 'text_area'
+		          when :boolean              then 'check_box'
 		          else
-		            :text_field
+		            'text_field'
 		        end
 
 		        "<%= f.#{@form_field} :#{self.name} %>"
