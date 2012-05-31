@@ -1,0 +1,16 @@
+<div id="<%= plural_name %>_index" class="mdwa_index">
+	<div class="page_header">
+		<h1><%%= t '<%= plural_name %>.index_title' %></h1>
+		<%- if options.ajax %>
+		<div class="page_header_right_tab">
+			<%%= link_to t('system.add_by_ajax', :name => '<%= singular_name.humanize %>'), new_<%= namespace_object%>_path, :class => 'lightbox various fancybox.ajax' %>
+		</div>
+		<%- end %>
+	</div>
+
+	<div class="inside">
+		<div id="<%= plural_name %>_list">
+			<%%= render '<%= plural_name %>' %>
+		</div>
+	</div>
+</div>

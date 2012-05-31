@@ -68,11 +68,20 @@ div.page_header_right_tab {
   float: right;
   position: relative;
   right: 0;
-  top: -14px;
+  top: -20px;
   width: auto;
 }
 div.page_header_right_tab a {
-  background: url( <%= asset_path 'mdwa/bt_g.png' %> );
+  
+  background: #EEEEEE; /* Old browsers */
+  background: -moz-linear-gradient(top,  #FFFFFF 0%, #EEEEEE 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(100%,#EEEEEE)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #FFFFFF 0%,#EEEEEE 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #FFFFFF 0%,#EEEEEE 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #FFFFFF 0%,#EEEEEE 100%); /* IE10+ */
+  background: linear-gradient(top,  #FFFFFF 0%,#EEEEEE 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#EEEEEE',GradientType=0 ); /* IE6-9 */
+
   padding: 13px;
   border-radius: 5px 5px 0 0;
   border-top: 1px solid #ccc;
@@ -80,7 +89,34 @@ div.page_header_right_tab a {
   border-right: 1px solid #ccc;
 }
 div.page_header_right_tab a:hover {
-  background: url( <%= asset_path 'mdwa/bt_g_inv.png' %>);
+  background: #eeeeee; /* Old browsers */
+  background: -moz-linear-gradient(top, #eeeeee 0%, #ffffff 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #eeeeee 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #eeeeee 0%,#ffffff 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #eeeeee 0%,#ffffff 100%); /* IE10+ */
+  background: linear-gradient(top, #eeeeee 0%,#ffffff 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+}
+
+div.tab_header {
+  display: inline-block;
+  float: right;
+  position: relative;
+  right: 0;
+  top: -14px;
+  width: auto;
+}
+div.tab_header a {
+  background: url(../images/bt_g.png);
+  padding: 13px;
+  border-radius: 5px 5px 0 0;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+}
+div.tab_header a:hover {
+  background: url(../images/bt_g_inv.png);
 }
 
 /* Content */

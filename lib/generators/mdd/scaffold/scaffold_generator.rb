@@ -13,7 +13,7 @@ module Mdd
       argument :attributes, :type => :array, :default => [], :banner => "field:type field:type"
 
       class_option :skip_migration, :desc => 'Skips the generation of a new migration', :type => :boolean
-
+      class_option :ajax, :desc => 'Generates modal forms and AJAX submits', :type => :boolean
 
       def initialize(*args, &block)
 
@@ -36,7 +36,7 @@ module Mdd
 
       def controller
         @inherit_controller = 'A::BackendController' if @namespace.underscore == 'a'
-        template 'controllers/controller.rb', "app/controllers/#{@namespace}/#{plural_name}_controller.rb"
+        template "controllers/#{'ajax_' if options.ajax}controller.rb", "app/controllers/#{@namespace}/#{plural_name}_controller.rb"
       end
 
       def model
@@ -52,10 +52,17 @@ module Mdd
 
       def views
         template 'views/edit.html.erb', "app/views/#{@namespace.underscore}/#{plural_name}/edit.html.erb"
-        template 'views/new.html.erb', "app/views/#{@namespace.underscore}/#{plural_name}/new.html.erb"
         template 'views/index.html.erb', "app/views/#{@namespace.underscore}/#{plural_name}/index.html.erb"
+        template 'views/index.js.erb', "app/views/#{@namespace.underscore}/#{plural_name}/index.js.erb"
+        template 'views/new.html.erb', "app/views/#{@namespace.underscore}/#{plural_name}/new.html.erb"
         template 'views/_form.html.erb', "app/views/#{@namespace.underscore}/#{plural_name}/_form.html.erb"
         template 'views/_list.html.erb', "app/views/#{@namespace.underscore}/#{plural_name}/_#{plural_name}.html.erb"
+
+        if options.ajax
+          template 'views/create.js.erb', "app/views/#{@namespace.underscore}/#{plural_name}/create.js.erb"
+          template 'views/destroy.js.erb', "app/views/#{@namespace.underscore}/#{plural_name}/destroy.js.erb"
+          template 'views/update.js.erb', "app/views/#{@namespace.underscore}/#{plural_name}/update.js.erb"
+        end
       end
 
       def routes
@@ -63,9 +70,13 @@ module Mdd
         route "namespace :#{namespace.underscore} do resources :#{plural_name} end" if namespace?
       end
 
+      def run_rake_db_migrate
+        rake('db:migrate') if yes? 'Run rake db:migrate?'
+      end
+
       private
 
-      	def singular_name
+        def singular_name
           @model_name.underscore
         end
 

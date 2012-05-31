@@ -84,14 +84,14 @@
 	margin-left: -21px;
 	width: 42px;
 	height: 42px;
-	background: url('../images/fancybox_loading.gif');
+	background: url('/assets/mdwa/fancybox_loading.gif');
 	opacity: 0.9;
 	cursor: pointer;
 	z-index: 1010;
 }
 
 .fancybox-close, .fancybox-prev span, .fancybox-next span {
-	background-image: url('../images/fancybox_sprite.png');
+	background-image: url('/assets/mdwa/fancybox_sprite.png');
 }
 
 .fancybox-close {
