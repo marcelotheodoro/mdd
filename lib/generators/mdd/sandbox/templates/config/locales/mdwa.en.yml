@@ -15,6 +15,8 @@ en:
     index_remove: "Remove"
     index_remove_label: "Remove"
     index_confirm_deletion: "Are you sure?"
+    add_by_ajax: "Add new %{name}"
+    edit_by_ajax: "Edit %{name}"
 
   administrators:
     edit_title: "Editing account: %{name}"
