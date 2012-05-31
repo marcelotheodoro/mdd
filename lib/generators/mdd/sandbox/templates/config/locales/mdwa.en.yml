@@ -11,6 +11,10 @@ en:
     logged_info_logout: "(Logout)"
     logged_info_edit_account: "My Account"
     cancel_button: "Cancel"
+    index_id: "ID"
+    index_remove: "Remove"
+    index_remove_label: "Remove"
+    index_confirm_deletion: "Are you sure?"
 
   administrators:
     edit_title: "Editing account: %{name}"

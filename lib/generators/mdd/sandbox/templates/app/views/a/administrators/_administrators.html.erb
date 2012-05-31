@@ -3,14 +3,14 @@
   	<th><%= t 'administrators.index_id' %></th>
     <th><%= t 'administrators.index_name' %></th>
     <th><%= t 'administrators.index_email' %></th>
-    <th><%= t 'administrators.index_remove' %></th>
+    <th><%= t 'system.index_remove' %></th>
   </thead>
 <% @administrators.each do |administrator| %>
   <tr class="<%= cycle 'odd_line', 'even_line' %>" >
   	<td align="center"><%= link_to administrator.id, edit_a_administrator_path(administrator) %></td>
     <td><%= link_to administrator.name, edit_a_administrator_path(administrator) %></td>
     <td><%= administrator.email %></td>
-    <td><%= link_to t('administrators.index_remove_label'), [:a, administrator], :method => :delete, :confirm => t('administrators.index_confirm_deletion') %></td>
+    <td><%= link_to t('system.index_remove_label'), [:a, administrator], :method => :delete, :confirm => t('system.index_confirm_deletion') %></td>
   </tr>
 <% end %>
 </table>
