@@ -1,2 +1,2 @@
-module <%= @namespace.camelize %>
+module <%= @model.namespace %>
 end

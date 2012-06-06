@@ -7,7 +7,7 @@ module Mdd
 
       source_root File.expand_path('../templates', __FILE__)
 
-      attr_accessor :namespace, :model_name, :model_attributes
+      attr_accessor :model, :model_attributes
       
       argument :scaffold_name, :type => :string, :banner => "[namespace]/Model"
       argument :attributes, :type => :array, :default => [], :banner => "field:type field:type"
@@ -19,87 +19,61 @@ module Mdd
 
         super
 
-        # separates model and namespace
-        @namespace = ''
-        @namespace = scaffold_name.split('/').first.camelize if scaffold_name.split('/').count > 1
-        @model_name = scaffold_name.split('/').last.singularize.camelize
+        @model = Generators::Model.new( scaffold_name )
 
         # model_name is not valid
-        print_usage unless @model_name.underscore =~ /^[a-z][a-z0-9_\/]+$/
+        print_usage unless @model.valid?
 
         # sets the model attributes
         @model_attributes = []
         attributes.each do |attribute|
-          @model_attributes << Generators::ModelAttribute.new( attribute )
+          @model_attributes << Generators::ModelAttribute.new( attribute, @model )
         end
       end
 
       def controller
-        @inherit_controller = 'A::BackendController' if @namespace.underscore == 'a'
-        template "controllers/#{'ajax_' if options.ajax}controller.rb", "app/controllers/#{@namespace}/#{plural_name}_controller.rb"
+        @inherit_controller = 'A::BackendController' if @model.space == 'a'
+        template "controllers/#{'ajax_' if options.ajax}controller.rb", "app/controllers/#{@model.space}/#{@model.plural_name}_controller.rb"
       end
 
       def model
-        template 'models/module.rb', "app/models/#{@namespace.underscore}.rb" unless @namespace.blank?
-        template 'models/model.rb', "app/models/#{@namespace.underscore}/#{singular_name}.rb"
+        template 'models/module.rb', "app/models/#{@model.space}.rb" unless @model.namespace?
+        template 'models/model.rb', "app/models/#{@model.space}/#{@model.singular_name}.rb"
       end 
 
       def migration
         unless options.skip_migration
-          migration_template 'db_migrate/migrate.rb', "db/migrate/create_#{plural_name}.rb"
+          migration_template 'db_migrate/migrate.rb', "db/migrate/create_#{@model.plural_name}.rb"
         end
       end
 
       def views
-        template 'views/edit.html.erb', "app/views/#{@namespace.underscore}/#{plural_name}/edit.html.erb"
-        template 'views/index.html.erb', "app/views/#{@namespace.underscore}/#{plural_name}/index.html.erb"
-        template 'views/index.js.erb', "app/views/#{@namespace.underscore}/#{plural_name}/index.js.erb"
-        template 'views/new.html.erb', "app/views/#{@namespace.underscore}/#{plural_name}/new.html.erb"
-        template 'views/_form.html.erb', "app/views/#{@namespace.underscore}/#{plural_name}/_form.html.erb"
-        template 'views/_list.html.erb', "app/views/#{@namespace.underscore}/#{plural_name}/_#{plural_name}.html.erb"
+        template 'views/edit.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/edit.html.erb"
+        template 'views/index.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/index.html.erb"
+        template 'views/index.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/index.js.erb"
+        template 'views/new.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/new.html.erb"
+        template 'views/_form.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/_form.html.erb"
+        template 'views/_list.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/_#{@model.plural_name}.html.erb"
 
         if options.ajax
-          template 'views/create.js.erb', "app/views/#{@namespace.underscore}/#{plural_name}/create.js.erb"
-          template 'views/destroy.js.erb', "app/views/#{@namespace.underscore}/#{plural_name}/destroy.js.erb"
-          template 'views/update.js.erb', "app/views/#{@namespace.underscore}/#{plural_name}/update.js.erb"
+          template 'views/create.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/create.js.erb"
+          template 'views/destroy.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/destroy.js.erb"
+          template 'views/update.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/update.js.erb"
         end
       end
 
       def routes
-        route "resources :#{plural_name}" unless namespace?
-        route "namespace :#{namespace.underscore} do resources :#{plural_name} end" if namespace?
+        route "resources :#{@model.plural_name}" unless @model.namespace?
+        route "namespace :#{@model.space} do resources :#{@model.plural_name} end" if @model.namespace?
       end
 
       def run_rake_db_migrate
-        rake('db:migrate') if yes? 'Run rake db:migrate?'
+        unless options.skip_migration
+          rake('db:migrate') if yes? 'Run rake db:migrate?'
+        end
       end
 
       private
-
-        def singular_name
-          @model_name.underscore
-        end
-
-        def plural_name
-          @model_name.underscore.pluralize
-        end
-
-        def namespace_model_class
-          "#{namespace_scope}#{@model_name}"
-        end
-
-        def namespace_scope
-          return "#{@namespace}::" unless @namespace.blank?
-          return ''
-        end
-
-        def namespace_object
-          namespace_model_class.gsub('::', '_').underscore
-        end
-
-        def namespace?
-          !namespace.blank?
-        end
 
         # Sets Rails migration timestamp
         def self.next_migration_number(dirname) #:nodoc:

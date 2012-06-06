@@ -1,12 +1,12 @@
-<%%= form_for(@<%= singular_name %><%= ', :remote => true, :class => :mdwa_ajax' if options.ajax %>) do |f| %>
+<%%= form_for(@<%= @model.singular_name %><%= ', :remote => true, :html => {:class => :mdwa_ajax}' if options.ajax %>) do |f| %>
 
 	<%- unless options.ajax %>
-		<%% if @<%= singular_name %>.errors.any? %>
+		<%% if @<%= @model.singular_name %>.errors.any? %>
 		    <div id="error_explanation">
-		      <h2><%%= pluralize(@<%= singular_name %>.errors.count, t('system.error')) %> :</h2>
+		      <h2><%%= pluralize(@<%= @model.singular_name %>.errors.count, t('system.error')) %> :</h2>
 
 		      <ul>
-		      <%% @<%= singular_name %>.errors.full_messages.each do |msg| %>
+		      <%% @<%= @model.singular_name %>.errors.full_messages.each do |msg| %>
 		        <li><%%= msg %></li>
 		      <%% end %>
 		      </ul>
@@ -27,7 +27,7 @@
 
 	<div class="actions">
 		<%- if !options.ajax %>
-		<%%= link_to t('system.cancel_button'), <%= namespace_object.pluralize %>_path, :class => :cancel %> <%- else %>
+		<%%= link_to t('system.cancel_button'), <%= @model.object_name.pluralize %>_path, :class => :cancel %> <%- else %>
 		<%%= link_to t('system.cancel_button'), '#', :class => :cancel %> <%- end %>
 	    
 	    <%%= f.submit :class => :button %>
