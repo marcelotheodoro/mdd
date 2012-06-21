@@ -7,13 +7,16 @@ module Mdd
 
       source_root File.expand_path('../templates', __FILE__)
 
-      attr_accessor :model, :model_attributes
+      attr_accessor :model, :create_nested_association
       
       argument :scaffold_name, :type => :string, :banner => "[namespace]/Model"
       argument :attributes, :type => :array, :default => [], :banner => "field:type field:type"
 
-      class_option :skip_migration, :desc => 'Skips the generation of a new migration', :type => :boolean
-      class_option :ajax, :desc => 'Generates modal forms and AJAX submits', :type => :boolean
+      class_option :ajax, :desc => 'Generates modal forms and AJAX submits.', :type => :boolean, :default => false
+      class_option :skip_migration, :desc => 'Skips the generation of a new migration.', :type => :boolean, :default => false
+      class_option :skip_timestamp, :desc => 'Skip timestamp generator on migration files.', :type => :boolean, :default => false
+      class_option :skip_interface, :desc => 'Cretes only models, migrations and associations.', :type => :boolean, :default => false
+      class_option :only_interface, :desc => 'Skips models, associations and migrations.', :type => :boolean, :default => false
 
       def initialize(*args, &block)
 
@@ -25,50 +28,73 @@ module Mdd
         print_usage unless @model.valid?
 
         # sets the model attributes
-        @model_attributes = []
         attributes.each do |attribute|
-          @model_attributes << Generators::ModelAttribute.new( attribute, @model )
+          @model.add_attribute Generators::ModelAttribute.new( attribute )
         end
+
       end
 
       def controller
-        @inherit_controller = 'A::BackendController' if @model.space == 'a'
-        template "controllers/#{'ajax_' if options.ajax}controller.rb", "app/controllers/#{@model.space}/#{@model.plural_name}_controller.rb"
+        unless options.skip_interface
+          @inherit_controller = 'A::BackendController' if @model.space == 'a'
+          template "controllers/#{'ajax_' if options.ajax}controller.rb", "app/controllers/#{@model.space}/#{@model.plural_name}_controller.rb"
+        end
       end
 
       def model
-        template 'models/module.rb', "app/models/#{@model.space}.rb" unless @model.namespace?
-        template 'models/model.rb', "app/models/#{@model.space}/#{@model.singular_name}.rb"
-      end 
-
-      def migration
-        unless options.skip_migration
-          migration_template 'db_migrate/migrate.rb', "db/migrate/create_#{@model.plural_name}.rb"
+        unless options.only_interface
+          template 'models/module.rb', "app/models/#{@model.space}.rb" if @model.namespace?
+          template 'models/model.rb', "app/models/#{@model.space}/#{@model.singular_name}.rb"
         end
       end
 
       def views
-        template 'views/edit.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/edit.html.erb"
-        template 'views/index.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/index.html.erb"
-        template 'views/index.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/index.js.erb"
-        template 'views/new.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/new.html.erb"
-        template 'views/_form.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/_form.html.erb"
-        template 'views/_list.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/_#{@model.plural_name}.html.erb"
+        unless options.skip_interface
+          template 'views/edit.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/edit.html.erb"
+          template 'views/index.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/index.html.erb"
+          template 'views/index.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/index.js.erb"
+          template 'views/new.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/new.html.erb"
+          template 'views/show.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/show.html.erb"
+          template 'views/_form.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/_form.html.erb"
+          template 'views/_form_fields.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/_form_fields.html.erb"
+          template 'views/_list.html.erb', "app/views/#{@model.space}/#{@model.plural_name}/_#{@model.plural_name}.html.erb"
 
-        if options.ajax
-          template 'views/create.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/create.js.erb"
-          template 'views/destroy.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/destroy.js.erb"
-          template 'views/update.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/update.js.erb"
+          if options.ajax
+            #create and update are the same
+            template 'views/create.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/create.js.erb"
+            template 'views/create.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/update.js.erb"
+            template 'views/destroy.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/destroy.js.erb"
+          end
         end
       end
 
       def routes
-        route "resources :#{@model.plural_name}" unless @model.namespace?
-        route "namespace :#{@model.space} do resources :#{@model.plural_name} end" if @model.namespace?
+        unless options.skip_interface
+          route "resources :#{@model.plural_name}" unless @model.namespace?
+          route "namespace :#{@model.space} do resources :#{@model.plural_name} end" if @model.namespace?
+        end
+      end
+
+      def migration
+        unless options.skip_migration or options.only_interface
+          migration_template 'db_migrate/migrate.rb', "db/migrate/create_#{@model.plural_name}.rb"
+        end
+      end
+
+      def associations
+        unless options.skip_migration or options.only_interface
+          @model.attributes.select{ |a| a.references? }.each do |attr|
+              # if attr.belongs_to? or attr.nested_one? or attr.has_one?
+                generate "mdd:association #{@model.raw} #{attr.reference_type} #{attr.type.raw} #{'--force' if options.force} --skip_rake_migrate --ask"
+              # else
+              #   generate "mdd:association #{attr.type.raw} #{attr.reference_type} #{@model.raw} #{'--force' if options.force} --skip_rake_migrate --ask"
+              # end
+          end
+        end
       end
 
       def run_rake_db_migrate
-        unless options.skip_migration
+        unless options.skip_migration or options.only_interface
           rake('db:migrate') if yes? 'Run rake db:migrate?'
         end
       end

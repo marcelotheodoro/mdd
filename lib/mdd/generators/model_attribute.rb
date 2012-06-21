@@ -6,7 +6,9 @@ module Mdd
 
 			STATIC_TYPES = [:boolean, :date, :datetime, :decimal, :float, :integer, :string, :text, :time, :timestamp, :file]
 
-			def initialize( arg, model_class )
+			# Sets the attributes variables
+			# Format: <name>:<type>:<reference>:<reference_type>
+			def initialize( arg )
 
 				# sets the variables by the string
 				split = arg.split(':')
@@ -14,8 +16,6 @@ module Mdd
 				self.name = split[0]
 				self.reference = split[2]
 				self.reference_type = split[3]
-				
-				self.model = model_class
 			end
 
 			def name=(value)
@@ -40,8 +40,8 @@ module Mdd
 				@reference = 'id' if value.blank?
 			end
 
-			def references?
-				!STATIC_TYPES.include?(self.type.to_s.to_sym)
+			def reference_type=(value)
+				@reference_type = value.underscore unless value.blank?
 			end
 
 			def migration_field
@@ -60,26 +60,51 @@ module Mdd
 			end
 
 			def form_field
-				if !references?
-			        @form_field ||= case self.type.to_s.to_sym
-			          when :integer              then 'number_field'
-			          when :float, :decimal      then 'text_field'
-			          when :file				 then 'file_field'
-			          when :time                 then 'time_select'
-			          when :datetime, :timestamp then 'datetime_select'
-			          when :date                 then 'date_select'
-			          when :text                 then 'text_area'
-			          when :boolean              then 'check_box'
-			          else
-			            'text_field'
-			        end
-
-			        "<%= f.#{@form_field} :#{self.name} %>"
-			    else
-			    	"<%= f.select :#{name}, options_for_select( #{type.klass}.order('#{reference} ASC').collect{ |c| [c.#{reference}, c.id] }, @#{model.singular_name}[:#{name}] ), :include_blank => '-- Select a #{name.humanize} --' %>"
-			    end
+		        @form_field ||= case self.type.to_s.to_sym
+		          when :integer              then 'number_field'
+		          when :float, :decimal      then 'text_field'
+		          when :file				 then 'file_field'
+		          when :time                 then 'time_select'
+		          when :datetime, :timestamp then 'datetime_select'
+		          when :date                 then 'date_select'
+		          when :text                 then 'text_area'
+		          when :boolean              then 'check_box'
+		          else
+		            'text_field'
+		        end
 			end
-			
+
+			def belongs_to?
+				return (reference_type == 'belongs_to')
+			end
+
+			def has_many?
+				return (reference_type == 'has_many')
+			end
+
+			def nested_many?
+				return (reference_type == 'nested_many')
+			end
+
+			def nested?
+				nested_many? || nested_one?
+			end
+
+			def nested_one?
+				return (reference_type == 'nested_one')
+			end
+
+			def has_one?
+				return (reference_type == 'has_one')
+			end
+
+			def has_and_belongs_to_many?
+				return (reference_type == 'has_and_belongs_and_to_many')
+			end
+
+			def references?
+				!STATIC_TYPES.include?(self.type.to_s.to_sym)
+			end
 		end
 
 	end

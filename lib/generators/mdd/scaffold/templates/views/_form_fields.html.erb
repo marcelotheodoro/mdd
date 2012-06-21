@@ -1,0 +1,27 @@
+<%- @model.attributes.each do |attr| %>
+	<%- unless attr.references? %>
+	<div class="field">
+    	<%%= f.label :<%= attr.name %> %> 
+    	<%%= f.<%= attr.form_field %> :<%= attr.name %> %>
+  	</div>
+	<%- end %>
+	<%- if attr.belongs_to? %>
+	<div class="field">
+		<%%= f.label :<%= attr.name %> %> 
+		<%%= f.select :<%= attr.name %>, 
+			  options_for_select( <%= attr.type.klass %>.order('<%= attr.reference %> ASC').collect{ |c| [c.<%= attr.reference %>, c.id] }, f.object.<%= attr.name %> ), 
+				:prompt => '-- Select --' %>
+	</div>
+	<%- end %>
+	<%- if attr.nested? %>
+		<div class="nested">
+		<%%= f.fields_for :<%= (attr.nested_many?) ? attr.type.plural_name : attr.type.singular_name %> do |ff| %>
+			<%%= render '<%= attr.type.space %>/<%= attr.type.plural_name %>/form_fields', :f => ff %>
+			<%- unless attr.nested_one? %><%%= ff.link_to_remove t('nested.remove') %><%- end %>
+		<%% end %>
+		<%- unless attr.nested_one? %>
+		<%%= f.link_to_add t('nested.add', :name => '<%= attr.type.singular_name %>'), :<%= attr.type.plural_name %> %>
+		<%- end %>
+		</div>
+	<%- end %>
+<%- end %>

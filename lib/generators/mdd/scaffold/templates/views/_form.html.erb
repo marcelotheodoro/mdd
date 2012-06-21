@@ -1,27 +1,12 @@
-<%%= form_for(@<%= @model.singular_name %><%= ', :remote => true, :html => {:class => :mdwa_ajax}' if options.ajax %>) do |f| %>
+<%%= <%= 'nested_' unless @model.attributes.select{|a| a.nested_many?}.count.zero? %>form_for(@<%= @model.singular_name %><%= ', :remote => true, :html => {:class => :mdwa_ajax}' if options.ajax %>) do |f| %>
 
-	<%- unless options.ajax %>
-		<%% if @<%= @model.singular_name %>.errors.any? %>
-		    <div id="error_explanation">
-		      <h2><%%= pluralize(@<%= @model.singular_name %>.errors.count, t('system.error')) %> :</h2>
-
-		      <ul>
-		      <%% @<%= @model.singular_name %>.errors.full_messages.each do |msg| %>
-		        <li><%%= msg %></li>
-		      <%% end %>
-		      </ul>
-		    </div>
-		<%% end %>
-	<%- end %>
-
+	<div id="mdwa_error">
+	   	<%%= render '/template/mdwa/crud_error', :object => @<%= @model.singular_name %> %>
+	</div>
+	
 	<div class="yui3-g">
 		<div class="yui3-u">
-			<%- @model_attributes.each do |attr| %>
-			<div class="field">
-	  	    	<%%= f.label :<%= attr.name %> %> 
-	  	    	<%= attr.form_field %>
-	  	  	</div>
-  	  		<%- end %>
+			<%%= render 'form_fields', :f => f %>
   	  	</div>
 	</div>
 

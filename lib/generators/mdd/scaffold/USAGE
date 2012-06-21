@@ -5,5 +5,53 @@ Description:
     All list have pagination with will_paginate gem.
     Referenced models also have their relations configured in models and views.
 
+Restriction:
+	The database must be configured correctly as usual.
+	So, run rake db:create before start.
+
 Example:
-    rails generate mdd:scaffold Model name:string initial_date:date category_id:category:name:belongs
+	It is equal to Rails scaffold if relations are not mentioned.
+	The relations syntax:
+
+    - rails generate mdd:scaffold Product name:string initial_date:date category_id:category:name:belongs
+    	# model product.rb
+    	class Product < ActiveRecord::Base
+    		attr_accessible :name, :initial_date, :category_id
+    		belongs_to :category
+    		...
+
+    - rails generate mdd:scaffold Category name:string products:product:name:has_many
+    	# model product.rb
+    	class Product < ActiveRecord::Base
+    		attr_accessible :name
+    		has_many :products
+    		...
+
+    - rails generate mdd:scaffold Product name:string category:category:name:nested_many
+    	# model product.rb
+    	class Product < ActiveRecord::Base
+    		attr_accessible :name, :categories_attributes
+    		has_many :categories
+    		accepts_nested_attributes_for :categories, :allow_destroy => true
+    		...
+
+    - rails generate mdd:scaffold Company name:string address:address:name:nested_one
+        class Company < ActiveRecord::Base
+            attr_accessible :name, :address_attributes
+            belongs_to :address
+            accepts_nested_attributes_for :address, :allow_destroy => true
+            ...
+
+    - rails generate mdd:scaffold User name:string projects:projects:name:has_and_belongs_to_many
+      rails generate mdd:scaffold Project name:string users:user:name:has_and_belongs_to_many
+        Class User < ActiveRecord::Base
+            has_and_belongs_to_many :projects
+        Class User < ActiveRecord::Base
+            has_and_belongs_to_many :users
+
+    - rails generate mdd:scaffold Product name:string product_price:productPrice:name:has_one
+    	# model product.rb
+    	class Product < ActiveRecord::Base
+    		attr_accessible :name
+    		has_one :product_price
+    		...

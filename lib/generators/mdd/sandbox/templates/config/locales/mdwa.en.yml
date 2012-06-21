@@ -43,3 +43,7 @@ en:
     administrators: "Users"
     add_administrator: "Add User"
     settings: "Settings"
+  
+  nested:
+    add: "Add %{name}"
+    remove: "Remove"

@@ -27,7 +27,7 @@ class <%= @model.controller_name %>Controller < <%= @inherit_controller || 'Appl
 
 	def create
 	    @<%= @model.singular_name %> = <%= @model.klass %>.new(params[:<%= @model.object_name %>])
-	    @<%= @model.singular_name %>.save
+	    @system_notice = t('<%= @model.plural_name %>.create_success') if @<%= @model.singular_name %>.save
 	    # loads all <%= @model.plural_name %> to display in the list
 	    load_list
 
@@ -38,7 +38,7 @@ class <%= @model.controller_name %>Controller < <%= @inherit_controller || 'Appl
 
 	def update
 	    @<%= @model.singular_name %> = <%= @model.klass %>.find(params[:id])
-	    @<%= @model.singular_name %>.update_attributes(params[:<%= @model.object_name %>])
+	    @system_notice = t('<%= @model.plural_name %>.update_success') if @<%= @model.singular_name %>.update_attributes(params[:<%= @model.object_name %>])
 	    
 	    # loads all <%= @model.plural_name %> to display in the list
 	    load_list
@@ -50,7 +50,7 @@ class <%= @model.controller_name %>Controller < <%= @inherit_controller || 'Appl
 
 	def destroy
 	    @<%= @model.singular_name %> = <%= @model.klass %>.find(params[:id])
-	    @<%= @model.singular_name %>.destroy
+	    @system_notice = t('<%= @model.plural_name %>.destroy_success') if @<%= @model.singular_name %>.destroy
 
 	    # loads all <%= @model.plural_name %> to display in the list
 	    load_list

@@ -20,6 +20,9 @@ class <%= @model.controller_name %>Controller < <%= @inherit_controller || 'Appl
 
 	def new
 	    @<%= @model.singular_name %> = <%= @model.klass %>.new
+	    <%- @model.attributes.select {|a| a.nested_one?}.each do |attr| %>
+	    @<%= @model.singular_name %>.<%= attr.type.singular_name %> = <%= attr.type.klass %>.new
+	    <%- end %>
 
 	    respond_to do |format|
 	      format.html

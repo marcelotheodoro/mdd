@@ -1,0 +1,11 @@
+<% if object.errors.any? %>
+	<div class="mdwa_error">	
+		<h2><%= pluralize(object.errors.count, t('system.error')) %> :</h2>
+
+		<ul>
+		<% object.errors.full_messages.each do |msg| %>
+		<li><%= msg %></li>
+		<% end %>
+		</ul>
+	</div>
+<% end %>

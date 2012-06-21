@@ -1,0 +1,21 @@
+Description:
+	Generate migrations and models based on ActiveRecord association types.
+
+Example:
+	rails g mdd:association Library has_many Books
+
+	rails g mdd:association Book belongs_to Library --with-opposite
+		Generates the first example as the opposite
+
+	rails g mdd:association Company nested_one Address
+		Creates address_id in migration and belongs_to :address and accepts_nested_attrs in Company model
+		Creates has_one :company in Address model if opposite requested
+
+	rails g mdd:association Sale nested_many SaleItem
+		Creates sale_id and belongs_to in SaleItem
+		Creates has_many and accepts_nested_attrs in Sale
+
+	rails g mdd:association User has_and_belongs_to_many Project
+		Creates the join table projects_users
+		Creates has_and_belongs_to_many association in both models
+		The generated code indicates the join_table parameter, because often users have many to many associations and may be inheritance involved.

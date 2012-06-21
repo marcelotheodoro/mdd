@@ -1,2 +1,7 @@
-$.fancybox.close(true);
-$("#<%= @model.plural_name %>_list").html("<%%= escape_javascript( render :partial => '<%= @model.plural_name %>' )%>");
+<%% if @<%= @model.singular_name %>.errors.any? %>
+	$("#mdwa_error").html("<%%= escape_javascript( render '/template/mdwa/crud_error', :object => @<%= @model.singular_name %> )%>");
+<%% else %>
+	$.fancybox.close(true);
+	$("#<%= @model.plural_name %>_list").html("<%%= escape_javascript( render :partial => '<%= @model.plural_name %>' )%>");
+	$('body').append("<%%= escape_javascript( render '/template/mdwa/notice', :notice => @system_notice )%>");
+<%% end %>

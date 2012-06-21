@@ -2,12 +2,12 @@ class Create<%= @model.plural_name.camelize %> < ActiveRecord::Migration
 
 	def self.up
 		create_table :<%= @model.plural_name %> do |t|
-		<%- @model_attributes.each do |attr| %>
+		<%- @model.simple_attributes.each do |attr| %>
 			t.<%= attr.migration_field %> :<%= attr.name %><%- end %>
-		end
-		<%- indexed_attributes = @model_attributes.select {|m| m.references?} %> <%- if indexed_attributes.count > 0 %>
-		add_index :<%= @model.plural_name %>, [<%= indexed_attributes.collect {|m| ":" + m.name }.join(', ') %>]
+		<%- unless options.skip_timestamp %>
+			t.timestamps 
 		<%- end %>
+		end
 	end
 
 	def self.down 
