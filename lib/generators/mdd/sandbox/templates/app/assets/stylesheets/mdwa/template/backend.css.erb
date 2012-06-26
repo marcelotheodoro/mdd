@@ -1,5 +1,60 @@
+body, input, button, textarea, select, select option {
+  font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;  
+}
+
 body {
   background: url("<%= asset_path 'mdwa/backend_bg.png' %>");
+  height:100%;
+  font-size: 13px;
+}
+
+a {
+  color: #222;
+  text-decoration:none;
+}
+
+/* Fields */
+div.field {
+  padding: 5px;
+}
+
+div.field label {
+  display: block;
+  font-size: 12px;
+}
+
+div.field input[type="text"],
+div.field input[type="email"],
+div.field input[type="number"],
+div.field input[type="password"],
+div.field textarea {
+  border: 1px solid #888;
+  padding: 4px;
+  font-size: 13px;
+  box-shadow: 0 0 2px #a2a2a2;
+}
+
+div.field input[type="text"]:hover,
+div.field input[type="email"]:hover,
+div.field input[type="number"]:hover,
+div.field input[type="password"]:hover {
+  border: 1px solid #666;
+  box-shadow: 0 0 2px #999;
+}
+
+div.field textarea {
+  height: 100px;
+}
+
+div.actions {
+  text-align:center;
+  margin: 20px 0;
+}
+
+p.description {
+  padding: 0;
+  margin: 5px;
+  font-size: 11px;
 }
 
 /* Header */
@@ -123,15 +178,15 @@ div.tab_header a:hover {
 div#content {
   background: #fff;
   left: auto;
-    margin-left: 240px;
-    margin-right: 0;
-    min-height: 800px;
-    padding-bottom: 25px;
-    position: relative;
-    top: auto;
-    width: auto;
-    z-index: 15;
-    box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.7);
+  margin-left: 240px;
+  margin-right: 0;
+  min-height: 800px;
+  padding-bottom: 25px;
+  position: relative;
+  top: auto;
+  width: auto;
+  z-index: 15;
+  box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.7);
 }
 
 div.inside {
@@ -169,7 +224,7 @@ div.inside {
   display: inline-block;
   font-size: 13px;
   font-weight: normal;
-  padding: 11px 18px 11px 18px;
+  padding: 11px 0;
   text-decoration: none;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
   width: 100%;
@@ -188,14 +243,15 @@ div.inside {
 	border:none;
 }
 
-#leftbar ul.submenu li a {
-  padding-left: 25px;
-}
-
 #leftbar ul.submenu li a:hover {
 	background: #5D5D5D !important
 }
 
+#leftbar ul li a span {
+  padding-left: 15px;
+}
+
 #leftbar ul.submenu li a span {
 	margin:0;
+  padding-left: 25px;
 }
