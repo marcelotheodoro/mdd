@@ -18,3 +18,6 @@ end
 
 # include the layout selector in ApplicationController
 ActionController::Base.send :include, Mdd::Layout::Helper
+ActiveSupport.on_load(:action_controller) do
+    helper_method "current_page"
+end
