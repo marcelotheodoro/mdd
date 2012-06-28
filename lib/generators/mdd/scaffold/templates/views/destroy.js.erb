@@ -1,2 +1,2 @@
-$("#<%= @model.plural_name %>_list").html("<%%= escape_javascript( render :partial => '<%= @model.plural_name %>' )%>");
+$("#<%= @model.plural_name %>_list").html("<%%= escape_javascript( render '<%= @model.plural_name %>' )%>");
 $('body').append("<%%= escape_javascript( render '/template/mdwa/notice', :notice => @system_notice )%>");

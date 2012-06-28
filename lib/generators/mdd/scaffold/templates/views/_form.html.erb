@@ -11,10 +11,11 @@
 	</div>
 
 	<div class="actions">
-		<%- if !options.ajax %>
-		<%%= link_to t('system.cancel_button'), <%= @model.object_name.pluralize %>_path, :class => :cancel %> <%- else %>
-		<%%= link_to t('system.cancel_button'), '#', :class => :cancel %> <%- end %>
-	    
+		<%- if !options.ajax -%>
+		<%%= link_to t('system.cancel_button'), <%= @model.object_name.pluralize %>_path, :class => :cancel %> 
+		<%- else -%>
+		<%%= link_to t('system.cancel_button'), '#', :class => :cancel %> 
+		<%- end -%>
 	    <%%= f.submit :class => :button %>
 	</div>
 

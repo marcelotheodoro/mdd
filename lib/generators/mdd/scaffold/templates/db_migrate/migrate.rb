@@ -2,11 +2,12 @@ class Create<%= @model.plural_name.camelize %> < ActiveRecord::Migration
 
 	def self.up
 		create_table :<%= @model.plural_name %> do |t|
-		<%- @model.simple_attributes.each do |attr| %>
-			t.<%= attr.migration_field %> :<%= attr.name %><%- end %>
-		<%- unless options.skip_timestamp %>
+		<%- @model.simple_attributes.each do |attr| -%>
+			t.<%= attr.migration_field %> :<%= attr.name %>
+		<%- end -%>
+		<%- unless options.skip_timestamp -%>
 			t.timestamps 
-		<%- end %>
+		<%- end -%>
 		end
 	end
 

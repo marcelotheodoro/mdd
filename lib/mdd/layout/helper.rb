@@ -14,9 +14,10 @@ module Mdd
 		      		Base.select_layout "#{request.path_parameters[:controller]}##{request.path_parameters[:action]}"
 		  	end
 		  	
-		  	def current_page
-          "#{request.path_parameters[:controller].underscore}_#{request.path_parameters[:action].underscore}"
+        def current_page
+          "#{request.path_parameters[:controller].gsub('/', '_').underscore}_#{request.path_parameters[:action].underscore}"
         end
+        
 		  end
 		end
 

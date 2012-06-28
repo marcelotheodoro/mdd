@@ -17,12 +17,15 @@ class <%= @model.controller_name %>Controller < <%= @inherit_controller || 'Appl
 
 	def new
 	    @<%= @model.singular_name %> = <%= @model.klass %>.new
-		render :layout => false
+	    <%- @model.attributes.select {|a| a.nested_one?}.each do |attr| -%>
+	    @<%= @model.singular_name %>.<%= attr.type.singular_name %> = <%= attr.type.klass %>.new
+	    <%- end -%>
+		  render :layout => false
 	end
 
 	def edit
 	    @<%= @model.singular_name %> = <%= @model.klass %>.find(params[:id])
-		render :layout => false
+		  render :layout => false
 	end
 
 	def create
