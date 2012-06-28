@@ -31,7 +31,7 @@
     </td>
     <%- end -%>
     <td>
-		<%%= link_to t('system.index_remove_label'), <%= @model.singular_name %>, :method => :delete, <%= ':remote => true,' if options.ajax %> :data => {:confirm => t('system.index_confirm_deletion')} %>
+		<%%= link_to t('system.index_remove_label'), <%= @model.to_route_object %>, :method => :delete, <%= ':remote => true,' if options.ajax %> :data => {:confirm => t('system.index_confirm_deletion')} %>
 	</td>
   </tr>
 <%% end %>

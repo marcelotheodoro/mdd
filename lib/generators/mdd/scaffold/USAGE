@@ -5,12 +5,8 @@ Description:
     All list have pagination with will_paginate gem.
     Referenced models also have their relations configured in models and views.
 
-Restriction:
-	The database must be configured correctly as usual.
-	So, run rake db:create before start.
-
 Example:
-	It is equal to Rails scaffold if relations are not mentioned.
+	It behaves equally to Rails scaffold if relations are not mentioned.
 	The relations syntax:
 
     - rails generate mdd:scaffold Product name:string initial_date:date category_id:category:name:belongs
@@ -55,3 +51,17 @@ Example:
     		attr_accessible :name
     		has_one :product_price
     		...
+
+
+Restrictions:
+	1. The database must be configured correctly as usual.
+	So, run rake db:create before start.
+	
+	2. For associations, you can use the mdd:association generator. 
+	It generates several kinds of model relations.
+	Scaffold associations will fail for model associations with specific model names, for example:
+		rails g mdd:scaffold a/groups name:string --model=group
+		rails g mdd:scaffold a/projects name:string group:a/group:name:belongs_to
+	For that reason, you should use:
+		rails g mdd:scaffold a/projects name:string group:a/group||group:name:belongs_to
+		

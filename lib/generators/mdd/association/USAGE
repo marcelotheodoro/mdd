@@ -1,5 +1,6 @@
 Description:
 	Generate migrations and models based on ActiveRecord association types.
+	Use the model class name.
 
 Example:
 	rails g mdd:association Library has_many Books

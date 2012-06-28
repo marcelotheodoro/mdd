@@ -2,7 +2,7 @@ module Mdd
 	module Generators
 		class Model
 
-			attr_accessor :name, :namespace, :attributes
+			attr_accessor :name, :namespace, :attributes, :specific_model_name
 
 			# Sets the variables by the string
 			# Format: <namespace>/<model>, the namespace is optional.
@@ -10,17 +10,30 @@ module Mdd
 				
 				self.namespace = '' # prevents unitialized variable errors
 				self.namespace = arg.split('/').first.camelize if arg.split('/').count > 1
-        		self.name = arg.split('/').last.singularize.camelize
+    		self.name = arg.split('/').last.singularize.camelize
 
-        		self.attributes = []
+    		self.attributes = []
 			end
 
 			def valid?
 				name.underscore =~ /^[a-z][a-z0-9_\/]+$/
 			end
+			
+			def specific?
+			  specific_model_name.blank?
+		  end
+		  
+		  def specific_model
+		    return Model.new( specific_model_name ) if specific?
+        return nil
+	    end
 
 			def klass
-				namespace_scope + name
+			  if !specific?
+				  return (namespace_scope + name)
+        else 
+          return specific_model.klass
+        end
 			end
 
 			def controller_name
@@ -30,6 +43,11 @@ module Mdd
 			def object_name
 				space + '_' + singular_name
 			end
+			
+			def to_route
+			  return "@#{singular_name}" if !specific? or !namespace?
+			  return "[ :#{space}, @#{singular_name}]" if specific? and namespace?
+		  end
 
 			def raw
 				klass.underscore

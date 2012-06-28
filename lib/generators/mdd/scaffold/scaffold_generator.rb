@@ -7,11 +7,12 @@ module Mdd
 
       source_root File.expand_path('../templates', __FILE__)
 
-      attr_accessor :model, :create_nested_association
+      attr_accessor :model, :specific_model
       
       argument :scaffold_name, :type => :string, :banner => "[namespace]/Model"
       argument :attributes, :type => :array, :default => [], :banner => "field:type field:type"
 
+      class_option :model, :desc => 'Use if model is different than the scaffold name. Format: "[namespace]/Model"', :type => :string
       class_option :ajax, :desc => 'Generates modal forms and AJAX submits.', :type => :boolean, :default => false
       class_option :skip_migration, :desc => 'Skips the generation of a new migration.', :type => :boolean, :default => false
       class_option :skip_timestamp, :desc => 'Skip timestamp generator on migration files.', :type => :boolean, :default => false
@@ -22,10 +23,20 @@ module Mdd
 
         super
 
-        @model = Generators::Model.new( scaffold_name )
+        @model = Generators::Model.new( scaffold_name )        
 
         # model_name is not valid
         print_usage unless @model.valid?
+
+        # verifies specific model name
+        @specific_model = Generators::Model.new( options.model ) if options.model.blank?
+        if !@specific_model.nil?
+          if !@specific_model.valid?
+            print_usage 
+          else
+            @model.specific_model_name = @specific_model.raw
+          end
+        end
 
         # sets the model attributes
         attributes.each do |attribute|
@@ -43,8 +54,9 @@ module Mdd
 
       def model
         unless options.only_interface
-          template 'models/module.rb', "app/models/#{@model.space}.rb" if @model.namespace?
-          template 'models/model.rb', "app/models/#{@model.space}/#{@model.singular_name}.rb"
+          model = @model.specific_model || @model
+          template 'models/module.rb', "app/models/#{model.space}.rb" if model.namespace?
+          template 'models/model.rb', "app/models/#{model.space}/#{model.singular_name}.rb"
         end
       end
 
@@ -84,11 +96,7 @@ module Mdd
       def associations
         unless options.skip_migration or options.only_interface
           @model.attributes.select{ |a| a.references? }.each do |attr|
-              # if attr.belongs_to? or attr.nested_one? or attr.has_one?
-                generate "mdd:association #{@model.raw} #{attr.reference_type} #{attr.type.raw} #{'--force' if options.force} --skip_rake_migrate --ask"
-              # else
-              #   generate "mdd:association #{attr.type.raw} #{attr.reference_type} #{@model.raw} #{'--force' if options.force} --skip_rake_migrate --ask"
-              # end
+              generate "mdd:association #{@model.raw} #{attr.reference_type} #{attr.type.raw} #{'--force' if options.force} --skip_rake_migrate --ask"
           end
         end
       end

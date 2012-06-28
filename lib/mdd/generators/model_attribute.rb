@@ -7,7 +7,7 @@ module Mdd
 			STATIC_TYPES = [:boolean, :date, :datetime, :decimal, :float, :integer, :string, :text, :time, :timestamp, :file]
 
 			# Sets the attributes variables
-			# Format: <name>:<type>:<reference>:<reference_type>
+			# Format: <name>:<type>||<model>:<reference>:<reference_type>
 			def initialize( arg )
 
 				# sets the variables by the string
@@ -30,7 +30,9 @@ module Mdd
 				if STATIC_TYPES.include?( value.to_sym )
 					@type = value
 				else
-					@type = Model.new value # instance of model
+				  value_split = value.split('||')
+					@type = Model.new( value_split.first ) # instance of model
+					@type.specific_model_name = value_split.last if value_split.count > 1
 					raise "Invalid reference type" if @type.nil?
 				end
 			end
