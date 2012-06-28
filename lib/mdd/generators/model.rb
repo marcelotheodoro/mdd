@@ -20,7 +20,7 @@ module Mdd
 			end
 			
 			def specific?
-			  specific_model_name.blank?
+			  !specific_model_name.blank?
 		  end
 		  
 		  def specific_model
@@ -44,7 +44,15 @@ module Mdd
 				space + '_' + singular_name
 			end
 			
-			def to_route
+			def to_params
+			  if !specific?
+				  return object_name
+        else 
+          return singular_name
+        end
+		  end
+			
+			def to_route_object
 			  return "@#{singular_name}" if !specific? or !namespace?
 			  return "[ :#{space}, @#{singular_name}]" if specific? and namespace?
 		  end

@@ -21,6 +21,7 @@ module Mdd
 
       class_option :with_opposite, :desc => 'Generate the opposite relation too. For example, the oposite of belongs_to is has_many.', :type => :boolean, :default => false
       class_option :skip_rake_migrate, :desc => 'Skips rake db:migrate', :type => :boolean, :default => false
+      class_option :skip_migrations, :desc => 'Skips migration files', :type => :boolean, :default => false
       class_option :ask, :desc => 'Asks if the opposite should be generated.', :type => :boolean, :default => false
 
       def initialize(*args, &block)
@@ -38,26 +39,7 @@ module Mdd
         # active record generates join tables alphabetically
         @ordered_models = [@model1, @model2].sort! {|a,b| a.plural_name <=> b.plural_name}
       end
-
-
-      def migrate
-        @pending_migrations = true
-        case @relation.to_sym 
-        when :belongs_to, :nested_one
-          @table = @model1
-          @field = @model2
-          migration_template 'migrate/one_field.rb', "db/migrate/add_#{@field.singular_name.foreign_key}_to_#{@table.plural_name}.rb"
-        when :nested_many
-          @table = @model2
-          @field = @model1
-          migration_template 'migrate/one_field.rb', "db/migrate/add_#{@field.singular_name.foreign_key}_to_#{@table.plural_name}.rb"
-        when :has_and_belongs_to_many
-          migration_template 'migrate/many_to_many.rb', "db/migrate/create_#{many_to_many_table_name}.rb"
-        else
-          @pending_migrations = false
-        end
-
-      end
+      
 
       def model
         case @relation.to_sym 
@@ -94,6 +76,25 @@ module Mdd
             # attr_nested_attributes 
             "\n\thas_many :#{@model2.plural_name}, :class_name => '#{@model2.klass}', :dependent => :destroy\n\tattr_accessible :#{@model2.plural_name}_attributes\n\taccepts_nested_attributes_for :#{@model2.plural_name}, :allow_destroy => true\n"
           end
+        end
+
+      end
+      
+      def migrate
+        unless options.skip_migrations
+          
+          @pending_migrations = true
+          case @relation.to_sym 
+          when :belongs_to, :nested_one
+            @table = @model1
+            @field = @model2
+            migration_template 'migrate/one_field.rb', "db/migrate/add_#{@field.singular_name.foreign_key}_to_#{@table.plural_name}.rb"
+          when :has_and_belongs_to_many
+            migration_template 'migrate/many_to_many.rb', "db/migrate/create_#{many_to_many_table_name}.rb"
+          else
+            @pending_migrations = false
+          end
+          
         end
 
       end

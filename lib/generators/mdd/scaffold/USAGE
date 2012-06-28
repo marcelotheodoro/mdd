@@ -63,5 +63,5 @@ Restrictions:
 		rails g mdd:scaffold a/groups name:string --model=group
 		rails g mdd:scaffold a/projects name:string group:a/group:name:belongs_to
 	For that reason, you should use:
-		rails g mdd:scaffold a/projects name:string group:a/group||group:name:belongs_to
+		rails g mdd:scaffold a/projects name:string group:a/group,group:name:belongs_to
 		

@@ -14,7 +14,7 @@ module Mdd
 
       class_option :model, :desc => 'Use if model is different than the scaffold name. Format: "[namespace]/Model"', :type => :string
       class_option :ajax, :desc => 'Generates modal forms and AJAX submits.', :type => :boolean, :default => false
-      class_option :skip_migration, :desc => 'Skips the generation of a new migration.', :type => :boolean, :default => false
+      class_option :skip_migrations, :desc => 'Skips the generation of a new migration.', :type => :boolean, :default => false
       class_option :skip_timestamp, :desc => 'Skip timestamp generator on migration files.', :type => :boolean, :default => false
       class_option :skip_interface, :desc => 'Cretes only models, migrations and associations.', :type => :boolean, :default => false
       class_option :only_interface, :desc => 'Skips models, associations and migrations.', :type => :boolean, :default => false
@@ -29,7 +29,7 @@ module Mdd
         print_usage unless @model.valid?
 
         # verifies specific model name
-        @specific_model = Generators::Model.new( options.model ) if options.model.blank?
+        @specific_model = Generators::Model.new( options.model ) unless options.model.blank?
         if !@specific_model.nil?
           if !@specific_model.valid?
             print_usage 
@@ -88,21 +88,21 @@ module Mdd
       end
 
       def migration
-        unless options.skip_migration or options.only_interface
+        unless options.skip_migrations or options.only_interface
           migration_template 'db_migrate/migrate.rb', "db/migrate/create_#{@model.plural_name}.rb"
         end
       end
 
       def associations
-        unless options.skip_migration or options.only_interface
+        unless options.only_interface
           @model.attributes.select{ |a| a.references? }.each do |attr|
-              generate "mdd:association #{@model.raw} #{attr.reference_type} #{attr.type.raw} #{'--force' if options.force} --skip_rake_migrate --ask"
+              generate "mdd:association #{@model.raw} #{attr.reference_type} #{attr.type.raw} #{'--skip_migrations' if options.skip_migrations} #{'--force' if options.force} --skip_rake_migrate --ask"
           end
         end
       end
 
       def run_rake_db_migrate
-        unless options.skip_migration or options.only_interface
+        unless options.skip_migrations or options.only_interface
           rake('db:migrate') if yes? 'Run rake db:migrate?'
         end
       end

@@ -5,7 +5,7 @@ class Create<%= @model.plural_name.camelize %> < ActiveRecord::Migration
 		<%- @model.simple_attributes.each do |attr| -%>
 			t.<%= attr.migration_field %> :<%= attr.name %>
 		<%- end -%>
-		<%- unless options.skip_timestamp -%>
+		<%- unless options.skip_timestamps -%>
 			t.timestamps 
 		<%- end -%>
 		end

@@ -30,9 +30,9 @@ module Mdd
 				if STATIC_TYPES.include?( value.to_sym )
 					@type = value
 				else
-				  value_split = value.split('||')
+          value_split = value.split(',')
 					@type = Model.new( value_split.first ) # instance of model
-					@type.specific_model_name = value_split.last if value_split.count > 1
+          @type.specific_model_name = value_split.last if value_split.count > 1
 					raise "Invalid reference type" if @type.nil?
 				end
 			end
