@@ -7,23 +7,19 @@ module Mdd
 			STATIC_TYPES = [:boolean, :date, :datetime, :decimal, :float, :integer, :string, :text, :time, :timestamp, :file]
 
 			# Sets the attributes variables
-			# Format: <name>:<type>||<model>:<reference>:<reference_type>
+			# Format: <name>:<type>,<model>:<reference>:<reference_type>
 			def initialize( arg )
 
 				# sets the variables by the string
 				split = arg.split(':')
-				self.type = split[1] 
 				self.name = split[0]
 				self.reference = split[2]
 				self.reference_type = split[3]
+				self.type = split[1] # type is the most important, so it's the last for override reasons
 			end
 
 			def name=(value)
-				if references? and !value.end_with?('_id')
-					@name = "#{value.singularize}_id" 
-				else
-					@name = value
-				end
+				@name = value
 			end
 
 			def type=(value)
@@ -32,8 +28,11 @@ module Mdd
 				else
           value_split = value.split(',')
 					@type = Model.new( value_split.first ) # instance of model
-          @type.specific_model_name = value_split.last if value_split.count > 1
+					@type.specific_model_name = value_split.last if value_split.count > 1
 					raise "Invalid reference type" if @type.nil?
+					
+					# rename attribute name if it's a belongs_to association
+					self.name = @type.singular_name.foreign_key if belongs_to?
 				end
 			end
 

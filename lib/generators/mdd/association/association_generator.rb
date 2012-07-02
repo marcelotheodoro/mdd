@@ -45,7 +45,10 @@ module Mdd
         case @relation.to_sym 
         when :belongs_to
           inject_into_class "app/models/#{@model1.space}/#{@model1.singular_name}.rb", @model1.klass.constantize do
-            "\n\tbelongs_to :#{@model2.singular_name}, :class_name => '#{@model2.klass}'\n\tattr_accessible :#{@model2.singular_name.foreign_key}"
+            ret = []
+            ret << "\n\tbelongs_to :#{@model2.singular_name}, :class_name => '#{@model2.klass}'"
+            ret << "\tattr_accessible :#{@model2.singular_name.foreign_key}"
+            ret.join("\n")
           end
         when :has_one
           inject_into_class "app/models/#{@model1.space}/#{@model1.singular_name}.rb", @model1.klass.constantize do
