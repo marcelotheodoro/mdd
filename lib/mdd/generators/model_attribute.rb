@@ -20,7 +20,7 @@ module Mdd
 
 			def name=(value)
 				if references? and !value.end_with?('_id')
-					@name = "#{value}_id" 
+					@name = "#{value.singularize}_id" 
 				else
 					@name = value
 				end

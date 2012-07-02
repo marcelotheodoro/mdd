@@ -52,9 +52,9 @@ module Mdd
         end
 		  end
 			
-			def to_route_object
-			  return "@#{singular_name}" if !specific? or !namespace?
-			  return "[ :#{space}, @#{singular_name}]" if specific? and namespace?
+			def to_route_object(prefix = '')
+			  return "#{prefix}#{singular_name}" if !specific? or !namespace?
+			  return "[ :#{space}, #{prefix}#{singular_name}]" if specific? and namespace?
 		  end
 
 			def raw
