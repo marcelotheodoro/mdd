@@ -44,36 +44,36 @@ module Mdd
       def model
         case @relation.to_sym 
         when :belongs_to
-          inject_into_class "app/models/#{@model1.space}/#{@model1.singular_name}.rb", @model1.klass.constantize do
+          inject_into_class "app/models/#{@model1.space}/#{@model1.singular_name}.rb", @model1.klass.classify.constantize do
             ret = []
             ret << "\n\tbelongs_to :#{@model2.singular_name}, :class_name => '#{@model2.klass}'"
             ret << "\tattr_accessible :#{@model2.singular_name.foreign_key}"
             ret.join("\n")
           end
         when :has_one
-          inject_into_class "app/models/#{@model1.space}/#{@model1.singular_name}.rb", @model1.klass.constantize do
+          inject_into_class "app/models/#{@model1.space}/#{@model1.singular_name}.rb", @model1.klass.classify.constantize do
             "\n\thas_one :#{@model2.singular_name}, :class_name => '#{@model2.klass}'\n"
           end
         when :has_many
-          inject_into_class "app/models/#{@model1.space}/#{@model1.singular_name}.rb", @model1.klass.constantize do
+          inject_into_class "app/models/#{@model1.space}/#{@model1.singular_name}.rb", @model1.klass.classify.constantize do
             "\n\thas_many :#{@model2.plural_name}, :class_name => '#{@model2.klass}'\n"
           end
         when :has_and_belongs_to_many
-          inject_into_class "app/models/#{@model1.space}/#{@model1.singular_name}.rb", @model1.klass.constantize do
+          inject_into_class "app/models/#{@model1.space}/#{@model1.singular_name}.rb", @model1.klass.classify.constantize do
             "\n\thas_and_belongs_to_many :#{@model2.plural_name}, :join_table => :#{many_to_many_table_name}\n"
           end
-          inject_into_class "app/models/#{@model2.space}/#{@model2.singular_name}.rb", @model2.klass.constantize do
+          inject_into_class "app/models/#{@model2.space}/#{@model2.singular_name}.rb", @model2.klass.classify.constantize do
             "\n\thas_and_belongs_to_many :#{@model1.plural_name}, :join_table => :#{many_to_many_table_name}\n"
           end
         when :nested_one
-          inject_into_class "app/models/#{@model1.space}/#{@model1.singular_name}.rb", @model1.klass.constantize do
+          inject_into_class "app/models/#{@model1.space}/#{@model1.singular_name}.rb", @model1.klass.classify.constantize do
             # belongs_to
             # attr_accessible attributes
             # attr_nested_attributes 
             "\n\tbelongs_to :#{@model2.singular_name}, :class_name => '#{@model2.klass}'\n\tattr_accessible :#{@model2.singular_name}_attributes, :#{@model2.singular_name.foreign_key}\n\taccepts_nested_attributes_for :#{@model2.singular_name}, :allow_destroy => true\n"
           end
         when :nested_many
-          inject_into_class "app/models/#{@model1.space}/#{@model1.singular_name}.rb", @model1.klass.constantize do
+          inject_into_class "app/models/#{@model1.space}/#{@model1.singular_name}.rb", @model1.klass.classify.constantize do
             # belongs_to
             # attr_accessible attributes
             # attr_nested_attributes 
