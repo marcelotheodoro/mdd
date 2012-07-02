@@ -16,7 +16,13 @@ module Mdd
 				self.reference = split[2]
 				self.reference_type = split[3]
 				self.type = split[1] # type is the most important, so it's the last for override reasons
+				
+				@raw_string = arg
 			end
+			
+			def raw
+			  @raw_string
+		  end
 
 			def name=(value)
 				@name = value

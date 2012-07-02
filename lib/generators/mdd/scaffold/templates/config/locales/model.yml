@@ -1,0 +1,13 @@
+en:
+  <%= @model.plural_name %>:
+    create_success: "<%= @model.plural_name.humanize %> created."
+    update_success: "<%= @model.plural_name.humanize %> updated."
+    destroy_success: "<%= @model.plural_name.humanize %> destroyed."
+    <%- @model.attributes.each do |attr| -%>
+    index_<%= attr.name %>: "<%= attr.name.humanize %>"
+    show_<%= attr.name %>: "<%= attr.name.humanize %>"
+    <%- end -%>
+    index_title: "<%= @model.plural_name.humanize %>"
+    show_title: "<%= @model.singular_name.humanize %>"
+    new_title: "New <%= @model.singular_name.humanize %>"
+    edit_title: "Edit <%= @model.singular_name.humanize %>"

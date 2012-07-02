@@ -6,7 +6,7 @@
 	<div class="inside">
 	<%- @model.attributes.each do |attr| -%>
 		<div class="field">
-			<label><%%= t '<%= @model.plural_name %>.index_<%= attr.name %>' %></label>
+			<label><%%= t '<%= @model.plural_name %>.show_<%= attr.name %>' %></label>
 			<span>
 		<%- if !attr.references? -%>
 	        <%%= @<%= @model.singular_name %>.<%= attr.name %> %>

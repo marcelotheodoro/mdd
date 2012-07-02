@@ -79,6 +79,10 @@ module Mdd
           end
         end
       end
+      
+      def locales
+        template 'config/locales/model.yml', "config/locales/mdwa/#{@model.plural_name}.en.yml"
+      end
 
       def routes
         unless options.skip_interface
