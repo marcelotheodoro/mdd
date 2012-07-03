@@ -84,9 +84,10 @@ module Mdd
         destination = 'config/locales/mdwa_model_specific.en.yml'
         inside Rails.root do
           create_file destination unless File.exist?(destination)
+          append_file destination, "en:\n"
         end
         
-        inject_into_file destination, :after => 'en:\n' do 
+        append_file destination, :after => "en:\n" do 
           lines = []
           lines <<  "  #{@model.plural_name}:"
           lines <<  "    create_success: \"#{@model.singular_name.humanize} created.\""
@@ -100,7 +101,8 @@ module Mdd
             lines <<  "    index_#{attr.name}: \"#{attr.name.humanize}\""
             lines <<  "    show_#{attr.name}: \"#{attr.name.humanize}\""
           end
-          return lines.join("\n")
+          lines << "\n"
+          lines.join("\n")
         end
       end
 
