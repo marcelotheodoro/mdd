@@ -156,7 +156,7 @@ module Mdd
       def db_seeds
         if ask_question( "Create DB Seeds?")
           copy_file 'db/seeds/site.rb', 'db/seeds/site.rb'
-          create_file 'db/seeds.rb'
+          create_file 'db/seeds.rb' unless File.exist?('db/seeds.rb')
           append_file 'db/seeds.rb' do
              "\nrequire File.expand_path( '../seeds/site', __FILE__ )\n"
           end

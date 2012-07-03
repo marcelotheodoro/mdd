@@ -81,7 +81,27 @@ module Mdd
       end
       
       def locales
-        template 'config/locales/model.yml', "config/locales/mdwa/#{@model.plural_name}.en.yml"
+        destination = 'config/locales/mdwa_model_specific.en.yml'
+        inside Rails.root do
+          create_file destination unless File.exist?(destination)
+        end
+        
+        inject_into_file destination, :after => 'en:\n' do 
+          lines = []
+          lines <<  "  #{@model.plural_name}:"
+          lines <<  "    create_success: \"#{@model.singular_name.humanize} created.\""
+          lines <<  "    update_success: \"#{@model.singular_name.humanize} updated.\""
+          lines <<  "    destroy_success: \"#{@model.singular_name.humanize} destroyed.\""
+          lines <<  "    index_title: \"#{@model.plural_name.humanize}\""
+          lines <<  "    show_title: \"#{@model.singular_name.humanize}\""
+          lines <<  "    new_title: \"New #{@model.singular_name.humanize}\""
+          lines <<  "    edit_title: \"Edit #{@model.singular_name.humanize}\""
+          @model.attributes.each do |attr|
+            lines <<  "    index_#{attr.name}: \"#{attr.name.humanize}\""
+            lines <<  "    show_#{attr.name}: \"#{attr.name.humanize}\""
+          end
+          return lines.join("\n")
+        end
       end
 
       def routes
