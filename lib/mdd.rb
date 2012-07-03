@@ -4,6 +4,10 @@ module Mdd
   class Mdd < Rails::Engine
     config.autoload_paths << File.expand_path("../app", __FILE__)
   end
+  
+  module Dsl
+    autoload :Entity, 'mdd/dsl/entity'
+  end
 
   module Generators
   	autoload :Model, 'mdd/generators/model'
