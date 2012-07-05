@@ -1,6 +1,8 @@
 require 'rails/generators/migration'
 
-module Mdd 
+module MDD 
+  
+  module Generators
 
     class ScaffoldGenerator < Rails::Generators::Base
       include Rails::Generators::Migration
@@ -144,6 +146,7 @@ module Mdd
           end
         end
 
-  end
+    end
 
+  end 
 end

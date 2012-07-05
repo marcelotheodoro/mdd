@@ -1,4 +1,4 @@
-Mdd::Layout::Base.config do |config|
+MDD::Layout::Base.config do |config|
 	config['/*'] 						            = 'public'
   config['/a/*'] 						          = 'system'
   config['/a/users/passwords#*'] 		  = 'system'

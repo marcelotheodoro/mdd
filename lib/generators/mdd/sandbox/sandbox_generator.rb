@@ -3,7 +3,7 @@
 require 'rails/generators'
 require 'rails/generators/migration'
 
-module Mdd
+module MDD
   module Generators
     class SandboxGenerator < Rails::Generators::Base
       

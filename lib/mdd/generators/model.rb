@@ -1,4 +1,5 @@
-module Mdd
+# -*- encoding : utf-8 -*-
+module MDD
 	module Generators
 		class Model
 

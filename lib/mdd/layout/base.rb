@@ -1,4 +1,6 @@
-module Mdd
+# -*- encoding : utf-8 -*-
+
+module MDD
   module Layout
 
     class Base

@@ -4,7 +4,7 @@ require "mdd/version"
 
 Gem::Specification.new do |s|
   s.name        = "mdd"
-  s.version     = Mdd::VERSION
+  s.version     = MDD::VERSION
   s.authors     = ["Marcelo Theodoro"]
   s.email       = ["marcelo.theodorojr@gmail.com"]
   s.homepage    = "https://github.com/marcelotheodoro/mdd"
@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'cancan'
   s.add_dependency 'will_paginate'
   s.add_dependency 'nested_form'
-  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'minitest'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

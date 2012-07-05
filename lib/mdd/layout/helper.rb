@@ -1,4 +1,6 @@
-module Mdd
+# -*- encoding : utf-8 -*-
+
+module MDD
 	module Layout
 
 		module Helper
@@ -11,7 +13,7 @@ module Mdd
 
 			module ClassMethods
 				def select_layout
-		      		Base.select_layout "#{request.path_parameters[:controller]}##{request.path_parameters[:action]}"
+      		Base.select_layout "#{request.path_parameters[:controller]}##{request.path_parameters[:action]}"
 		  	end
 		  	
         def current_page
