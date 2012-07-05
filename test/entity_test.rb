@@ -6,13 +6,7 @@ require 'minitest/autorun'
 
 describe MDD::DSL::Entities do
   
-  it "must create entities list by default" do
-    MDD::DSL.entities.must_be_instance_of MDD::DSL::Entities
-    MDD::DSL.entities.nodes.must_be_instance_of Hash
-  end
-  
-  
-  it "must access the right elements" do
+  before do
     # create product entity
     MDD::DSL.entities.register "Product" do |e|
       e.resource = true
@@ -26,7 +20,11 @@ describe MDD::DSL::Entities do
     MDD::DSL.entity("Category").must_be_instance_of MDD::DSL::EntityNode
   end
   
-  
+  it "must create entities list by default" do
+    MDD::DSL.entities.must_be_instance_of MDD::DSL::Entities
+    MDD::DSL.entities.nodes.must_be_instance_of Hash
+  end
+    
   it "must keep track of every element initialized" do
     product = MDD::DSL.entity("Product")
     product.must_be_instance_of MDD::DSL::EntityNode
