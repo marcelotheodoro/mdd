@@ -3,7 +3,7 @@ module MDD
   module DSL
     
     autoload :Entities, 'mdd/dsl/entities'
-    autoload :EntityNode, 'mdd/dsl/entity_node'
+    autoload :Entity, 'mdd/dsl/entity'
     
   end
 end
