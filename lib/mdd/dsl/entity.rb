@@ -6,7 +6,7 @@ module MDD
 
     class Entity
       
-      attr_accessor :name, :resource, :model_name, :ajax
+      attr_accessor :name, :resource, :purpose, :model_name, :ajax, :generated, :force
       attr_accessor :attributes, :associations
       
       def initialize( name )
@@ -14,13 +14,21 @@ module MDD
         self.name = name
         
         # fixed attributes
-        resource    = false
-        model_name  = self.name
-        ajax        = false
+        self.resource    = false
+        self.model_name  = self.name
+        self.ajax        = false
+        self.generated   = false
+        self.force       = false
         
         # arrays
-        attributes   = []
-        associations = []
+        self.attributes   = []
+        self.associations = []
+      end
+      
+      def attribute
+        attr = OpenStruct.new
+        yield( attr ) if block_given?
+        self.attributes << attr
       end
       
       def generate

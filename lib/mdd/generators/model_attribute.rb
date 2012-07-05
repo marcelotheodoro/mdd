@@ -26,10 +26,6 @@ module MDD
 			  @raw_string
 		  end
 
-			def name=(value)
-				@name = value
-			end
-
 			def type=(value)
 				if STATIC_TYPES.include?( value.to_sym )
 					@type = value
@@ -72,7 +68,7 @@ module MDD
 		        @form_field ||= case self.type.to_s.to_sym
 		          when :integer              then 'number_field'
 		          when :float, :decimal      then 'text_field'
-		          when :file				 then 'file_field'
+		          when :file				         then 'file_field'
 		          when :time                 then 'time_select'
 		          when :datetime, :timestamp then 'datetime_select'
 		          when :date                 then 'date_select'

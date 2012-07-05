@@ -9,15 +9,20 @@ describe MDD::DSL::Entities do
   before do
     # create product entity
     MDD::DSL.entities.register "Product" do |e|
-      e.resource = true
+      e.resource  = true
+      e.ajax      = true
+      e.generated = false
+      e.attribute do |attr|
+        attr.name = 'test'
+      end
     end
-    MDD::DSL.entity("Product").must_be_instance_of MDD::DSL::EntityNode
+    MDD::DSL.entity("Product").must_be_instance_of MDD::DSL::Entity
     
     # create category entity
     MDD::DSL.entities.register "Category" do |e|
       e.resource = false
     end
-    MDD::DSL.entity("Category").must_be_instance_of MDD::DSL::EntityNode
+    MDD::DSL.entity("Category").must_be_instance_of MDD::DSL::Entity
   end
   
   
@@ -29,12 +34,19 @@ describe MDD::DSL::Entities do
     
   it "must keep track of every element initialized" do
     product = MDD::DSL.entity("Product")
-    product.must_be_instance_of MDD::DSL::EntityNode
+    product.must_be_instance_of MDD::DSL::Entity
     product.resource.must_equal true
+    product.ajax.must_equal true
+    product.generated.must_equal false
+    product.associations.must_be_instance_of Array
+    product.attributes.must_be_instance_of Array
+    product.model_name.must_equal( "Product" )
     
     category = MDD::DSL.entity("Category")
-    category.must_be_instance_of MDD::DSL::EntityNode
+    category.must_be_instance_of MDD::DSL::Entity
     category.resource.must_equal false
+    category.associations.must_be_instance_of Array
+    category.attributes.must_be_instance_of Array
   end
   
   

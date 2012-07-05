@@ -16,7 +16,7 @@ module MDD
       end
       
       def register( name )        
-        e = Entity.new( name )
+        e = element(name) || Entity.new( name )
         yield e
         add_node e
       end
