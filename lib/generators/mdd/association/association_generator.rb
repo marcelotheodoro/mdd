@@ -2,6 +2,7 @@
 
 require 'rails/generators'
 require 'rails/generators/migration'
+require 'mdd/generators'
 
 module MDD
   module Generators
