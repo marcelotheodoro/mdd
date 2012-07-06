@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'mdd/dsl/dsl'
+require 'mdd/dsl'
 
 require 'minitest/spec'
 require 'minitest/autorun'
