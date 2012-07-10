@@ -22,7 +22,7 @@ Run the bundle command to install it.
 After you install MDD and add it to your Gemfile, you need to run the generator:
 
 ```console
-rails generate mdd:sandbox
+rails generate mdwa:sandbox
 ```
 This generator will setup the clean sandbox environment with:
 

@@ -1,5 +1,4 @@
 # -*- encoding : utf-8 -*-
-require "mdd/version"
 require 'rails/engine'
 
 module MDD

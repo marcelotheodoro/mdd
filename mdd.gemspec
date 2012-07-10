@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "mdd/version"
+require "mdwa/version"
 
 Gem::Specification.new do |s|
   s.name        = "mdd"
-  s.version     = MDD::VERSION
+  s.version     = MDWA::VERSION
   s.authors     = ["Marcelo Theodoro"]
   s.email       = ["marcelo.theodorojr@gmail.com"]
   s.homepage    = "https://github.com/marcelotheodoro/mdd"

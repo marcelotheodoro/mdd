@@ -1,0 +1,67 @@
+Description:
+    This generator is similar to Rails scaffold.
+    It adds some tools to minimize the customization process.
+    For example, HTML code is within id elements to ease the CSS part.
+    All list have pagination with will_paginate gem.
+    Referenced models also have their relations configured in models and views.
+
+Example:
+	It behaves equally to Rails scaffold if relations are not mentioned.
+	The relations syntax:
+
+    - rails generate mdwa:scaffold Product name:string initial_date:date category_id:category:name:belongs
+    	# model product.rb
+    	class Product < ActiveRecord::Base
+    		attr_accessible :name, :initial_date, :category_id
+    		belongs_to :category
+    		...
+
+    - rails generate mdwa:scaffold Category name:string products:product:name:has_many
+    	# model product.rb
+    	class Product < ActiveRecord::Base
+    		attr_accessible :name
+    		has_many :products
+    		...
+
+    - rails generate mdwa:scaffold Product name:string category:category:name:nested_many
+    	# model product.rb
+    	class Product < ActiveRecord::Base
+    		attr_accessible :name, :categories_attributes
+    		has_many :categories
+    		accepts_nested_attributes_for :categories, :allow_destroy => true
+    		...
+
+    - rails generate mdwa:scaffold Company name:string address:address:name:nested_one
+        class Company < ActiveRecord::Base
+            attr_accessible :name, :address_attributes
+            belongs_to :address
+            accepts_nested_attributes_for :address, :allow_destroy => true
+            ...
+
+    - rails generate mdwa:scaffold User name:string projects:projects:name:has_and_belongs_to_many
+      rails generate mdwa:scaffold Project name:string users:user:name:has_and_belongs_to_many
+        Class User < ActiveRecord::Base
+            has_and_belongs_to_many :projects
+        Class User < ActiveRecord::Base
+            has_and_belongs_to_many :users
+
+    - rails generate mdwa:scaffold Product name:string product_price:productPrice:name:has_one
+    	# model product.rb
+    	class Product < ActiveRecord::Base
+    		attr_accessible :name
+    		has_one :product_price
+    		...
+
+
+Restrictions:
+	1. The database must be configured correctly as usual.
+	So, run rake db:create before start.
+	
+	2. For associations, you can use the mdd:association generator. 
+	It generates several kinds of model relations.
+	Scaffold associations will fail for model associations with specific model names, for example:
+		rails g mdwa:scaffold a/groups name:string --model=group
+		rails g mdwa:scaffold a/projects name:string group:a/group:name:belongs_to
+	For that reason, you should use:
+		rails g mdwa:scaffold a/projects name:string group:a/group,group:name:belongs_to
+		

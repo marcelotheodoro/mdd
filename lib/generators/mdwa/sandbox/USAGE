@@ -1,0 +1,9 @@
+Description:
+    This generator is similar to Rails scaffold.
+    It adds some tools to minimize the customization process.
+    For example, HTML code is within id elements to ease the CSS part.
+    All list have pagination with will_paginate gem.
+    Referenced models also have their relations configured in models and views.
+
+Example:
+    rails generate mdwa:scaffold Model name:string initial_date:date category_id:category:name:belongs
