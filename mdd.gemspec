@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'cancan'
   s.add_dependency 'will_paginate'
   s.add_dependency 'nested_form'
+  s.add_dependency 'require_all'
   s.add_development_dependency 'minitest'
 
   s.files         = `git ls-files`.split("\n")

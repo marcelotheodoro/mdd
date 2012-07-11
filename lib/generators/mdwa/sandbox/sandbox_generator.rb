@@ -27,6 +27,7 @@ module Mdwa
         gem 'cancan'
         gem 'will_paginate'
         gem 'nested_form'
+        gem 'require_all'
 
         inside Rails.root do
           run "bundle install"

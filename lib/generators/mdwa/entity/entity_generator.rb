@@ -14,7 +14,7 @@ module Mdwa
       class_option :no_comments, :type => :boolean, :default => false, :desc => 'Generates entity without comments.'
       
       def generate
-        template 'entity.rb', "app/mdwa/entities/#{name}.rb"
+        template 'entity.rb', "app/mdwa/structure/#{name}.rb"
       end
       
     end # entity
