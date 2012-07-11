@@ -192,6 +192,7 @@ describe MDWA::DSL::Entities do
     MDWA::DSL.entities.register "Group" do |p|
       p.scaffold_name = 'a/group'
       p.ajax = true
+      p.force = true
       
       p.attribute do |a|
         a.name = 'nome'
@@ -207,7 +208,8 @@ describe MDWA::DSL::Entities do
     project = MDWA::DSL.entity("Project")
     group = MDWA::DSL.entity("Group")
     
-    puts project.generate
+    project.generate.must_equal "mdwa:scaffold a/project nome:string ativo:boolean situacao_atual:text group:a/group:nome:has_many --ajax --model='Project'"
+    group.generate.must_equal "mdwa:scaffold a/group nome:string ativo:boolean --ajax --force --model='Group'"
   end
   
 end
