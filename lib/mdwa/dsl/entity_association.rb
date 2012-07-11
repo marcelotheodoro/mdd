@@ -46,8 +46,7 @@ module MDWA
         
         gen = []
         gen << self.name
-        gen << destination.scaffold_name
-        gen << ",#{destination.model_name}" unless destination.model_name != destination.scaffold_name
+        gen << destination.scaffold_name + ",#{destination.model_name}" if destination.model_name != destination.scaffold_name
         gen << (self.destination_view || destination.default_attribute.name)
         gen << generator_type
         

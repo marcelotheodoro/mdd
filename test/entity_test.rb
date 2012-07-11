@@ -167,6 +167,7 @@ describe MDWA::DSL::Entities do
   it "must generated correct code" do
     
     MDWA::DSL.entities.register "Project" do |p|
+      p.resource = true
       p.scaffold_name = 'a/project'
       p.ajax = true
       
@@ -190,6 +191,7 @@ describe MDWA::DSL::Entities do
     end
     
     MDWA::DSL.entities.register "Group" do |p|
+      p.resource = true
       p.scaffold_name = 'a/group'
       p.ajax = true
       p.force = true
@@ -208,8 +210,30 @@ describe MDWA::DSL::Entities do
     project = MDWA::DSL.entity("Project")
     group = MDWA::DSL.entity("Group")
     
-    project.generate.must_equal "mdwa:scaffold a/project nome:string ativo:boolean situacao_atual:text group:a/group:nome:has_many --ajax --model='Project'"
+    project.generate.must_equal "mdwa:scaffold a/project nome:string ativo:boolean situacao_atual:text group:a/group,Group:nome:has_many --ajax --model='Project'"
     group.generate.must_equal "mdwa:scaffold a/group nome:string ativo:boolean --ajax --force --model='Group'"
+  end
+  
+  it "should not generate non-resource entities" do
+    MDWA::DSL.entities.register "Task" do |p|
+      p.resource = false
+      p.scaffold_name = 'a/task'
+      p.ajax = true
+      p.force = true
+      
+      p.attribute do |a|
+        a.name = 'name'
+        a.type = 'string'
+      end
+      
+      p.attribute do |a|
+        a.name = 'active'
+        a.type = 'boolean'
+      end
+    end
+    
+    task = MDWA::DSL.entity('Task')
+    task.generate.must_equal nil
   end
   
 end

@@ -12,7 +12,7 @@ module MDWA
         self.name = name
         
         # fixed attributes
-        self.resource    = false
+        self.resource    = true
         self.ajax        = false
         self.generated   = false
         self.force       = false
@@ -61,6 +61,9 @@ module MDWA
       end
       
       def generate
+        # generates nothing if is not a resource
+        return nil unless self.resource
+        
         gen = []
         gen << scaffold_name
         

@@ -11,6 +11,8 @@ module Mdwa
 
       argument :name, :type => :string, :banner => 'Entity name'
       
+      class_option :no_comments, :type => :boolean, :default => false, :desc => 'Generates entity without comments.'
+      
       def generate
         template 'entity.rb', "app/mdwa/entities/#{name}.rb"
       end

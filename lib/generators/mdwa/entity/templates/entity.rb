@@ -1,7 +1,9 @@
 # -*- encoding : utf-8 -*-
 MDWA::DSL.entities.register "<%= name %>" do |e|
-  e.purpose   = %q{To-do}
-  e.resource  = true
+  
+  <%- unless options.no_comments -%>
+  # e.purpose   = %q{To-do} # what this entity does?
+  # e.resource  = true      # should it be stored like a resource?
 
   ##
   ## Define entity attributes
@@ -31,5 +33,6 @@ MDWA::DSL.entities.register "<%= name %>" do |e|
   #   a.composition = true
   #   a.description = 'This entity has a composite address.'
   # end
+  <%- end -%>
   
 end
