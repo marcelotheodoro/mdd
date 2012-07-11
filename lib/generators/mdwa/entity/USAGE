@@ -1,0 +1,5 @@
+Generates a clean entity for MDWA structural model.
+
+Example:
+	rails g mdwa:entity Product
+	rails g mdwa:entity a/category
