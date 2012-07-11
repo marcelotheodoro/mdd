@@ -26,6 +26,7 @@ module MDWA
       def attribute
         attr = EntityAttribute.new(self)
         yield( attr ) if block_given?
+        attr.raise_errors_if_invalid!
         self.attributes[attr.name] = attr
       end
       
