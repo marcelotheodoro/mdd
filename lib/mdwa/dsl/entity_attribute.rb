@@ -36,6 +36,10 @@ module MDWA
         self.default
       end
       
+      def generate
+        "#{name}:#{type}"
+      end
+      
     end
     
   end

@@ -32,6 +32,47 @@ describe MDWA::DSL::Entities do
         attr.type = 'boolean'
       end
       
+      ## associations
+      e.association do |a|
+        a.destination = 'Category'
+        a.type = 'many_to_one'
+        a.description = 'Holds the category'
+      end
+      
+      e.association do |a|
+        a.name = 'marca'
+        a.destination = 'Brand'
+        a.type = 'many_to_one'
+        a.composition = true
+        a.description = 'Product`s brand'
+      end
+      
+      e.association do |a|
+        a.destination = 'Category2'
+        a.type = 'one_to_one'
+      end
+      
+      e.association do |a|
+        a.destination = 'Category3'
+        a.type = 'one_to_one'
+        a.composition = true
+      end
+      
+      e.association do |a|
+        a.destination = 'Category4'
+        a.type = 'one_to_many'
+      end
+      
+      e.association do |a|
+        a.destination = 'Category5'
+        a.type = 'one_to_one_not_navigable'
+      end
+      
+      e.association do |a|
+        a.destination = 'Category6'
+        a.type = 'many_to_many'
+      end
+      
     end
     MDWA::DSL.entity("Product").must_be_instance_of MDWA::DSL::Entity
     
@@ -70,12 +111,6 @@ describe MDWA::DSL::Entities do
     category.attributes.must_be_instance_of Hash
   end
   
-  
-  it "must not store other stuff" do
-    MDWA::DSL.entities.nodes.size.must_equal 2
-  end
-  
-  
   it "must override elements" do
     MDWA::DSL.entities.register "Product" do |e|
       e.resource = false
@@ -101,6 +136,78 @@ describe MDWA::DSL::Entities do
     category = MDWA::DSL.entity("Category")
     category.attributes.count.must_equal 1
     category.default_attribute.name.must_equal 'name'
+  end
+  
+  it "must keep associations" do
+      
+    product = MDWA::DSL.entity("Product")
+    product.associations.count.must_equal 7
+    
+    product.associations['category'].type.must_equal 'many_to_one'
+    product.associations['category'].destination.must_equal 'Category'
+    product.associations['category'].generator_type.must_equal 'has_many'
+    
+    product.associations['brand'].must_equal nil
+    product.associations['marca'].type.must_equal 'many_to_one'
+    product.associations['marca'].destination.must_equal 'Brand'
+    product.associations['marca'].generator_type.must_equal 'nested_many'
+    
+    product.associations['category2'].generator_type.must_equal 'belongs_to'
+    
+    product.associations['category3'].generator_type.must_equal 'nested_one'
+    
+    product.associations['category4'].generator_type.must_equal 'belongs_to'
+    
+    product.associations['category5'].generator_type.must_equal 'has_one'
+    
+    product.associations['category6'].generator_type.must_equal 'has_and_belongs_to_many'
+    
+  end
+  
+  it "must generated correct code" do
+    
+    MDWA::DSL.entities.register "Project" do |p|
+      p.scaffold_name = 'a/project'
+      p.ajax = true
+      
+      p.attribute do |a|
+        a.name = 'nome'
+        a.type = 'string'
+      end
+      p.attribute do |a|
+        a.name = 'ativo'
+        a.type = 'boolean'
+      end
+      p.attribute do |a|
+        a.name = 'situacao_atual'
+        a.type = 'text'
+      end
+      
+      p.association do |assoc|
+        assoc.destination = 'Group'
+        assoc.type = 'many_to_one'
+      end
+    end
+    
+    MDWA::DSL.entities.register "Group" do |p|
+      p.scaffold_name = 'a/group'
+      p.ajax = true
+      
+      p.attribute do |a|
+        a.name = 'nome'
+        a.type = 'string'
+      end
+      
+      p.attribute do |a|
+        a.name = 'ativo'
+        a.type = 'boolean'
+      end
+    end
+    
+    project = MDWA::DSL.entity("Project")
+    group = MDWA::DSL.entity("Group")
+    
+    puts project.generate
   end
   
 end
