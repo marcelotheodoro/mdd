@@ -15,12 +15,20 @@ module MDWA
         @__instance__ ||= new
       end
       
-      def register( name )        
+      #
+      # Register a new entity in the list.
+      #
+      def register( name )
+        # retrive or initialize a entity
         e = element(name) || Entity.new( name )
         yield e
-        add_node e
+        add_node e # add to the list
       end
     
+      #
+      # Add note to the entity list
+      # Prevents entity duplication
+      #
       def add_node(node)
         @nodes[node.name] = node
       end

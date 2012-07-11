@@ -1,6 +1,4 @@
 # -*- encoding : utf-8 -*-
-require 'ostruct'
-
 module MDWA
   module DSL
 
@@ -21,14 +19,22 @@ module MDWA
         self.force       = false
         
         # arrays
-        self.attributes   = []
-        self.associations = []
+        self.attributes   = {}
+        self.associations = {}
       end
       
       def attribute
-        attr = OpenStruct.new
+        attr = EntityAttribute.new(self)
         yield( attr ) if block_given?
-        self.attributes << attr
+        self.attributes[attr.name] = attr
+      end
+      
+      def default_attribute
+        default_attr = self.attributes.first.last # first element value
+        self.attributes.each do |key, attr|
+          default_attr = attr if attr.default?
+        end
+        return default_attr
       end
       
       def generate
