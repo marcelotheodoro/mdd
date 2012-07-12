@@ -18,6 +18,7 @@ module Mdwa
       class_option :model, :desc => 'Use if model is different than the scaffold name. Format: "[namespace]/Model"', :type => :string
       class_option :ajax, :desc => 'Generates modal forms and AJAX submits.', :type => :boolean, :default => false
       class_option :skip_migrations, :desc => 'Skips the generation of a new migration.', :type => :boolean, :default => false
+      class_option :skip_rake_migrate, :desc => 'Skips running rake db:migrate', :type => :boolean, :default => false
       class_option :skip_timestamp, :desc => 'Skip timestamp generator on migration files.', :type => :boolean, :default => false
       class_option :skip_interface, :desc => 'Cretes only models, migrations and associations.', :type => :boolean, :default => false
       class_option :only_interface, :desc => 'Skips models, associations and migrations.', :type => :boolean, :default => false
@@ -126,7 +127,7 @@ module Mdwa
       end
 
       def run_rake_db_migrate
-        unless options.skip_migrations or options.only_interface
+        if !options.skip_rake_migrate and !options.skip_migrations and !options.only_interface
           rake('db:migrate') if yes? 'Run rake db:migrate?'
         end
       end

@@ -12,7 +12,6 @@ describe MDWA::DSL::Entities do
       e.purpose   = 'Store the company products.'
       e.resource  = true
       e.ajax      = true
-      e.generated = false
       
       ## attributes
       e.attribute do |attr|
@@ -99,7 +98,6 @@ describe MDWA::DSL::Entities do
     product.must_be_instance_of MDWA::DSL::Entity
     product.resource.must_equal true
     product.ajax.must_equal true
-    product.generated.must_equal false
     product.associations.must_be_instance_of Hash
     product.attributes.must_be_instance_of Hash
     product.model_name.must_equal( "Product" )
@@ -210,8 +208,11 @@ describe MDWA::DSL::Entities do
     project = MDWA::DSL.entity("Project")
     group = MDWA::DSL.entity("Group")
     
-    project.generate.must_equal "mdwa:scaffold a/project nome:string ativo:boolean situacao_atual:text group:a/group,Group:nome:has_many --ajax --model='Project'"
-    group.generate.must_equal "mdwa:scaffold a/group nome:string ativo:boolean --ajax --force --model='Group'"
+    project.scaffold_name.must_equal 'a/project'
+    project.model_name.must_equal 'a/project'
+    
+    project.generate.must_equal "mdwa:scaffold a/project nome:string ativo:boolean situacao_atual:text group:a/group:nome:has_many --ajax"
+    group.generate.must_equal "mdwa:scaffold a/group nome:string ativo:boolean --ajax --force"
   end
   
   it "should not generate non-resource entities" do

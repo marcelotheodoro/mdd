@@ -51,14 +51,14 @@ module MDWA
 
 			def migration_field
 				@migration_field ||= case self.type.to_s.to_sym
-		          when :string, :file		 then 'string'
-		          when :boolean              then 'boolean'
-		          when :date 				 then 'date'
-		          when :datetime             then 'datetime'
-		          when :decimal, :float      then 'decimal'
-		          when :text 				 then 'text'
-		          when :time 				 then 'time'
-		          when :timestamp 			 then 'timestamp'
+		          when :string, :file		      then 'string'
+		          when :boolean               then 'boolean'
+		          when :date 				          then 'date'
+		          when :datetime              then 'datetime'
+		          when :decimal, :float       then 'decimal'
+		          when :text 				          then 'text'
+		          when :time 				          then 'time'
+		          when :timestamp 			      then 'timestamp'
 		          else
 		            'integer'
 		        end

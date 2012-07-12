@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-MDWA::DSL.entities.register "<%= name %>" do |e|
+MDWA::DSL.entities.register "<%= name.singularize.camelize %>" do |e|
   
   <%- unless options.no_comments -%>
   # e.purpose   = %q{To-do} # what this entity does?

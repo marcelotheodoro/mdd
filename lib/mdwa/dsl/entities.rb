@@ -36,6 +36,10 @@ module MDWA
       def element(e)
         @nodes[e]
       end
+      
+      def all
+        @nodes.values
+      end
 
     end # class entitites
     

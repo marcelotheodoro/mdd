@@ -1,0 +1,5 @@
+Generates code for MDWA structural models.
+Examples:
+	
+	rails g mdwa:code 							# Generates code for all entities
+	rails g mdwa:code Product Category Client 	# Generates code for Product, Category and Client entities

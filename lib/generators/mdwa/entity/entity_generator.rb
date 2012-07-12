@@ -3,6 +3,8 @@
 require 'rails/generators'
 require 'rails/generators/migration'
 
+require 'mdwa/dsl'
+
 module Mdwa
   module Generators
     class EntityGenerator < Rails::Generators::Base
@@ -13,8 +15,8 @@ module Mdwa
       
       class_option :no_comments, :type => :boolean, :default => false, :desc => 'Generates entity without comments.'
       
-      def generate
-        template 'entity.rb', "app/mdwa/structure/#{name}.rb"
+      def code_generation
+        template 'entity.rb', "#{MDWA::DSL::STRUCTURAL_PATH}#{MDWA::DSL::Entity.new(name).file_name}.rb"
       end
       
     end # entity

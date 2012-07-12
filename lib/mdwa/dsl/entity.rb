@@ -1,4 +1,6 @@
 # -*- encoding : utf-8 -*-
+require 'mdwa/generators'
+
 module MDWA
   module DSL
 
@@ -24,9 +26,18 @@ module MDWA
       
       def name=(value)
         @name = value
-        
-        self.scaffold_name  = @name if self.scaffold_name.blank?
-        self.model_name     = self.scaffold_name if self.model_name.blank?
+      end
+      
+      def scaffold_name
+        return (@scaffold_name.blank? ? name: @scaffold_name)
+      end
+      
+      def model_name
+        return (@model_name.blank? ? scaffold_name: @model_name)
+      end
+      
+      def resource?
+        self.resource
       end
       
       #
@@ -60,6 +71,23 @@ module MDWA
         self.associations[assoc.name] = assoc
       end
       
+      #
+      # Returns the associated model in app/models folder
+      #
+      def model_class
+        Generators::Model.new(self.model_name).model_class
+      end
+      
+      #
+      # Entity file name
+      #
+      def file_name
+        self.name.singularize.underscore
+      end
+      
+      #
+      # Generate MDWA scaffold code for structural schema.
+      #
       def generate
         # generates nothing if is not a resource
         return nil unless self.resource

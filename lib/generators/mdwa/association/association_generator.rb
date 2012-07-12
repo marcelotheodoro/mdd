@@ -34,7 +34,7 @@ module Mdwa
 
       def model
         if @association.belongs_to?
-          inject_into_class "app/models/#{@association.model1.space}/#{@association.model1.singular_name}.rb", @association.model1.klass.classify.constantize do
+          inject_into_class "app/models/#{@association.model1.space}/#{@association.model1.singular_name}.rb", @association.model1.model_class do
             ret = []
             ret << "\n\tbelongs_to :#{@association.model2.singular_name}, :class_name => '#{@association.model2.klass}'"
             ret << "\tattr_accessible :#{@association.model2.singular_name.foreign_key}"
@@ -42,25 +42,25 @@ module Mdwa
           end
         end
         if @association.has_one?
-          inject_into_class "app/models/#{@association.model1.space}/#{@association.model1.singular_name}.rb", @association.model1.klass.classify.constantize do
+          inject_into_class "app/models/#{@association.model1.space}/#{@association.model1.singular_name}.rb", @association.model1.model_class do
             "\n\thas_one :#{@association.model2.singular_name}, :class_name => '#{@association.model2.klass}'\n"
           end
         end
         if @association.has_many?
-          inject_into_class "app/models/#{@association.model1.space}/#{@association.model1.singular_name}.rb", @association.model1.klass.classify.constantize do
+          inject_into_class "app/models/#{@association.model1.space}/#{@association.model1.singular_name}.rb", @association.model1.model_class do
             "\n\thas_many :#{@association.model2.plural_name}, :class_name => '#{@association.model2.klass}'\n"
           end
         end
         if @association.has_and_belongs_to_many?
-          inject_into_class "app/models/#{@association.model1.space}/#{@association.model1.singular_name}.rb", @association.model1.klass.classify.constantize do
+          inject_into_class "app/models/#{@association.model1.space}/#{@association.model1.singular_name}.rb", @association.model1.model_class do
             "\n\thas_and_belongs_to_many :#{@association.model2.plural_name}, :join_table => :#{many_to_many_table_name}\n"
           end
-          inject_into_class "app/models/#{@association.model2.space}/#{@association.model2.singular_name}.rb", @association.model2.klass.classify.constantize do
+          inject_into_class "app/models/#{@association.model2.space}/#{@association.model2.singular_name}.rb", @association.model2.model_class do
             "\n\thas_and_belongs_to_many :#{@association.model1.plural_name}, :join_table => :#{many_to_many_table_name}\n"
           end
         end
         if @association.nested_one?
-          inject_into_class "app/models/#{@association.model1.space}/#{@association.model1.singular_name}.rb", @association.model1.klass.classify.constantize do
+          inject_into_class "app/models/#{@association.model1.space}/#{@association.model1.singular_name}.rb", @association.model1.model_class do
             # belongs_to
             # attr_accessible attributes
             # attr_nested_attributes 
@@ -68,7 +68,7 @@ module Mdwa
           end
         end
         if @association.nested_many?
-          inject_into_class "app/models/#{@association.model1.space}/#{@association.model1.singular_name}.rb", @association.model1.klass.classify.constantize do
+          inject_into_class "app/models/#{@association.model1.space}/#{@association.model1.singular_name}.rb", @association.model1.model_class do
             # belongs_to
             # attr_accessible attributes
             # attr_nested_attributes 

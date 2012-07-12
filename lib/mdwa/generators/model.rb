@@ -4,9 +4,11 @@ module MDWA
 		class Model
 
 			attr_accessor :name, :namespace, :attributes, :specific_model_name
-
+      
+      #
 			# Sets the variables by the string
 			# Format: <namespace>/<model>, the namespace is optional.
+			#
 			def initialize( arg )
 				
 				self.namespace = '' # prevents unitialized variable errors
@@ -36,6 +38,13 @@ module MDWA
           return specific_model.klass
         end
 			end
+			
+			#
+      # Returns the associated model in app/models folder
+      #
+			def model_class
+			 self.klass.classify.constantize
+		  end
 
 			def controller_name
 				namespace_scope + name.pluralize
@@ -89,9 +98,9 @@ module MDWA
 
 			private 
 				def namespace_scope
-		          return "#{namespace}::" if namespace?
-		          return ''
-		        end
+          return "#{namespace}::" if namespace?
+          return ''
+        end
 
 		end
 	end
