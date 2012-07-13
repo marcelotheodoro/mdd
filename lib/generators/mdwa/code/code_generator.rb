@@ -59,14 +59,14 @@ module Mdwa
             puts "===================================================="
             puts "Generating code for '#{entity.name}'"
             puts "===================================================="
-            generate "#{entity.generate} #{'--skip_rake_migrate' unless options.run_migrations}"
+            generate "#{entity.generate} #{'--skip_rake_migrate' unless options.run_migrations} #{'--force' if options.force}"
             next # nothing's changed, go to the next entity
           end
         
           # check what changed
           model_class.columns.each do |column|
-            # ignore rails default columns
-            next if column.name == 'id' or column.name == 'created_at' or column.name == 'updated_at'
+            # ignore rails default columns and attributes used in associations
+            next if column.name == 'id' or column.name == 'created_at' or column.name == 'updated_at' or column.name.end_with? '_id'
             
             entity_attribute = entity.attributes[column.name]
             # model attribute exists, but not in entity -> was erased

@@ -1,0 +1,25 @@
+<div class="yui3-u-1-2">
+  <div class="field">
+    <%= f.label :name %> 
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :email %> 
+    <%= f.text_field :email %>
+  </div>
+</div>
+
+<div class="yui3-u-1-2">
+  <% unless @administrator.new_record? %>
+    <p class="description"><%= raw t('administrators.edit_form_password_text') %></p>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :password, t('administrators.edit_form_password') %> 
+    <%= f.password_field :password %>
+  </div>
+  <div class="field">
+    <%= f.label :password_confirmation, t('administrators.edit_form_password_confirmation') %> 
+    <%= f.password_field :password_confirmation %>
+  </div>
+</div>
