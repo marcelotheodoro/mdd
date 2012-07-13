@@ -2,6 +2,7 @@
 
 require 'rails/generators'
 require 'rails/generators/migration'
+
 require 'mdwa/generators'
 
 module Mdwa
@@ -27,7 +28,7 @@ module Mdwa
 
         super
         
-        @association = Generators::ModelAssocation.new(model1, model2, relation)
+        @association = MDWA::Generators::ModelAssociation.new(model1, model2, relation)
 
       end
       
@@ -133,9 +134,9 @@ module Mdwa
       end
 
       # Implement the required interface for Rails::Generators::Migration.
-      def self.next_migration_number(dirname)
+      def self.next_migration_number(dirname) #:nodoc:
         if ActiveRecord::Base.timestamped_migrations
-          Time.now.utc.strftime("%Y%m%d%H%M%S").to_s
+          Time.now.utc.strftime("%Y%m%d%H%M%S")
         else
           "%.3d" % (current_migration_number(dirname) + 1)
         end

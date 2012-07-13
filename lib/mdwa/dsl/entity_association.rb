@@ -28,13 +28,13 @@ module MDWA
       #
       def generator_type
         case self.type.to_sym
-          when :many_to_one
+          when :one_to_many
             return (self.composition ? 'nested_many' : 'has_many' )
           when :one_to_one
             return (self.composition ? 'nested_one' : 'belongs_to' )
           when :one_to_one_not_navigable
             'has_one'
-          when :one_to_many
+          when :many_to_one
             'belongs_to'
           when :many_to_many
             'has_and_belongs_to_many'

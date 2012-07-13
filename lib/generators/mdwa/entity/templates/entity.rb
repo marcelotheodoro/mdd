@@ -4,6 +4,8 @@ MDWA::DSL.entities.register "<%= name.singularize.camelize %>" do |e|
   <%- unless options.no_comments -%>
   # e.purpose   = %q{To-do} # what this entity does?
   # e.resource  = true      # should it be stored like a resource?
+  # e.ajax      = true      # scaffold with ajax?
+  # e.scaffold_name = 'a/<%= name.singularize.underscore %>' # mdwa sandbox specific code?
 
   ##
   ## Define entity attributes

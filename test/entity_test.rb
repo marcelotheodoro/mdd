@@ -41,7 +41,7 @@ describe MDWA::DSL::Entities do
       e.association do |a|
         a.name = 'marca'
         a.destination = 'Brand'
-        a.type = 'many_to_one'
+        a.type = 'one_to_many'
         a.composition = true
         a.description = 'Product`s brand'
       end
@@ -70,6 +70,11 @@ describe MDWA::DSL::Entities do
       e.association do |a|
         a.destination = 'Category6'
         a.type = 'many_to_many'
+      end
+      
+      e.association do |a|
+        a.destination = 'Category7'
+        a.type = 'many_to_one'
       end
       
     end
@@ -139,26 +144,23 @@ describe MDWA::DSL::Entities do
   it "must keep associations" do
       
     product = MDWA::DSL.entity("Product")
-    product.associations.count.must_equal 7
+    product.associations.count.must_equal 8
     
     product.associations['category'].type.must_equal 'many_to_one'
     product.associations['category'].destination.must_equal 'Category'
-    product.associations['category'].generator_type.must_equal 'has_many'
+    product.associations['category'].generator_type.must_equal 'belongs_to'
     
     product.associations['brand'].must_equal nil
-    product.associations['marca'].type.must_equal 'many_to_one'
+    product.associations['marca'].type.must_equal 'one_to_many'
     product.associations['marca'].destination.must_equal 'Brand'
     product.associations['marca'].generator_type.must_equal 'nested_many'
     
     product.associations['category2'].generator_type.must_equal 'belongs_to'
-    
     product.associations['category3'].generator_type.must_equal 'nested_one'
-    
-    product.associations['category4'].generator_type.must_equal 'belongs_to'
-    
+    product.associations['category4'].generator_type.must_equal 'has_many'
     product.associations['category5'].generator_type.must_equal 'has_one'
-    
     product.associations['category6'].generator_type.must_equal 'has_and_belongs_to_many'
+    product.associations['category7'].generator_type.must_equal 'belongs_to'
     
   end
   
@@ -211,7 +213,7 @@ describe MDWA::DSL::Entities do
     project.scaffold_name.must_equal 'a/project'
     project.model_name.must_equal 'a/project'
     
-    project.generate.must_equal "mdwa:scaffold a/project nome:string ativo:boolean situacao_atual:text group:a/group:nome:has_many --ajax"
+    project.generate.must_equal "mdwa:scaffold a/project nome:string ativo:boolean situacao_atual:text group:a/group:nome:belongs_to --ajax"
     group.generate.must_equal "mdwa:scaffold a/group nome:string ativo:boolean --ajax --force"
   end
   

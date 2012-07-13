@@ -40,6 +40,10 @@ module MDWA
         self.resource
       end
       
+      def force?
+        self.force
+      end
+      
       #
       # Declares one attribute of the list using the block given.
       #
@@ -79,7 +83,7 @@ module MDWA
       end
       
       #
-      # Entity file name
+      # Entity file name  
       #
       def file_name
         self.name.singularize.underscore

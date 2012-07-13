@@ -55,7 +55,7 @@ module Mdwa
           rescue
             model_class = nil
           end
-          if model_class.nil? or !model_class.table_exists?
+          if entity.force? or model_class.nil? or !model_class.table_exists?
             puts "===================================================="
             puts "Generating code for '#{entity.name}'"
             puts "===================================================="
@@ -108,13 +108,13 @@ module Mdwa
       end
       
       # Implement the required interface for Rails::Generators::Migration.
-      def self.next_migration_number(dirname)
+      def self.next_migration_number(dirname) #:nodoc:
         if ActiveRecord::Base.timestamped_migrations
-          Time.now.utc.strftime("%Y%m%d%H%M%S").to_s
+          Time.now.utc.strftime("%Y%m%d%H%M%S")
         else
           "%.3d" % (current_migration_number(dirname) + 1)
         end
-      end   
+      end
       
       private 
        def inverse_migration_type(type)
