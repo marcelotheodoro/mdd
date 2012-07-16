@@ -69,7 +69,8 @@ module Mdwa
 
       def model_and_migration        
         # model override
-        template 'model.rb', "app/models/#{@model.space}/#{@model.singular_name}.rb"
+        # template 'model.rb', "app/models/#{@model.space}/#{@model.singular_name}.rb"
+        gsub_file "app/models/#{@model.space}/#{@model.singular_name}.rb", /ActiveRecord::Base/, 'User'
         
         # override model attributes to not allow field duplicity (causing errorss)
         @model.attributes = []

@@ -70,6 +70,8 @@ module Mdwa
             
             next # nothing's changed, go to the next entity
           end
+          
+          next if entity.user?
         
           # check what changed
           model_class.columns.each do |column|
@@ -78,7 +80,7 @@ module Mdwa
             
             entity_attribute = entity.attributes[column.name]
             # model attribute exists, but not in entity -> was erased
-            if entity_attribute.nil? 
+            if entity_attribute.nil?
               @changes << {:entity => entity, :type => 'remove_column', :column => column.name}
             # attribute exists in model and entity, but changed type
             elsif entity_attribute.type.to_sym != column.type.to_sym
