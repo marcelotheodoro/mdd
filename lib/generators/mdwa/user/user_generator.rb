@@ -42,11 +42,14 @@ module Mdwa
           end
         end
         
-        predefined_fields = ["id", "email", 'password', 'password_confirmation', 'encrypted_password', "name", "type", "reset_password_token", "reset_password_sent_at", "remember_created_at", "sign_in_count", "current_sign_in_at", "last_sign_in_at", "current_sign_in_ip", "last_sign_in_ip", "created_at", "updated_at"]
-
+        require_all "#{Rails.root}/app/models/user.rb"
+        @predefined_fields = User.column_names
+        @predefined_fields << 'password'
+        @predefined_fields << 'password_confirmation'
+        
         # sets the model attributes
         attributes.each do |attribute|
-          @model.add_attribute MDWA::Generators::ModelAttribute.new( attribute ) unless predefined_fields.include?( attribute.split(':').first )
+          @model.add_attribute MDWA::Generators::ModelAttribute.new( attribute ) unless User.accessible_attributes.to_a.include?( attribute.split(':').first )
         end
         
         generate "mdwa:scaffold #{scaffold_name} name:string email:string password:password password_confirmation:password #{attributes.join(' ')} #{'--force' if options.force} #{'--ajax' if options.ajax} #{"model=#{options.model}" if options.model} #{'--skip_interface' if options.skip_interface} #{'--only_interface' if options.only_interface} #{'--skip_rake_migrate' if options.skip_rake_migrate} #{'--skip_timestamp' if options.skip_timestamp} #{'--skip_questions' if options.skip_questions} --skip-migrations"
@@ -65,14 +68,21 @@ module Mdwa
       end
 
       def model_and_migration        
+        # model override
         template 'model.rb', "app/models/#{@model.space}/#{@model.singular_name}.rb"
-        migration_template 'migrate.rb', "db/migrate/add_#{@model.attributes.collect{|a| a.name}.join('_')}_to_users"
+        
+        # override model attributes to not allow field duplicity (causing errorss)
+        @model.attributes = []
+        attributes.each do |attribute|
+          @model.add_attribute MDWA::Generators::ModelAttribute.new( attribute ) unless @predefined_fields.include?( attribute.split(':').first )
+        end
+        migration_template 'migrate.rb', "db/migrate/add_#{@model.attributes.collect{|a| a.name}.join('_')}_to_users" unless @model.attributes.empty?
         
         # include type in db:seed
         append_file 'db/seeds/site.rb' do
           "\n\nPermission.create( :name => '#{@model.singular_name}' ) if Permission.find_by_name('#{@model.singular_name}').nil?"
         end
-        
+        # run rake db:seeds
         if yes?('Run rake db:seed to create permission type?')
           rake 'db:migrate'
           rake 'db:seed' 
