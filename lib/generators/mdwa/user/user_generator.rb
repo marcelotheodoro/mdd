@@ -69,8 +69,15 @@ module Mdwa
 
       def model_and_migration        
         # model override
-        # template 'model.rb', "app/models/#{@model.space}/#{@model.singular_name}.rb"
-        gsub_file "app/models/#{@model.space}/#{@model.singular_name}.rb", /ActiveRecord::Base/, 'User'
+        gsub_file "app/models/#{@model.space}/#{@model.singular_name}.rb", 'ActiveRecord::Base', 'User'
+        inject_into_class "app/models/#{@model.space}/#{@model.singular_name}.rb", @model.model_class do 
+          inj = []
+          inj << "\nafter_create :create_#{@model.singular_name}_permission\n"
+          inj << "def create_#{@model.singular_name}_permission"
+          inj << "\tself.permissions.push Permission.find_by_name('#{@model.singular_name}')"
+          inj << "end"
+          return inj.join("\n")
+        end
         
         # override model attributes to not allow field duplicity (causing errorss)
         @model.attributes = []
