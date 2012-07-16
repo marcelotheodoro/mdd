@@ -68,7 +68,7 @@ module MDWA
 			end
 
 			def has_and_belongs_to_many?
-				return (relation == 'has_and_belongs_and_to_many')
+				return (relation == 'has_and_belongs_to_many')
 			end
       
     end

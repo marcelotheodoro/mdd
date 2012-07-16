@@ -6,7 +6,7 @@ module MDWA
 		class ModelAttribute
 			attr_accessor :name, :type, :reference, :reference_type, :model
 
-			STATIC_TYPES = [:boolean, :date, :datetime, :decimal, :float, :integer, :string, :text, :time, :timestamp, :file]
+			STATIC_TYPES = [:boolean, :date, :datetime, :decimal, :float, :integer, :string, :text, :time, :timestamp, :file, :password]
 
 			# Sets the attributes variables
 			# Format: <name>:<type>,<model>:<reference>:<reference_type>
@@ -51,14 +51,14 @@ module MDWA
 
 			def migration_field
 				@migration_field ||= case self.type.to_s.to_sym
-		          when :string, :file		      then 'string'
-		          when :boolean               then 'boolean'
-		          when :date 				          then 'date'
-		          when :datetime              then 'datetime'
-		          when :decimal, :float       then 'decimal'
-		          when :text 				          then 'text'
-		          when :time 				          then 'time'
-		          when :timestamp 			      then 'timestamp'
+		          when :string, :file, :password  then 'string'
+		          when :boolean                   then 'boolean'
+		          when :date 				              then 'date'
+		          when :datetime                  then 'datetime'
+		          when :decimal, :float           then 'decimal'
+		          when :text 				              then 'text'
+		          when :time 				              then 'time'
+		          when :timestamp 			          then 'timestamp'
 		          else
 		            'integer'
 		        end
@@ -74,6 +74,7 @@ module MDWA
 		          when :date                 then 'date_select'
 		          when :text                 then 'text_area'
 		          when :boolean              then 'check_box'
+	            when :password             then 'password_field'  
 		          else
 		            'text_field'
 		        end

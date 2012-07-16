@@ -132,7 +132,8 @@ module Mdwa
     devise_for :users, :skip => :registrations, :controllers => {:sessions => 'a/users/sessions', :passwords => 'a/users/passwords' }
    
     resources :administrators
-    controller :administrators do
+    
+    controller :home do
       get '/edit_account' => :edit_own_account
     end
     

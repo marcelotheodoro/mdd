@@ -21,7 +21,7 @@
         <%%= <%= @model.singular_name %>.<%= attr.name %> %>
       <%- elsif attr.belongs_to? || attr.nested_one? -%>
         <%%= <%= @model.singular_name %>.<%= attr.type.singular_name %>.<%= attr.reference %> %>
-      <%- elsif attr.has_many? or attr.nested_many? -%>
+      <%- elsif attr.has_many? or attr.has_and_belongs_to_many? or attr.nested_many? -%>
         <ul>
         <%% <%= @model.singular_name %>.<%= attr.type.plural_name %>.each do |<%= attr.type.singular_name %>| %>
           <li><%%= <%= attr.type.singular_name %>.<%= attr.reference %> %> </li>

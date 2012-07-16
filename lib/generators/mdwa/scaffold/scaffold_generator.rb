@@ -20,6 +20,7 @@ module Mdwa
       class_option :skip_migrations, :desc => 'Skips the generation of a new migration.', :type => :boolean, :default => false
       class_option :skip_rake_migrate, :desc => 'Skips running rake db:migrate', :type => :boolean, :default => false
       class_option :skip_timestamp, :desc => 'Skip timestamp generator on migration files.', :type => :boolean, :default => false
+      class_option :skip_questions, :desc => 'Answer no for all questions by default.', :type => :boolean, :default => false
       class_option :skip_interface, :desc => 'Cretes only models, migrations and associations.', :type => :boolean, :default => false
       class_option :only_interface, :desc => 'Skips models, associations and migrations.', :type => :boolean, :default => false
 
@@ -121,14 +122,14 @@ module Mdwa
       def associations
         unless options.only_interface
           @model.attributes.select{ |a| a.references? }.each do |attr|
-              generate "mdwa:association #{@model.raw} #{attr.reference_type} #{attr.type.raw} #{'--skip_migrations' if options.skip_migrations} #{'--force' if options.force} --skip_rake_migrate --ask"
+              generate "mdwa:association #{@model.raw} #{attr.reference_type} #{attr.type.raw} #{'--skip_migrations' if options.skip_migrations} #{'--force' if options.force} #{'--ask' unless options.skip_questions} --skip_rake_migrate"
           end
         end
       end
 
       def run_rake_db_migrate
         if !options.skip_rake_migrate and !options.skip_migrations and !options.only_interface
-          rake('db:migrate') if yes? 'Run rake db:migrate?'
+          rake('db:migrate') if !options.skip_questions and yes? 'Run rake db:migrate?'
         end
       end
 

@@ -6,5 +6,9 @@ class A::HomeController < A::BackendController
 
   def index
   end
+  
+  def edit_own_account
+    redirect_to "/a/#{current_user.type.underscore.split('/').last.pluralize}/#{current_user.id}/edit?static_html=1"
+  end
 
 end

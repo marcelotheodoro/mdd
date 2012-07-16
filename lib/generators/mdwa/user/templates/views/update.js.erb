@@ -1,0 +1,12 @@
+<%% if @<%= @model.singular_name %>.errors.any? %>
+	$("#mdwa_error").html("<%%= escape_javascript( render '/template/mdwa/crud_error', :object => @<%= @model.singular_name %> )%>");
+<%% else %>
+	if( $('#<%= @model.plural_name %>_list').length > 0 ) {
+		$.fancybox.close(true);
+		$("#<%= @model.plural_name %>_list").html("<%%= escape_javascript( render '<%= @model.plural_name %>' )%>");
+	}
+	else if( $("#edit_<%= @model.plural_name %>").length > 0 ) {
+		$("#edit_<%= @model.plural_name %> .inside").html("<%%= escape_javascript( render 'form' )%>");
+	}
+	$('body').append("<%%= escape_javascript( render '/template/mdwa/notice', :notice => @system_notice )%>");
+<%% end %>

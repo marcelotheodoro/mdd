@@ -18,6 +18,7 @@ module Mdwa
       argument :entities, :type => :array, :banner => 'Specific entities', :default => []
       
       class_option :run_migrations, :type => :boolean, :default => false, :desc => 'Run rake db:migrate directly'
+      class_option :only_interface, :type => :boolean, :default => false, :desc => 'Generate only user interface'
       
       def initialize(*args, &block)
         super
@@ -43,6 +44,8 @@ module Mdwa
       
       def code_generation
         
+        return false if options.only_interface
+        
         @all_entities.each do |entity|
           
           # if it's not a resource, ignore
@@ -59,7 +62,12 @@ module Mdwa
             puts "===================================================="
             puts "Generating code for '#{entity.name}'"
             puts "===================================================="
-            generate "#{entity.generate} #{'--skip_rake_migrate' unless options.run_migrations} #{'--force' if options.force}"
+            generation_string = "#{entity.generate} #{'--skip_rake_migrate' unless options.run_migrations} #{'--force' if options.force} --skip-questions"
+            generate generation_string
+            
+            # append generated code to entity
+            append_to_file "#{MDWA::DSL::STRUCTURAL_PATH}#{entity.file_name}.rb", "\n\nMDWA::DSL.entity('#{entity.name}').code_generations << '#{generation_string}'"
+            
             next # nothing's changed, go to the next entity
           end
         
@@ -72,11 +80,10 @@ module Mdwa
             # model attribute exists, but not in entity -> was erased
             if entity_attribute.nil? 
               @changes << {:entity => entity, :type => 'remove_column', :column => column.name}
-              # puts "#{entity.name} - #{column.name}: Atributo apagado"
             # attribute exists in model and entity, but changed type
-            elsif entity_attribute.type.to_sym != column.type.to_sym 
+            elsif entity_attribute.type.to_sym != column.type.to_sym
+              next if entity_attribute.type.to_sym == :file or entity_attribute.type.to_sym == :password
               @changes << {:entity => entity, :type => 'change_column', :column => column.name, :attr_type => entity_attribute.type, :from => column.type}
-              # puts "#{entity.name} - #{column.name}: Trocou de #{entity_attribute.type} por #{column.type}"
             end
             
           end
@@ -86,10 +93,38 @@ module Mdwa
             # no column with that name -> column must be added
             if model_class.columns.select {|c| c.name == attr.name}.count.zero?
               @changes << {:entity => entity, :type => 'add_column', :column => attr.name, :attr_type => attr.type}
-              # puts "#{entity.name} - #{attr.name}: Atributo a incluir"
             end
           end
           
+        end
+        
+      end
+      
+      def only_interface_generation
+        
+        if options.only_interface
+          @all_entities.each do |entity|
+
+            # if it's not a resource, ignore
+            next unless entity.resource?
+
+            # if model has not a database yet, run the generate command
+            begin
+              # if model does not exist, should generate scaffold
+              model_class = entity.model_class
+            rescue
+              model_class = nil
+            end
+            if entity.force? or model_class.nil? or !model_class.table_exists?
+              puts "===================================================="
+              puts "Generating code for '#{entity.name}'"
+              puts "===================================================="
+              generate "#{entity.generate} --only_interface #{'--force' if options.force}"
+              
+              # append generated code to entity
+              append_to_file "#{MDWA::DSL::STRUCTURAL_PATH}#{entity.file_name}.rb", "\n\nMDWA::DSL.entity('#{entity.name}').code_generations << '#{generation_string}'"
+            end
+          end
         end
         
       end  

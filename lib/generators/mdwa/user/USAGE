@@ -1,0 +1,3 @@
+Generates a loggable user, similar to MDWA Scaffold.
+USAGE:
+	rails g mdwa:user birth_date:date

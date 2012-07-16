@@ -6,8 +6,8 @@ module MDWA
 
     class Entity
       
-      attr_accessor :name, :resource, :purpose, :scaffold_name, :model_name, :ajax, :generated, :force
-      attr_accessor :attributes, :associations
+      attr_accessor :name, :resource, :user, :purpose, :scaffold_name, :model_name, :ajax, :generated, :force
+      attr_accessor :attributes, :associations, :code_generations
       
       def initialize( name )
         # set the entity name
@@ -15,6 +15,7 @@ module MDWA
         
         # fixed attributes
         self.resource    = true
+        self.user        = false
         self.ajax        = false
         self.generated   = false
         self.force       = false
@@ -22,6 +23,7 @@ module MDWA
         # arrays
         self.attributes   = {}
         self.associations = {}
+        self.code_generations = []
       end
       
       def name=(value)
@@ -42,6 +44,10 @@ module MDWA
       
       def force?
         self.force
+      end
+      
+      def user?
+        self.user
       end
       
       #
@@ -111,7 +117,7 @@ module MDWA
         gen << "--force" if force
         gen << "--model='#{model_name}'" if model_name != scaffold_name
         
-        "mdwa:scaffold #{gen.join(' ')}"
+        "mdwa:#{user? ? 'user': 'scaffold'} #{gen.join(' ')}"
       end
       
     end
