@@ -30,7 +30,7 @@ en:
     index_title: "System users"
     index_id: "ID"
     index_name: "Name"
-    index_email: "Email"
+    index_email: "E-mail"
     index_remove: "Remove?"
     index_remove_label: "Remove"
     index_confirm_deletion: "Are you sure?"
