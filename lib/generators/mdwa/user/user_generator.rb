@@ -72,11 +72,11 @@ module Mdwa
         gsub_file "app/models/#{@model.space}/#{@model.singular_name}.rb", 'ActiveRecord::Base', 'User'
         inject_into_class "app/models/#{@model.space}/#{@model.singular_name}.rb", @model.model_class do 
           inj = []
-          inj << "\nafter_create :create_#{@model.singular_name}_permission\n"
-          inj << "def create_#{@model.singular_name}_permission"
-          inj << "\tself.permissions.push Permission.find_by_name('#{@model.singular_name}')"
-          inj << "end"
-          return inj.join("\n")
+          inj << "\n\tafter_create :create_#{@model.singular_name}_permission\n"
+          inj << "\tdef create_#{@model.singular_name}_permission"
+          inj << "\t\tself.permissions.push Permission.find_by_name('#{@model.singular_name}')"
+          inj << "\tend"
+          inj.join("\n")
         end
         
         # override model attributes to not allow field duplicity (causing errorss)
