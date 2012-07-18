@@ -6,7 +6,7 @@ module MDWA
 
     class Entity
       
-      attr_accessor :name, :resource, :user, :purpose, :scaffold_name, :model_name, :ajax, :generated, :force
+      attr_accessor :name, :resource, :user, :purpose, :scaffold_name, :model_name, :ajax, :force
       attr_accessor :attributes, :associations, :code_generations
       
       def initialize( name )
@@ -17,7 +17,6 @@ module MDWA
         self.resource    = true
         self.user        = false
         self.ajax        = false
-        self.generated   = false
         self.force       = false
         
         # arrays
