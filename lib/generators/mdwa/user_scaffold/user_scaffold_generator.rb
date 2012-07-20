@@ -66,19 +66,35 @@ module Mdwa
           template 'views/update.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/update.js.erb"
         end
       end
-
-      def model_and_migration        
+      
+      def model_override
+        # locate the mdwa user to discover the roles
+        require_all "#{MDWA::DSL::USERS_PATH}#{@model.singular_name}.rb"
+        @mdwa_user = MDWA::DSL.user(@model.name)
+        if @mdwa_user.nil?
+          @roles = [@model.name]
+        else
+          @roles = @mdwa_user.user_roles
+        end
+        
         # model override
         gsub_file "app/models/#{@model.space}/#{@model.singular_name}.rb", 'ActiveRecord::Base', 'User'
         inject_into_class "app/models/#{@model.space}/#{@model.singular_name}.rb", @model.model_class do 
           inj = []
-          inj << "\n\tafter_create :create_#{@model.singular_name}_permission\n"
-          inj << "\tdef create_#{@model.singular_name}_permission"
-          inj << "\t\tself.permissions.push Permission.find_by_name('#{@model.singular_name}')"
+          inj << "\n\tafter_create :create_user_permissions\n"
+          inj << "\tdef create_user_permissions"
+          @roles.each do |role|
+            inj << "\t\t#{role}_permission = Permission.find_by_name('#{role}')"
+            inj << "\t\t#{role}_permission = Permission.create(:name => '#{role}') if #{role}_permission.nil?" 
+            inj << "\t\tself.permissions.push #{role}_permission"
+          end
           inj << "\tend"
           inj.join("\n")
         end
-        
+      end
+
+      def migration_override        
+
         # override model attributes to not allow field duplicity (causing errorss)
         @model.attributes = []
         attributes.each do |attribute|
