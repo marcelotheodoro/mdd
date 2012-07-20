@@ -7,7 +7,7 @@ module MDWA
     class Entity
       
       attr_accessor :name, :resource, :user, :purpose, :scaffold_name, :model_name, :ajax, :force
-      attr_accessor :attributes, :associations, :code_generations
+      attr_accessor :attributes, :associations, :actions, :code_generations
       
       def initialize( name )
         # set the entity name
@@ -23,6 +23,8 @@ module MDWA
         self.attributes   = {}
         self.associations = {}
         self.code_generations = []
+        
+        self.actions      = EntityActions.new(self)
       end
       
       def name=(value)
@@ -30,11 +32,18 @@ module MDWA
       end
       
       def scaffold_name
-        return (@scaffold_name.blank? ? name: @scaffold_name)
+        return (@scaffold_name.blank? ? name : @scaffold_name)
       end
       
       def model_name
-        return (@model_name.blank? ? scaffold_name: @model_name)
+        return (@model_name.blank? ? scaffold_name : @model_name)
+      end
+      
+      def resource=(value)
+        @resource = value
+        
+        # if entity is resorceful, generate default resource action
+        self.actions.set_resource_actions
       end
       
       def resource?
@@ -60,17 +69,6 @@ module MDWA
       end
       
       #
-      # Selects the default attribute of the entity
-      #
-      def default_attribute
-        default_attr = self.attributes.first.last # first element value
-        self.attributes.each do |key, attr|
-          default_attr = attr if attr.default?
-        end
-        return default_attr
-      end
-      
-      #
       # Defines one association
       #
       def association
@@ -78,6 +76,20 @@ module MDWA
         yield( assoc ) if block_given?
         # assoc.raise_errors_if_invalid!
         self.associations[assoc.name] = assoc
+      end
+      
+      #
+      # Include a member action
+      # Params: name, method = get, request_type = html
+      def member_action(name, method, request_type)
+        self.actions.member_action(name, method, request_type)
+      end
+      
+      #
+      # Include a collection action
+      # Params: name, method = get, request_type = html
+      def collection_action(name, method, request_type)
+        self.actions.collection_action(name, method, request_type)
       end
       
       #
@@ -92,6 +104,17 @@ module MDWA
       #
       def file_name
         self.name.singularize.underscore
+      end
+      
+      #
+      # Selects the default attribute of the entity
+      #
+      def default_attribute
+        default_attr = self.attributes.first.last # first element value
+        self.attributes.each do |key, attr|
+          default_attr = attr if attr.default?
+        end
+        return default_attr
       end
       
       #
