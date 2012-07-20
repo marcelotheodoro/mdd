@@ -5,7 +5,7 @@ module Mdwa
   
   module Generators
 
-    class UserGenerator < Rails::Generators::Base
+    class UserScaffoldGenerator < Rails::Generators::Base
       include Rails::Generators::Migration
 
       source_root File.expand_path('../templates', __FILE__)

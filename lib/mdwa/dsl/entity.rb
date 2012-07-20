@@ -142,7 +142,7 @@ module MDWA
         gen << "--force" if force
         gen << "--model='#{model_name}'" if model_name != scaffold_name
         
-        "mdwa:#{user? ? 'user': 'scaffold'} #{gen.join(' ')}"
+        "mdwa:#{user? ? 'user_scaffold': 'scaffold'} #{gen.join(' ')}"
       end
       
     end
