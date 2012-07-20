@@ -81,14 +81,14 @@ module Mdwa
         gsub_file "app/models/#{@model.space}/#{@model.singular_name}.rb", 'ActiveRecord::Base', 'User'
         inject_into_class "app/models/#{@model.space}/#{@model.singular_name}.rb", @model.model_class do 
           inj = []
-          inj << "\n\tafter_create :create_user_permissions\n"
-          inj << "\tdef create_user_permissions"
           @roles.each do |role|
+            inj << "\n\n\tafter_create :create_#{role}_permission\n"
+            inj << "\tdef create_#{role}_permission"
             inj << "\t\t#{role}_permission = Permission.find_by_name('#{role}')"
             inj << "\t\t#{role}_permission = Permission.create(:name => '#{role}') if #{role}_permission.nil?" 
             inj << "\t\tself.permissions.push #{role}_permission"
+            inj << "\tend"
           end
-          inj << "\tend"
           inj.join("\n")
         end
       end
