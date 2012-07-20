@@ -83,11 +83,11 @@ module Mdwa
         inject_into_class "app/models/#{@model.space}/#{@model.singular_name}.rb", @model.model_class do 
           inj = []
           @roles.each do |role|
-            inj << "\n\n\tafter_create :create_#{role}_permission\n"
-            inj << "\tdef create_#{role}_permission"
-            inj << "\t\t#{role}_permission = Permission.find_by_name('#{role}')"
-            inj << "\t\t#{role}_permission = Permission.create(:name => '#{role}') if #{role}_permission.nil?" 
-            inj << "\t\tself.permissions.push #{role}_permission"
+            inj << "\n\n\tafter_create :create_#{role.underscore}_permission\n"
+            inj << "\tdef create_#{role.underscore}_permission"
+            inj << "\t\t#{role.underscore}_permission = Permission.find_by_name('#{role.underscore}')"
+            inj << "\t\t#{role.underscore}_permission = Permission.create(:name => '#{role.underscore}') if #{role.underscore}_permission.nil?" 
+            inj << "\t\tself.permissions.push #{role.underscore}_permission"
             inj << "\tend"
           end
           inj.join("\n")
@@ -96,7 +96,7 @@ module Mdwa
 
       def migration_override        
 
-        # override model attributes to not allow field duplicity (causing errorss)
+        # override model attributes to not allow field duplicity (causing errors)
         @model.attributes = []
         attributes.each do |attribute|
           @model.add_attribute MDWA::Generators::ModelAttribute.new( attribute ) unless @predefined_fields.include?( attribute.split(':').first )
