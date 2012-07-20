@@ -11,14 +11,23 @@ describe MDWA::DSL::EntityActions do
     MDWA::DSL.entities.register "Product" do |e|
       e.resource  = true
       e.ajax      = true
-      
-      e.member_action :publish
+
+      e.member_action :publish, :get, :html
     end 
+  end
+  
+  it "should create action correctly" do 
+    action = MDWA::DSL::Action.new :publish, :member, :method => :get, :request_type => [:html, :ajax_js]
+    action.name.must_equal :publish
+    action.member?.must_equal true
+    action.method.must_equal :get
+    action.resource?.must_equal false
+    action.request_type.must_equal [:html, :ajax_js]
   end
   
   it "should store resource actions correctly" do 
     product = MDWA::DSL.entity('Product')
-    product.actions.actions.count.must_equal 7
+    product.actions.actions.count.must_equal 8
     product.actions.actions[:index].must_be_instance_of MDWA::DSL::Action
     product.actions.actions[:index].collection?.must_equal true
     product.actions.actions[:index].member?.must_equal false
@@ -49,23 +58,31 @@ describe MDWA::DSL::EntityActions do
     product.actions.actions[:delete].member?.must_equal true
     
     product.actions.actions[:no_ecsiste].must_equal nil
+  end
+  
+  it "should work well with non-resourceful actions" do 
+    product = MDWA::DSL.entity('Product')
+    product.actions.member_actions.count.must_equal 1
+    product.actions.actions[:publish].name.must_equal :publish
+    product.actions.actions[:publish].method.must_equal :get
+    product.actions.actions[:publish].request_type.must_equal [:html]
+    product.actions.actions[:publish].resource?.must_equal false
+  end
+  
+  it "should not generate actions for non-resourceful entities" do
+    
+    MDWA::DSL.entities.register 'Reports' do |e|
+      e.resource = false
+    end
+    
+    reports = MDWA::DSL.entity('Reports')
+    reports.actions.actions.count.must_equal 0
     
   end
   
-  # it "should not generate actions for non-resourceful entities" do
-  #   
-  #   MDWA::DSL.entities.register 'Category' do |e|
-  #     e.resource = false
-  #   end
-  #   
-  #   category = MDWA::DSL.entity('Category')
-  #   category.actions.actions.count.zero?.must_equal true
-  #   
-  # end
-  
   it "should generate correct code" do
-    # product = MDWA::DSL.entity('Product')
-    # puts product.actions.generate_routes
+    product = MDWA::DSL.entity('Product')
+    puts product.actions.generate_routes
   end
   
 end

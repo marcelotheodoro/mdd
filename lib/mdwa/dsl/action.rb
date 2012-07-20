@@ -8,9 +8,9 @@ module MDWA
       ALLOWED_METHODS = [:get, :post, :put, :delete]
       PREDEFINED_REQUEST_TYPES   = [:html, :ajax, :ajax_js, :modalbox]
       
-      attr_accessor :name, :type, :method, :request_type, :resource
+      attr_accessor :name, :type, :method, :request_type, :response, :resource
       
-      def initialize(name, type, options = {})
+      def initialize(name, type, options)
         self.name         = name.to_sym
         self.type         = type.to_sym
         self.method       = options[:method] || :get
@@ -23,15 +23,15 @@ module MDWA
         if value.is_a? Array
           @request_type = value
         else
-          @request_type = [value] 
+          @request_type = [value]
         end
       end
       
       def response=(value)
         if value.is_a? Hash
-          @request_type = value
+          @response = value
         else
-          @request_type = {self.method.first.to_sym => value}
+          @response = {self.method.first.to_sym => value}
         end
       end
       
@@ -49,21 +49,21 @@ module MDWA
       
       def generate_controller
         action_str = []
-        action_str << "\tdef #{action.name.to_s}"
+        action_str << "\tdef #{self.name.to_s}"
         action_str << ""
           action_str << "\t\trespond_to do |format|"        
           self.request_type.each do |request|          
             case request.to_sym
             when :modalbox
-              action_str << "\t\t\tformat.html{render :layout => false}"
+              # action_str << "\t\t\tformat.html{render :layout => false}"
             when :html
-              action_str << "\t\t\tformat.html #{"{#{options.response[:html]}}" unless options.response[:html].blank?}"
+              action_str << "\t\t\tformat.html #{"{#{self.response[:html]}}" unless self.response[:html].blank?}"
             when :ajax
-              action_str << "\t\t\tformat.js #{"{#{options.response[:ajax]}}" unless options.response[:ajax].blank?}"
+              action_str << "\t\t\tformat.js #{"{#{self.response[:ajax]}}" unless self.response[:ajax].blank?}"
             when :ajax_js
-              action_str << "\t\t\tformat.json #{"{#{options.response[:ajax_js]}}" unless options.response[:ajax_js].blank?}"
+              action_str << "\t\t\tformat.json #{"{#{self.response[:ajax_js]}}" unless self.response[:ajax_js].blank?}"
             else
-              action_str << "\t\t\tformat.#{request.to_s} #{"{#{options.response[request.to_sym]}}" unless options.response[request.to_sym].blank?}"
+              action_str << "\t\t\tformat.#{request.to_s} #{"{#{self.response[request.to_sym]}}" unless self.response[request.to_sym].blank?}"
             end
           end
           action_str << "\t\tend"

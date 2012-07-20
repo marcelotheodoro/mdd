@@ -42,7 +42,11 @@ module MDWA
         @resource = value
         
         # if entity is resorceful, generate default resource action
-        self.actions.set_resource_actions
+        if resource?
+          self.actions.set_resource_actions 
+        else
+          self.actions.clear_resource_actions
+        end
       end
       
       def resource?
@@ -80,7 +84,7 @@ module MDWA
       #
       # Include a member action
       # Params: name, method = get, request_type = html
-      def member_action(name, method, request_type)
+      def member_action(name, method = nil, request_type = nil)
         self.actions.member_action(name, method, request_type)
       end
       

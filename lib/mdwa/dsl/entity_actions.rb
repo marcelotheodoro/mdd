@@ -11,15 +11,23 @@ module MDWA
         self.actions  = {}
       end
       
-      def member_action(member, method, request_type)
-        self.actions[:name] = Action.new(name, :member, method, request_type)
+      def member_action(name, method, request_type)
+        self.actions[name.to_sym] = Action.new(name.to_sym, :member, :method => method, :request_type => request_type)
       end
       
       #
       # Include a collection action
       # Params: name, method = get, request_type = html
-      def collection_action(member, method, request_type)
-        self.actions[:name] = Action.new(name, :collection, method, request_type)
+      def collection_action(name, method, request_type)
+        self.actions[name.to_sym] = Action.new(name.to_sym, :collection, :method => method, :request_type => request_type)
+      end
+      
+      def member_actions
+        actions.values.to_a.select{|a| a.member? and !a.resource?}
+      end
+      
+      def collection_actions
+        actions.values.to_a.select{|a| a.collection? and !a.resource?}
       end
       
       def generate_routes
@@ -47,6 +55,16 @@ module MDWA
         self.actions[:create]  = Action.new(:create, :collection, :method => :post, :resource => true)
         self.actions[:update]  = Action.new(:update, :member, :method => :put, :resource => true)
         self.actions[:delete]  = Action.new(:delete, :member, :method => :delete, :resource => true)
+      end
+      
+      def clear_resource_actions
+        self.actions.delete :index
+        self.actions.delete :new
+        self.actions.delete :edit
+        self.actions.delete :show
+        self.actions.delete :create
+        self.actions.delete :update
+        self.actions.delete :delete
       end
       
     end
