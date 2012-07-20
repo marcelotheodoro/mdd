@@ -35,18 +35,18 @@ module MDWA
         self.actions.value.select {|a| !a.resource?}.each do |action|
           controller << action.generate_controller
         end
-        controller.join("\n\n")
+        # controller.join("\n\n")
       end
       
       # Returns all resource actions
       def set_resource_actions
         self.actions[:index]   = Action.new(:index, :collection, :resource => true)
         self.actions[:new]     = Action.new(:new, :collection, :resource => true)
-        self.actions[:edit]    = Action.new(:index, :member, :resource => true)
+        self.actions[:edit]    = Action.new(:edit, :member, :resource => true)
         self.actions[:show]    = Action.new(:show, :member, :resource => true)
         self.actions[:create]  = Action.new(:create, :collection, :method => :post, :resource => true)
-        self.actions[:update]  = Action.new(:create, :member, :method => :put, :resource => true)
-        self.actions[:delete]  = Action.new(:create, :member, :method => :delete, :resource => true)
+        self.actions[:update]  = Action.new(:update, :member, :method => :put, :resource => true)
+        self.actions[:delete]  = Action.new(:delete, :member, :method => :delete, :resource => true)
       end
       
     end

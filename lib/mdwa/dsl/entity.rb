@@ -13,18 +13,17 @@ module MDWA
         # set the entity name
         self.name = name
         
+        # arrays
+        self.attributes   = {}
+        self.associations = {}
+        self.code_generations = []
+        self.actions      = EntityActions.new(self)
+        
         # fixed attributes
         self.resource    = true
         self.user        = false
         self.ajax        = false
         self.force       = false
-        
-        # arrays
-        self.attributes   = {}
-        self.associations = {}
-        self.code_generations = []
-        
-        self.actions      = EntityActions.new(self)
       end
       
       def name=(value)

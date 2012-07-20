@@ -36,11 +36,11 @@ module MDWA
       end
       
       def member?
-        self.method.to_sym == :member
+        self.type.to_sym == :member
       end
       
       def collection?
-        self.method.to_sym == :collection
+        self.type.to_sym == :collection
       end
       
       def resource?
@@ -49,27 +49,27 @@ module MDWA
       
       def generate_controller
         action_str = []
-        action_str << "def #{action.name.to_s}"
+        action_str << "\tdef #{action.name.to_s}"
         action_str << ""
-          action_str << "\trespond_to do |format|"        
+          action_str << "\t\trespond_to do |format|"        
           self.request_type.each do |request|          
             case request.to_sym
             when :modalbox
-              action_str << "\tformat.html{render :layout => false}"
+              action_str << "\t\t\tformat.html{render :layout => false}"
             when :html
-              action_str << "\t\tformat.html #{"{#{options.response[:html]}}" unless options.response[:html].blank?}"
+              action_str << "\t\t\tformat.html #{"{#{options.response[:html]}}" unless options.response[:html].blank?}"
             when :ajax
-              action_str << "\t\tformat.js #{"{#{options.response[:ajax]}}" unless options.response[:ajax].blank?}"
+              action_str << "\t\t\tformat.js #{"{#{options.response[:ajax]}}" unless options.response[:ajax].blank?}"
             when :ajax_js
-              action_str << "\t\tformat.json #{"{#{options.response[:ajax_js]}}" unless options.response[:ajax_js].blank?}"
+              action_str << "\t\t\tformat.json #{"{#{options.response[:ajax_js]}}" unless options.response[:ajax_js].blank?}"
             else
-              action_str << "\t\tformat.#{request.to_s} #{"{#{options.response[request.to_sym]}}" unless options.response[request.to_sym].blank?}"
+              action_str << "\t\t\tformat.#{request.to_s} #{"{#{options.response[request.to_sym]}}" unless options.response[request.to_sym].blank?}"
             end
           end
-          action_str << "\tend"
+          action_str << "\t\tend"
         
-        action_str << "end"        
-        action_str.join("\n")
+        action_str << "\tend"        
+        # action_str.join("\n")
       end
       
     end
