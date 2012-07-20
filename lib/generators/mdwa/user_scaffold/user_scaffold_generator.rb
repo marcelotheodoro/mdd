@@ -1,5 +1,6 @@
 require 'rails/generators/migration'
 require 'mdwa/generators'
+require 'mdwa/dsl'
 
 module Mdwa
   

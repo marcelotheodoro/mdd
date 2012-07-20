@@ -143,17 +143,19 @@ module Mdwa
           rake 'db:migrate'
         end
       end
-      
-      # Implement the required interface for Rails::Generators::Migration.
-      def self.next_migration_number(dirname) #:nodoc:
-        if ActiveRecord::Base.timestamped_migrations
-          Time.now.utc.strftime("%Y%m%d%H%M%S")
-        else
-          "%.3d" % (current_migration_number(dirname) + 1)
-        end
-      end
+
       
       private 
+      
+       # Implement the required interface for Rails::Generators::Migration.
+       def self.next_migration_number(dirname) #:nodoc:
+         if ActiveRecord::Base.timestamped_migrations
+           Time.now.utc.strftime("%Y%m%d%H%M%S")
+         else
+           "%.3d" % (current_migration_number(dirname) + 1)
+         end
+       end
+      
        def inverse_migration_type(type)
          case type.to_sym
          when :add_column      then 'remove_column'
