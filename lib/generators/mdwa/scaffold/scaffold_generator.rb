@@ -108,8 +108,14 @@ module Mdwa
 
       def routes
         unless options.skip_interface
-          route "resources :#{@model.plural_name}" unless @model.namespace?
-          route "namespace :#{@model.space} do resources :#{@model.plural_name} end" if @model.namespace?
+          route_str = []
+          route_str << "namespace :#{@model.space} do" if @model.namespace?
+          route_str << "\tcontroller :#{@model.plural_name} do"
+          route_str << "\tend"
+          route_str << "\tresources :#{@model.plural_name}"
+          route_str << "end" if @model.namespace?
+          
+          route route_str.join("\n")
         end
       end
 

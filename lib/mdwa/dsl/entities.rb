@@ -20,9 +20,9 @@ module MDWA
       #
       def register( name )
         # retrive or initialize a entity
-        e = element(name) || Entity.new( name )
-        yield e
-        add_node e # add to the list
+        entity = element(name) || Entity.new( name )
+        yield(entity) if block_given?
+        add_node entity # add to the list
       end
     
       #
