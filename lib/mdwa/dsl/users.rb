@@ -49,7 +49,7 @@ module MDWA
     end
     
     def self.user(name)
-      self.user.element(name)
+      self.users.element(name)
     end
 
     
