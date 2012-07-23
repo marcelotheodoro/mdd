@@ -38,14 +38,12 @@ module Mdwa
           
           # generate entities
           requirement.entities.each do |entity|
-            inside Rails.root do 
-              generate "mdwa:entity #{entity}" unless File.exist?("#{MDWA::DSL::STRUCTURAL_PATH}#{entity}")
-            end
+            generate "mdwa:entity #{entity}" unless File.exist?("#{Rails.root}/#{MDWA::DSL::STRUCTURAL_PATH}#{MDWA::DSL::Entity.new(entity).file_name}.rb")
           end
           
           # generate users
           requirement.users.each do |user|
-            generate "mdwa:user #{user}" unless File.exist?("#{MDWA::DSL::STRUCTURAL_PATH}#{entity}")
+            generate "mdwa:user #{user}" unless File.exist?("#{Rails.root}/#{MDWA::DSL::USERS_PATH}#{MDWA::DSL::Entity.new(user).file_name}.rb")
           end
           
         end
