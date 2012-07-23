@@ -20,10 +20,16 @@ module Mdwa
       class_option :run_migrations, :type => :boolean, :default => false, :desc => 'Run rake db:migrate directly'
       class_option :only_interface, :type => :boolean, :default => false, :desc => 'Generate only user interface'
       
+      #
+      # Constructor
+      # Require all entities to load the DSL of the application
+      #
       def initialize(*args, &block)
         super
         
         # include files with entities
+        # select models that will be generated
+        # only required models are included
         inside Rails.root do
           if entities.count.zero?
             require_all MDWA::DSL::STRUCTURAL_PATH
@@ -32,17 +38,20 @@ module Mdwa
             require_all files.join(', ')
           end
         end
-        
-        # select models that will be generated
-        # only required models are included
         @all_entities = MDWA::DSL.entities.all
         
+        # entity changes and migrations
         @changes = []
         @random_migration_key = rand.to_s.gsub('.','').to_i
         
       end
       
-      def code_generation
+      
+      #
+      # Generate code for entities or entity changes.
+      # Generate migration for field changes.
+      #
+      def entities_and_changes
         
         return false if options.only_interface
         
@@ -100,9 +109,18 @@ module Mdwa
           
         end
         
+        # generate changed code
+        unless @changes.empty?
+          migration_template 'migration.rb', "db/migrate/alter_#{@all_entities.select{|e| e.resource?}.collect{|e| e.file_name}.join('_')}#{@random_migration_key}.rb"
+        end
+        
       end
       
-      def only_interface_generation
+      
+      #
+      # Generate entities interface.
+      #
+      def entities_interface
         
         if options.only_interface
           @all_entities.each do |entity|
@@ -129,21 +147,34 @@ module Mdwa
           end
         end
         
-      end  
+      end 
       
-      def migration_generation
-        unless @changes.empty?
-          # generate changed code                                                               
-          migration_template 'migration.rb', "db/migrate/alter_#{@all_entities.select{|e| e.resource?}.collect{|e| e.file_name}.join('_')}#{@random_migration_key}.rb"
-        end
+      
+      #
+      # Generate actions for entities.
+      #
+      def entities_actions
+      end 
+      
+      #
+      # Generate code for entities specify.
+      #
+      def entites_specifications
       end
+    
       
+      #
+      # Run rake db:migrate
+      #
       def rake_db_migrate
         if options.run_migrations
           rake 'db:migrate'
         end
       end
 
+      
+      
+      
       
       private 
       

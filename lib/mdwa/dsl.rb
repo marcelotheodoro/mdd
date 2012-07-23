@@ -9,6 +9,7 @@ module MDWA
     autoload :EntityAttribute, 'mdwa/dsl/entity_attribute'
     autoload :EntityAssociation, 'mdwa/dsl/entity_association'
     autoload :EntityActions, 'mdwa/dsl/entity_actions'
+    autoload :EntitySpecification, 'mdwa/dsl/entity_specification'
     autoload :Action, 'mdwa/dsl/action'
     autoload :User, 'mdwa/dsl/user'
     

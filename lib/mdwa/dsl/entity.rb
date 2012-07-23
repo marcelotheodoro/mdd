@@ -7,17 +7,18 @@ module MDWA
     class Entity
       
       attr_accessor :name, :resource, :user, :purpose, :scaffold_name, :model_name, :ajax, :force
-      attr_accessor :attributes, :associations, :actions, :code_generations
+      attr_accessor :attributes, :associations, :actions, :specifications, :code_generations
       
       def initialize( name )
         # set the entity name
         self.name = name
         
         # arrays
-        self.attributes   = {}
-        self.associations = {}
+        self.attributes       = {}
+        self.associations     = {}
+        self.actions          = EntityActions.new(self)
+        self.specifications   = []
         self.code_generations = []
-        self.actions      = EntityActions.new(self)
         
         # fixed attributes
         self.resource    = true
@@ -93,6 +94,16 @@ module MDWA
       # Params: name, method = get, request_type = html
       def collection_action(name, method, request_type)
         self.actions.collection_action(name, method, request_type)
+      end
+      
+      #
+      # Entity specifications.
+      # Params: description and block
+      #
+      def specify(description)
+        specification = EntitySpecification.new(description)
+        yield(specification) if block_given?
+        self.specifications << specification
       end
       
       #
