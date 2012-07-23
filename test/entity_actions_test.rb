@@ -13,6 +13,8 @@ describe MDWA::DSL::EntityActions do
       e.ajax      = true
 
       e.member_action :publish, :get, :html
+      e.collection_action :export, :post, [:csv, :xml]
+      e.collection_action :report, :get, [:ajax]
     end 
   end
   
@@ -27,7 +29,7 @@ describe MDWA::DSL::EntityActions do
   
   it "should store resource actions correctly" do 
     product = MDWA::DSL.entity('Product')
-    product.actions.actions.count.must_equal 8
+    product.actions.actions.count.must_equal 10
     product.actions.actions[:index].must_be_instance_of MDWA::DSL::Action
     product.actions.actions[:index].collection?.must_equal true
     product.actions.actions[:index].member?.must_equal false
@@ -67,6 +69,17 @@ describe MDWA::DSL::EntityActions do
     product.actions.actions[:publish].method.must_equal :get
     product.actions.actions[:publish].request_type.must_equal [:html]
     product.actions.actions[:publish].resource?.must_equal false
+    
+    product.actions.collection_actions.count.must_equal 2
+    product.actions.actions[:export].name.must_equal :export
+    product.actions.actions[:export].method.must_equal :post
+    product.actions.actions[:export].request_type.must_equal [:csv, :xml]
+    product.actions.actions[:export].resource?.must_equal false
+    
+    product.actions.actions[:report].name.must_equal :report
+    product.actions.actions[:report].method.must_equal :get
+    product.actions.actions[:report].request_type.must_equal [:ajax]
+    product.actions.actions[:report].resource?.must_equal false
   end
   
   it "should not generate actions for non-resourceful entities" do
