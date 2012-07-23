@@ -28,11 +28,10 @@ module Mdwa
         super
         
         # include files with entities
-        # select models that will be generated
-        # only required models are included
+        # select entities that will be generated
         inside Rails.root do
           if entities.count.zero?
-            require_all MDWA::DSL::STRUCTURAL_PATH
+            require_all MDWA::DSL::STRUCTURAL_PATH unless Dir.glob("#{MDWA::DSL::STRUCTURAL_PATH}/*.rb").count.zero?
           else
             files = entities.collect{ |e| "#{MDWA::DSL::STRUCTURAL_PATH}#{MDWA::DSL::Entity.new(e).file_name}.rb" }
             require_all files.join(', ')
@@ -43,7 +42,7 @@ module Mdwa
         # entity changes and migrations
         @changes = []
         @random_migration_key = rand.to_s.gsub('.','').to_i
-        
+
       end
       
       

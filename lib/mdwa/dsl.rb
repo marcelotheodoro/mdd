@@ -19,7 +19,7 @@ module MDWA
     STRUCTURAL_PATH   = 'app/mdwa/structure/'
     USERS_PATH        = 'app/mdwa/users/'
     WORKFLOW_PATH     = 'app/mdwa/workflow/'
-    REQUIREMENTS_PATH = 'app/mdwa/requirements'
+    REQUIREMENTS_PATH = 'app/mdwa/requirements/'
     
   end
 end
