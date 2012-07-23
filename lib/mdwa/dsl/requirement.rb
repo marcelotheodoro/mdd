@@ -4,14 +4,17 @@ module MDWA
     
     class Requirement
       
-      attr_accessor :summary, :description
+      attr_accessor :summary, :description, :alias, :users, :entities
       
       def initialize(summary = nil)
-        self.summary = summary
+        self.summary  = summary
+        
+        self.users    = []
+        self.entities = []
       end
       
       def alias
-        self.summary.gsub(' ', '_').underscore
+        @alias ||= self.summary.gsub(' ', '_').underscore
       end
       
     end

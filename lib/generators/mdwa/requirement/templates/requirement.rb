@@ -2,7 +2,8 @@
 MDWA::DSL.requirements.register do |r|
   
   r.summary     = '<%= @summary %>'
-  <%- if options.
+  <%- unless options.no_comments %>
+  # r.alias       = '' # alias is the unique requirement name and it's created automatically, you can override with this argument.
   # r.description = %q{Detailed description of the requirement.}
   
   #
@@ -14,5 +15,6 @@ MDWA::DSL.requirements.register do |r|
   # Users involved in this requirement.
   # Use an array of user names.
   # r.users       = ['Administrator', 'TeamMember']
-  
+  <% end %>
+    
 end

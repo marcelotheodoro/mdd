@@ -18,11 +18,11 @@ module MDWA
       #
       # Register a new requirement in the list.
       #
-      def register( name )
+      def register( summary = nil )
         # retrive or initialize a entity
-        req = element(name) || Requirement.new( name )
+        req = Requirement.new( summary )
         yield(req) if block_given?
-        add_node req # add to the list
+        add_node(req) # add to the list
       end
     
       #

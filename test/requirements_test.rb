@@ -7,30 +7,37 @@ require 'minitest/autorun'
 describe MDWA::DSL::Entity do
   
   before do 
-    MDWA::DSL.entities.register 'Spec' do |e|
-      e.resource = true
-      
-      e.specify "fields should not be invalid" do |s|
-        s.such_as "date should be valid"
-        s.such_as "administrator must not be empty"
-        s.such_as "description must not be empty"
-      end
-      e.specify "date should not be in the past"
+    MDWA::DSL.requirements.register do |r|
+      r.summary = 'Manage Projects'
+
+      r.description = %q{Detailed description of the requirement.}
+      r.entities    = ['ProjectGroup', 'Project', 'Task', 'Milestone']
+      r.users       = ['Administrator', 'TeamMember']
+    end
+    
+    MDWA::DSL.requirements.register 'Manage clients' do |r|
+      r.alias = 'clients'
     end
   end
   
-  it 'should store specifications correctly' do
+  it 'should store data correctly' do
     
-    entity = MDWA::DSL.entity('Spec')
-    entity.specifications.count.must_equal 2
-    entity.specifications.first.details.count.must_equal 3
-    entity.specifications.last.details.count.must_equal 0
+    requirement = MDWA::DSL.requirement('manage_projects')
+    requirement.summary.must_equal 'Manage Projects'
+    requirement.description.must_equal 'Detailed description of the requirement.'
+    requirement.entities.count.must_equal 4
+    requirement.entities[0].must_equal 'ProjectGroup'
+    requirement.entities[1].must_equal 'Project'
+    requirement.entities[2].must_equal 'Task'
+    requirement.entities[3].must_equal 'Milestone'
+    requirement.users.count.must_equal 2
+    requirement.users[0].must_equal 'Administrator'
+    requirement.users[1].must_equal 'TeamMember'
     
-    entity.specifications.first.description.must_equal "fields should not be invalid"
-    entity.specifications.first.details[0].must_equal "date should be valid"
-    entity.specifications.first.details[1].must_equal "administrator must not be empty"
-    entity.specifications.first.details[2].must_equal "description must not be empty"
-    entity.specifications.last.description.must_equal "date should not be in the past"
+    requirement_client = MDWA::DSL.requirement('clients')
+    requirement_client.nil?.must_equal false
+    requirement_client.summary.must_equal 'Manage clients'
+    requirement_client.alias.must_equal 'clients'
     
   end
   

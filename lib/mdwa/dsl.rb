@@ -13,6 +13,7 @@ module MDWA
     autoload :EntityActions, 'mdwa/dsl/entity_actions'
     autoload :Action, 'mdwa/dsl/action'
     autoload :User, 'mdwa/dsl/user'
+    autoload :Requirement, 'mdwa/dsl/requirement'
     
     
     STRUCTURAL_PATH   = 'app/mdwa/structure/'
