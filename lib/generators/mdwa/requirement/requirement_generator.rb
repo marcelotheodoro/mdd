@@ -15,7 +15,8 @@ module Mdwa
       class_option :no_comments, :type => :boolean, :default => false, :desc => 'Generates requirements without comments.'
       
       def code_generation
-        template 'requirement.rb', "#{MDWA::DSL::REQUIREMENTS_PATH}#{MDWA::DSL::Requirement.new(summary).alias}.rb"
+        @requirement = MDWA::DSL::Requirement.new(summary)
+        template 'requirement.rb', "#{MDWA::DSL::REQUIREMENTS_PATH}#{@requirement.alias}.rb"
       end
       
     end # entity

@@ -1,0 +1,4 @@
+Generates a new process.
+USAGE
+	rails g mdwa:process 'Put product in shopping cart'
+	rails g mdwa:process 'Ship delivery' --no-comments

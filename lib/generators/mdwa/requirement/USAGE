@@ -1,0 +1,4 @@
+Generates a new requirement.
+USAGE
+	rails g mdwa:requirement 'Manage clients and projects'
+	rails g mdwa:requirement 'Manage project tasks' --no-comments

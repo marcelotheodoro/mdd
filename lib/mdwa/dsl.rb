@@ -2,6 +2,7 @@
 require 'mdwa/dsl/entities'
 require 'mdwa/dsl/users'
 require 'mdwa/dsl/requirements'
+require 'mdwa/dsl/workflow'
 
 module MDWA
   module DSL
@@ -14,7 +15,7 @@ module MDWA
     autoload :Action, 'mdwa/dsl/action'
     autoload :User, 'mdwa/dsl/user'
     autoload :Requirement, 'mdwa/dsl/requirement'
-    
+    autoload :Process, 'mdwa/dsl/process'
     
     STRUCTURAL_PATH   = 'app/mdwa/structure/'
     USERS_PATH        = 'app/mdwa/users/'
