@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class <%= @model.controller_name %>Controller < <%= @inherit_controller || 'ApplicationController' %>
   
   load_and_authorize_resource :class => "<%= @model.klass %>"

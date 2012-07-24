@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module MdwaHelper
   
   def pagination_footer( object_list )

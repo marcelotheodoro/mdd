@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class Create<%= @model.plural_name.camelize %> < ActiveRecord::Migration
 
 	def self.up

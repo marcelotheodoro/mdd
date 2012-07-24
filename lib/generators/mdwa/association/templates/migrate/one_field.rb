@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class Add<%= @field.singular_name.foreign_key.camelize %>To<%= @table.plural_name.camelize %> < ActiveRecord::Migration
 
 	def self.up

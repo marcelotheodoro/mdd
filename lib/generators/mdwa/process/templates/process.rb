@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'mdwa/dsl'
 MDWA::DSL.workflow.register '<%= @description %>' do |p|
   

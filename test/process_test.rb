@@ -18,7 +18,7 @@ describe MDWA::DSL::Workflow do
       p.start_for 'TeamMember', 'new_task'
 
       p.detail 'New Project Group' do |d|
-        d.user_roles ['ProjectManager']
+        d.user_roles = ['ProjectManager']
         d.action 'project_group', 'new'
         d.next_action 'create_project_group', :method => :post
       end
@@ -31,15 +31,12 @@ describe MDWA::DSL::Workflow do
 
         # Roles with permission to execute this action
         # Default: all -> no restriction
-        d.user_roles ['ProjectManager']
+        d.user_roles = ['ProjectManager']
 
         # Refered action
         # Params: 
-        # => :alias
         # => :entity
         # => :action
-        # => :method        => :get (default), :post, :put, :delete
-        # => :request_type  => :html (default), :ajax, :ajax_js, :modalbox
         d.action 'project_group', 'create'
 
         # Possible next action
@@ -54,7 +51,7 @@ describe MDWA::DSL::Workflow do
         # => :when - situation when it might occur
         d.next_action 'new_project_group', :when => 'save failed'
         d.next_action entity: 'project_group', action: 'index', :redirect => true, :when => 'save ok'
-        d.next_action 'project', 'new', :when => 'clicked save & new project'
+        d.next_action entity: 'project', action: 'new', :when => 'clicked save & new project'
 
       end
 

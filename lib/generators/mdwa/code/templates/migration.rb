@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class Alter<%= @all_entities.select{|e| e.resource?}.collect{|e| e.file_name.camelize}.join('') %><%= @random_migration_key %> < ActiveRecord::Migration
   
   def self.up

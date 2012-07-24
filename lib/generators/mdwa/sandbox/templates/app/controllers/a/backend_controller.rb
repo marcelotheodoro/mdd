@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class A::BackendController < ApplicationController
 
 	before_filter :authenticate_a_user!

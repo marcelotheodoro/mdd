@@ -16,6 +16,8 @@ module MDWA
     autoload :User, 'mdwa/dsl/user'
     autoload :Requirement, 'mdwa/dsl/requirement'
     autoload :Process, 'mdwa/dsl/process'
+    autoload :ProcessDetail, 'mdwa/dsl/process_detail'
+    autoload :ProcessDetailNextAction, 'mdwa/dsl/process_detail_next_action'
     
     STRUCTURAL_PATH   = 'app/mdwa/structure/'
     USERS_PATH        = 'app/mdwa/users/'

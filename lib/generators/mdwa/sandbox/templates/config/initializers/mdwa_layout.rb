@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'mdwa/layout'
 MDWA::Layout::Base.config do |config|
 	config['/*'] 						            = 'public'
