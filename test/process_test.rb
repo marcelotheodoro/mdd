@@ -68,7 +68,19 @@ describe MDWA::DSL::Workflow do
     
     # next actions
     p.details['new_project_group'].next_actions.first.alias.must_equal 'create_project_group'
+    p.details['new_project_group'].next_actions.first.method.must_equal :post
+    p.details['new_project_group'].next_actions.first.request.must_equal :html
     
+    p.details['create_project_group'].next_actions[0].alias.must_equal 'new_project_group'
+    p.details['create_project_group'].next_actions[0].when.must_equal 'save failed'
+    p.details['create_project_group'].next_actions[0].redirect.must_equal false
+    p.details['create_project_group'].next_actions[1].alias.must_equal 'project_group_list'
+    p.details['create_project_group'].next_actions[1].when.must_equal 'save ok'
+    p.details['create_project_group'].next_actions[1].redirect.must_equal true
+    p.details['create_project_group'].next_actions[2].alias.must_equal 'new_project'
+    p.details['create_project_group'].next_actions[2].when.must_equal 'clicked save & new project'
+    p.details['create_project_group'].next_actions[2].redirect.must_equal false
+  
   end
   
 end
