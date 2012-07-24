@@ -1,4 +1,6 @@
 # -*- encoding : utf-8 -*-
+require 'active_support/core_ext'
+
 module MDWA
 	module Generators
 		class Model

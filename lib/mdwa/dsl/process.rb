@@ -10,7 +10,7 @@ module MDWA
         
         # Hash: [detail_alias] => ProcessDetail object
         self.details          = {}
-        # Hash: [role_alias] => ProcessDetail object
+        # Hash: [role_alias] => detail_alias
         self.start_for_roles  = {}
       end
       
@@ -19,13 +19,13 @@ module MDWA
       end
       
       def start_for(role, detail_alias)
-        start_for_roles[role] = details[detail_alias]
+        start_for_roles[role] = detail_alias
       end
       
       def detail(description)
         detail = ProcessDetail.new(self, description)
-        yield(detail) if block_given?
         self.details[detail.alias] = detail
+        yield(detail) if block_given?
       end
       
       # 

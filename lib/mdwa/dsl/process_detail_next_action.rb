@@ -4,11 +4,10 @@ module MDWA
     
     class ProcessDetailNextAction
       
-      attr_accessor :parent, :next_action, :method, :request, :redirect, :render, :when
+      attr_accessor :alias, :method, :request, :redirect, :render, :when
       
-      def initialize(parent, next_action)
-        self.parent = parent
-        self.next_action = next_action
+      def initialize(next_action_alias)
+        self.alias = next_action_alias
       end
       
     end

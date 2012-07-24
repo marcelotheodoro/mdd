@@ -11,7 +11,7 @@ module MDWA
         self.description  = description
         
         self.user_roles   = []
-        self.next_actions = {}
+        self.next_actions = []
         self.detail_action = OpenStruct.new
       end
       
@@ -40,17 +40,15 @@ module MDWA
       # => :redirect  => boolean
       # => :render    => boolean
       # => :when - situation when it might occur
-      def next_action(detail_alias = nil, options = {})
-        action = self.process.process_detail(:alias => detail_alias, :entity => options[:entity], :action => options[:action])
-
-        next_action = ProcessDetailNextAction.new(self, action)
-        next_action.method    = options[:method]
-        next_action.request   = options[:request]
-        next_action.redirect  = options[:redirect]
-        next_action.render    = options[:render]
+      def next_action(detail_alias, options = {})
+        next_action = ProcessDetailNextAction.new(detail_alias)
+        next_action.method    = options[:method] || :get
+        next_action.request   = options[:request] || :html
+        next_action.redirect  = options[:redirect] || false
+        next_action.render    = options[:render] || false
         next_action.when      = options[:when]
 
-        next_actions[next_action.alias] = next_action
+        next_actions << next_action
       end
             
     end
