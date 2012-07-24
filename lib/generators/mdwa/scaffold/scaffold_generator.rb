@@ -24,6 +24,7 @@ module Mdwa
       class_option :skip_questions, :desc => 'Answer no for all questions by default.', :type => :boolean, :default => false
       class_option :skip_interface, :desc => 'Cretes only models, migrations and associations.', :type => :boolean, :default => false
       class_option :only_interface, :desc => 'Skips models, associations and migrations.', :type => :boolean, :default => false
+      class_option :skip_tests, :desc => 'Skip Rspec tests generation', :type => :boolean, :default => false
 
       def initialize(*args, &block)
 
@@ -138,6 +139,17 @@ module Mdwa
         if !options.skip_rake_migrate and !options.skip_migrations and !options.only_interface
           rake('db:migrate') if !options.skip_questions and yes? 'Run rake db:migrate?'
         end
+      end
+      
+      def tests_and_specify
+        ## commented code for generating all specs
+        # attrib = []
+        # @model.simple_attributes.each do |attr|
+        #   attrib << "#{attr.name}:#{attr.migration_field}"
+        # end
+        # generate "rspec:scaffold #{@model.raw} #{attrib.join(' ')}"
+        
+        template 'specs/model.rb', "spec/models/#{@model.space}/#{@model.singular_name}_spec.rb"
       end
 
       private

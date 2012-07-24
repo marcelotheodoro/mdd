@@ -28,6 +28,7 @@ module Mdwa
         gem 'will_paginate'
         gem 'nested_form'
         gem 'require_all'
+        gem 'rspec-rails', :group => [:test, :development]
 
         inside Rails.root do
           run "bundle install"
@@ -166,6 +167,11 @@ module Mdwa
         end
         
         rake "db:seed" if ask_question( "Run rake db:seeds?" )
+      end
+      
+      def testes
+        # Install Rspec as the default testing framework
+        generate 'rspec:install'
       end
 
       private 

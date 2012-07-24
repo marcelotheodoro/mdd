@@ -151,14 +151,38 @@ module Mdwa
       
       #
       # Generate actions for entities.
+      # Generate controller actions and routes
       #
       def entities_actions
       end 
       
       #
       # Generate code for entities specify.
+      # Generate unit testing code for models.
       #
       def entites_specifications
+
+        @all_entities.each do |entity|
+          # next iteration if entity doesn't have specifications
+          next if entity.specifications.count.zero?
+          
+          model = MDWA::Generators::Model.new(entity.model_name)
+          
+          insert_into_file "spec/models/#{model.space}/#{model.singular_name}_spec.rb", :after => 'describe A::Product do\n' do
+            specs = []
+            entity.secifications.each do |specification|
+              specs << "\tdescribe '#{specification.description}' do"
+              specification.details.each do |detail|
+                specs << "\t\tit '#{detail}' do"
+                specs << '\t\tend'
+              end
+              specs << '\tend'
+            end
+            specs.join("\n")
+          end
+          
+        end
+
       end
     
       

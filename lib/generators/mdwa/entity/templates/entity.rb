@@ -46,6 +46,25 @@ MDWA::DSL.entities.register "<%= name.singularize.camelize %>" do |e|
   #   a.composition = true
   #   a.description = 'This entity has a composite address.'
   # end
+
+  ##
+  ## Entity specifications. 
+  ## Define restrictions and rules so this entity will work properly.
+  ##
+  # e.specify "fields should not be invalid" do |s|
+  #    s.such_as "date should be valid"
+  #    s.such_as "administrator must not be empty"
+  #    s.such_as "description must not be empty"
+  #  end
+  #  e.specify "date should not be in the past"
+
+  ##
+  ## Entity actions. Define controller and routes for new operations with this entity.
+  ##
+  # e.member_action :publish, :get, :html
+  # e.collection_action :export, :post, [:csv, :xml]
+  # e.collection_action :report, :get, [:ajax]
+  
   <%- end -%>
   
 end
