@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+require 'mdwa/dsl'
 MDWA::DSL.entities.register "<%= name.singularize.camelize %>" do |e|
   
   <%- if options.user -%>

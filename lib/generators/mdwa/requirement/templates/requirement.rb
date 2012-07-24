@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+require 'mdwa/dsl'
 MDWA::DSL.requirements.register do |r|
   
   r.summary     = '<%= @summary %>'

@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+require 'mdwa/dsl'
 MDWA::DSL.users.register '<%= @user %>' do |u|
   
   # Description of what this user does in the system.
