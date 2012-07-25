@@ -107,10 +107,10 @@ module MDWA
       end
       
       #
-      # Returns the associated model in app/models folder
+      # Return an instance of Generators::Model
       #
-      def model_class
-        Generators::Model.new(self.model_name).model_class
+      def generator_model
+        Generators::Model.new(self.model_name)
       end
       
       #

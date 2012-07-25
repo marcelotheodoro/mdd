@@ -56,12 +56,12 @@ module MDWA
       
       def generate_controller
         action_str = []
-        action_str << "\t# #{entity.entity.model_class.plural_name}##{self.name.to_s}"
+        action_str << "\t# #{entity.generator_model.plural_name}##{self.name.to_s}"
         action_str << "\t# Route: #{generate_route}"
         action_str << "\tdef #{self.name.to_s}"
           
           if member?
-            action_str << "\t\t@#{entity.model_class.singular_name} = #{entity.model_class.klass}.find(params[:id])"
+            action_str << "\t\t@#{entity.generator_model.singular_name} = #{entity.generator_model.klass}.find(params[:id])"
             action_str << ""
           end
           
@@ -98,7 +98,7 @@ module MDWA
           when :ajax
             names[:ajax] = "#{name}.js.erb" unless self.response[:ajax].blank?
           when :ajax_js
-            names[:ajax_js] "#{name}.json.erb" unless self.response[:ajax_js].blank?
+            names[:ajax_js] = "#{name}.json.erb" unless self.response[:ajax_js].blank?
           else
             names[request.to_sym] = "#{name}.#{request.to_s}.erb" unless self.response[request.to_sym].blank?
           end

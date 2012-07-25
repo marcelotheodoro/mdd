@@ -62,7 +62,7 @@ module Mdwa
           # if model has not a database yet, run the generate command
           begin
             # if model does not exist, should generate scaffold
-            model_class = entity.model_class
+            model_class = entity.generator_model.model_class
           rescue
             model_class = nil
           end
@@ -130,7 +130,7 @@ module Mdwa
             # if model has not a database yet, run the generate command
             begin
               # if model does not exist, should generate scaffold
-              model_class = entity.model_class
+              model_class = entity.generator_model.model_class
             rescue
               model_class = nil
             end
@@ -159,7 +159,7 @@ module Mdwa
           # next iteration if entity doesn't have specifications
           next if entity.actions.actions.count.zero?
           
-          model = entity.model_class
+          model = entity.generator_model
           
           path_to_controller  = "app/controllers/#{model.space}/#{model.plural_name}_controller.rb"
           controller_string   = File.read("#{Rails.root}/#{path_to_controller}")
@@ -225,7 +225,7 @@ module Mdwa
           # next iteration if entity doesn't have specifications
           next if entity.specifications.count.zero?
           
-          model = entity.model_class
+          model = entity.generator_model
           
           path_to_spec = "spec/models/#{model.space}/#{model.singular_name}_spec.rb"
           insert_into_file path_to_spec, :after => 'describe A::Product do' do
