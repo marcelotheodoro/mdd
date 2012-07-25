@@ -138,7 +138,8 @@ module Mdwa
               puts "===================================================="
               puts "Generating code for '#{entity.name}'"
               puts "===================================================="
-              generate "#{entity.generate} --only_interface #{'--force' if options.force}"
+              generation_string = "#{entity.generate} --only_interface #{'--force' if options.force}"
+              generate generation_string
               
               # append generated code to entity
               append_to_file "#{MDWA::DSL::STRUCTURAL_PATH}#{entity.file_name}.rb", "\n\nMDWA::DSL.entity('#{entity.name}').code_generations << '#{generation_string}'"
@@ -239,7 +240,7 @@ module Mdwa
           model = entity.generator_model
           
           path_to_spec = "spec/models/#{model.space}/#{model.singular_name}_spec.rb"
-          insert_into_file path_to_spec, :after => 'describe A::Product do' do
+          insert_into_file path_to_spec, :after => "describe #{model.klass} do" do
             specs = []
             file_string = File.read("#{Rails.root}/#{path_to_spec}")
             entity.specifications.each do |specification|
