@@ -159,7 +159,7 @@ module Mdwa
           # next iteration if entity doesn't have specifications
           next if entity.actions.actions.count.zero?
           
-          model = MDWA::Generators::Model.new(entity.model_name)
+          model = entity.model_class
           
           path_to_controller  = "app/controllers/#{model.space}/#{model.plural_name}_controller.rb"
           controller_string   = File.read("#{Rails.root}/#{path_to_controller}")
@@ -180,6 +180,7 @@ module Mdwa
           insert_into_file path_to_controller, :after => after do 
             actions = []
             entity.actions.generate_controller.each do |action_name, generation_string|
+              # write the generated code only if it is not declared in the controller
               actions << "\n\n#{generation_string}" unless controller_string.include? "def #{action_name}"
             end
             actions.join
@@ -193,6 +194,22 @@ module Mdwa
             end
             routes.join
           end 
+          
+          # generate the corresponding files
+          entity.actions.actions.values.select{ |a| !a.resource? }.each do |action|
+            action.template_names.each do |request, file_name|          
+              case request.to_sym
+              when :modalbox, :html
+                template 'views/view.html.erb', "app/views/#{file_name}" unless File.exist?("#{Rails.root}/app/views/#{file_name}")
+              when :ajax
+                template 'views/view.js.erb', "app/views/#{file_name}" unless File.exist?("#{Rails.root}/app/views/#{file_name}")
+              when :ajax_js
+                template 'views/view.json.erb', "app/views/#{file_name}" unless File.exist?("#{Rails.root}/app/views/#{file_name}")
+              else
+                template 'views/view.custom.erb', "app/views/#{file_name}" unless File.exist?("#{Rails.root}/app/views/#{file_name}")
+              end
+            end
+          end
           
         end
         
@@ -208,7 +225,7 @@ module Mdwa
           # next iteration if entity doesn't have specifications
           next if entity.specifications.count.zero?
           
-          model = MDWA::Generators::Model.new(entity.model_name)
+          model = entity.model_class
           
           path_to_spec = "spec/models/#{model.space}/#{model.singular_name}_spec.rb"
           insert_into_file path_to_spec, :after => 'describe A::Product do' do

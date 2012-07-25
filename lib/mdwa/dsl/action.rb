@@ -56,13 +56,12 @@ module MDWA
       
       def generate_controller
         action_str = []
-        action_str << "\t# #{self.entity.name}##{self.name.to_s}"
+        action_str << "\t# #{entity.entity.model_class.plural_name}##{self.name.to_s}"
         action_str << "\t# Route: #{generate_route}"
         action_str << "\tdef #{self.name.to_s}"
           
           if member?
-            model = MDWA::Generators::Model.new(entity.model_name)
-            action_str << "\t\t@#{model.singular_name} = #{model.klass}.find(params[:id])"
+            action_str << "\t\t@#{entity.model_class.singular_name} = #{entity.model_class.klass}.find(params[:id])"
             action_str << ""
           end
           
@@ -85,6 +84,27 @@ module MDWA
         
         action_str << "\tend"        
         action_str.join("\n")
+      end
+      
+      
+      def template_names
+        names = {}
+        self.request_type.each do |request|          
+          case request.to_sym
+          when :modalbox
+            names[:modalbox] = "#{name}.html.erb"
+          when :html
+            names[:html] = "#{name}.html.erb" unless self.response[:html].blank?
+          when :ajax
+            names[:ajax] = "#{name}.js.erb" unless self.response[:ajax].blank?
+          when :ajax_js
+            names[:ajax_js] "#{name}.json.erb" unless self.response[:ajax_js].blank?
+          else
+            names[request.to_sym] = "#{name}.#{request.to_s}.erb" unless self.response[request.to_sym].blank?
+          end
+        end
+        
+        return names
       end
       
     end
