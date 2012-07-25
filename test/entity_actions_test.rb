@@ -94,6 +94,11 @@ describe MDWA::DSL::EntityActions do
     
   end
   
+  it 'should generate view files correctly' do
+    product = MDWA::DSL.entity('Product')
+    # p product.actions.actions[:publish].template_names
+  end
+  
   it 'should generate correct code' do
     
     product = MDWA::DSL.entity('Product')

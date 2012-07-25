@@ -200,13 +200,13 @@ module Mdwa
             action.template_names.each do |request, file_name|          
               case request.to_sym
               when :modalbox, :html
-                template 'views/view.html.erb', "app/views/#{file_name}" unless File.exist?("#{Rails.root}/app/views/#{file_name}")
+                template 'views/view.html.erb', "app/views/#{model.space}/#{model.plural_name}/#{file_name}" unless File.exist?("#{Rails.root}/app/views/#{model.space}/#{model.plural_name}/#{file_name}")
               when :ajax
-                template 'views/view.js.erb', "app/views/#{file_name}" unless File.exist?("#{Rails.root}/app/views/#{file_name}")
+                template 'views/view.js.erb', "app/views/#{model.space}/#{model.plural_name}/#{file_name}" unless File.exist?("#{Rails.root}/app/views/#{model.space}/#{model.plural_name}/#{file_name}")
               when :ajax_js
-                template 'views/view.json.erb', "app/views/#{file_name}" unless File.exist?("#{Rails.root}/app/views/#{file_name}")
+                template 'views/view.json.erb', "app/views/#{model.space}/#{model.plural_name}/#{file_name}" unless File.exist?("#{Rails.root}/app/views/#{model.space}/#{model.plural_name}/#{file_name}")
               else
-                template 'views/view.custom.erb', "app/views/#{file_name}" unless File.exist?("#{Rails.root}/app/views/#{file_name}")
+                template 'views/view.custom.erb', "app/views/#{model.space}/#{model.plural_name}/#{file_name}" unless File.exist?("#{Rails.root}/app/views/#{model.space}/#{model.plural_name}/#{file_name}")
               end
             end
           end

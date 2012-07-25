@@ -89,18 +89,18 @@ module MDWA
       
       def template_names
         names = {}
-        self.request_type.each do |request|          
+        self.request_type.each do |request|
           case request.to_sym
           when :modalbox
-            names[:modalbox] = "#{name}.html.erb"
+            names[:modalbox] = "#{self.name}.html.erb"
           when :html
-            names[:html] = "#{name}.html.erb" unless self.response[:html].blank?
+            names[:html] = "#{self.name}.html.erb" if self.response[:html].blank?
           when :ajax
-            names[:ajax] = "#{name}.js.erb" unless self.response[:ajax].blank?
+            names[:ajax] = "#{self.name}.js.erb" if self.response[:ajax].blank?
           when :ajax_js
-            names[:ajax_js] = "#{name}.json.erb" unless self.response[:ajax_js].blank?
+            names[:ajax_js] = "#{self.name}.json.erb" if self.response[:ajax_js].blank?
           else
-            names[request.to_sym] = "#{name}.#{request.to_s}.erb" unless self.response[request.to_sym].blank?
+            names[request.to_sym] = "#{self.name}.#{request.to_s}.erb" if self.response[request.to_sym].blank?
           end
         end
         
