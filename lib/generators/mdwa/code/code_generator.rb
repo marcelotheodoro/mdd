@@ -165,13 +165,24 @@ module Mdwa
           controller_string   = File.read("#{Rails.root}/#{path_to_controller}")
           path_to_routes      = 'config/routes.rb'
           
+          #
           # inject methods in the controller
-          inject_into_class path_to_controller, "#{model.controller_name}Controller" do 
+          # decide if code is included after class declaration or after cancan load code.
+          cancan_load = "load_and_authorize_resource :class => \"#{model.klass}\"" 
+          if controller_string.include? cancan_load
+            after = cancan_load 
+          else
+            inherit_controller = 'A::BackendController' if model.space == 'a'
+            after = "class #{model.controller_name}Controller < #{inherit_controller || 'ApplicationController'}"
+          end
+          
+          # insert in controller
+          insert_into_file path_to_controller, :after => after do 
             actions = []
             entity.actions.generate_controller.each do |action_name, generation_string|
-              actions << generation_string unless controller_string.include? "def #{action_name}"
+              actions << "\n\n#{generation_string}" unless controller_string.include? "def #{action_name}"
             end
-            actions.join("\n\n")
+            actions.join
           end
           
           # inject routes declarations

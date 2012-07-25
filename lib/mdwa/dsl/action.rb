@@ -1,4 +1,6 @@
 # -*- encoding : utf-8 -*-
+require 'mdwa/generators'
+
 module MDWA
   module DSL
 
@@ -54,8 +56,16 @@ module MDWA
       
       def generate_controller
         action_str = []
+        action_str << "\t# #{self.entity.name}##{self.name.to_s}"
+        action_str << "\t# Route: #{generate_route}"
         action_str << "\tdef #{self.name.to_s}"
-        action_str << ""
+          
+          if member?
+            model = MDWA::Generators::Model.new(entity.model_name)
+            action_str << "\t\t@#{model.singular_name} = #{model.klass}.find(params[:id])"
+            action_str << ""
+          end
+          
           action_str << "\t\trespond_to do |format|"        
           self.request_type.each do |request|          
             case request.to_sym
@@ -74,7 +84,7 @@ module MDWA
           action_str << "\t\tend"
         
         action_str << "\tend"        
-        # action_str.join("\n")
+        action_str.join("\n")
       end
       
     end
