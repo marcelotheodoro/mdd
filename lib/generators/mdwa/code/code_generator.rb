@@ -154,6 +154,37 @@ module Mdwa
       # Generate controller actions and routes
       #
       def entities_actions
+        
+        @all_entities.each do |entity|
+          # next iteration if entity doesn't have specifications
+          next if entity.actions.actions.count.zero?
+          
+          model = MDWA::Generators::Model.new(entity.model_name)
+          
+          path_to_controller  = "app/controllers/#{model.space}/#{model.plural_name}_controller.rb"
+          controller_string   = File.read("#{Rails.root}/#{path_to_controller}")
+          path_to_routes      = 'config/routes.rb'
+          
+          # inject methods in the controller
+          inject_into_class path_to_controller, "#{model.controller_name}Controller" do 
+            actions = []
+            entity.actions.generate_controller.each do |action_name, generation_string|
+              actions << generation_string unless controller_string.include? "def #{action_name}"
+            end
+            actions.join("\n\n")
+          end
+          
+          # inject routes declarations
+          insert_into_file path_to_routes, :after => "controller :#{model.plural_name} do" do
+            routes = []
+            entity.actions.generate_routes.each do |action_name, generation_string|
+              routes << generation_string
+            end
+            routes.join("\n")
+          end 
+          
+        end
+        
       end 
       
       #
@@ -168,15 +199,21 @@ module Mdwa
           
           model = MDWA::Generators::Model.new(entity.model_name)
           
-          insert_into_file "spec/models/#{model.space}/#{model.singular_name}_spec.rb", :after => 'describe A::Product do\n' do
+          path_to_spec = "spec/models/#{model.space}/#{model.singular_name}_spec.rb"
+          insert_into_file path_to_spec, :after => 'describe A::Product do' do
             specs = []
-            entity.secifications.each do |specification|
-              specs << "\tdescribe '#{specification.description}' do"
-              specification.details.each do |detail|
-                specs << "\t\tit '#{detail}' do"
-                specs << '\t\tend'
+            file_string = File.read("#{Rails.root}/#{path_to_spec}")
+            entity.specifications.each do |specification|
+              unless file_string.include? specification.description
+                specs << "\n\n\tdescribe '#{specification.description}' do"
+                specification.details.each do |detail|
+                  unless file_string.include? detail
+                    specs << "\t\tit '#{detail}' do"
+                    specs << "\t\tend"
+                  end
+                end
+                specs << "\tend"
               end
-              specs << '\tend'
             end
             specs.join("\n")
           end

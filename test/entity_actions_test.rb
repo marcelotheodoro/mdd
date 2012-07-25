@@ -19,7 +19,8 @@ describe MDWA::DSL::EntityActions do
   end
   
   it "should create action correctly" do 
-    action = MDWA::DSL::Action.new :publish, :member, :method => :get, :request_type => [:html, :ajax_js]
+    product_entity = MDWA::DSL.entity('Product')
+    action = MDWA::DSL::Action.new( product_entity, :publish, :member, :method => :get, :request_type => [:html, :ajax_js] )
     action.name.must_equal :publish
     action.member?.must_equal true
     action.method.must_equal :get
@@ -92,10 +93,6 @@ describe MDWA::DSL::EntityActions do
     reports.actions.actions.count.must_equal 0
     
   end
-  
-  it "should generate correct code" do
-    product = MDWA::DSL.entity('Product')
-    puts product.actions.generate_routes
-  end
+
   
 end

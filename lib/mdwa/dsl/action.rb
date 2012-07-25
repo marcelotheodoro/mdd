@@ -8,11 +8,12 @@ module MDWA
       ALLOWED_METHODS = [:get, :post, :put, :delete]
       PREDEFINED_REQUEST_TYPES   = [:html, :ajax, :ajax_js, :modalbox]
       
-      attr_accessor :name, :type, :method, :request_type, :response, :resource
+      attr_accessor :name, :type, :entity, :method, :request_type, :response, :resource
       
-      def initialize(name, type, options)
+      def initialize(entity, name, type, options = {})
         self.name         = name.to_sym
         self.type         = type.to_sym
+        self.entity       = entity
         self.method       = options[:method] || :get
         self.request_type = options[:request_type] || :html
         self.response     = options[:response] || {}
@@ -47,6 +48,10 @@ module MDWA
         resource
       end
       
+      def generate_route
+        "#{self.method.to_s} '#{self.entity.name.underscore.pluralize}/#{self.name.to_s}' => #{self.name.to_sym}"
+      end
+      
       def generate_controller
         action_str = []
         action_str << "\tdef #{self.name.to_s}"
@@ -55,7 +60,7 @@ module MDWA
           self.request_type.each do |request|          
             case request.to_sym
             when :modalbox
-              # action_str << "\t\t\tformat.html{render :layout => false}"
+              action_str << "\t\t\tformat.html{render :layout => false}"
             when :html
               action_str << "\t\t\tformat.html #{"{#{self.response[:html]}}" unless self.response[:html].blank?}"
             when :ajax
