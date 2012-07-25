@@ -193,7 +193,18 @@ module Mdwa
               routes << "\n\t\t\t#{generation_string}"
             end
             routes.join
-          end 
+          end
+          
+          # inject routes testing
+          insert_into_file "spec/routing/#{model.space}/#{model.plural_name}_routing_spec.rb", :after => 'describe "routing" do' do
+            routes = []
+            entity.actions.actions.values.select {|a| !a.resource}.each do |action|
+              routes << "\n\n\t\tit 'routes to ##{action.name}' do"
+              routes << "\n\t\t\t#{action.method.to_s}('#{action.entity.generator_model.to_route_url}/#{'1/' if action.member?}#{action.name}').should route_to('#{action.entity.generator_model.to_route_url}##{action.name}' #{', :id => "1"' if action.member?})"
+              routes << "\n\t\tend"
+            end
+            routes.join
+          end
           
           # generate the corresponding files
           entity.actions.actions.values.select{ |a| !a.resource? }.each do |action|
@@ -211,9 +222,9 @@ module Mdwa
             end
           end
           
-        end
+        end # iteration over entities
         
-      end 
+      end # method
       
       #
       # Generate code for entities specify.
@@ -260,8 +271,6 @@ module Mdwa
         end
       end
 
-      
-      
       
       
       private 

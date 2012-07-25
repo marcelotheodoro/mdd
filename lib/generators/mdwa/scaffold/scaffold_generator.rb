@@ -142,14 +142,8 @@ module Mdwa
       end
       
       def tests_and_specify
-        ## commented code for generating all specs
-        # attrib = []
-        # @model.simple_attributes.each do |attr|
-        #   attrib << "#{attr.name}:#{attr.migration_field}"
-        # end
-        # generate "rspec:scaffold #{@model.raw} #{attrib.join(' ')}"
-        
         template 'specs/model.rb', "spec/models/#{@model.space}/#{@model.singular_name}_spec.rb"
+        template 'specs/routing.rb', "spec/routing/#{@model.space}/#{@model.plural_name}_routing_spec.rb"
       end
 
       private

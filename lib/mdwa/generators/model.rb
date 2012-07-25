@@ -63,6 +63,13 @@ module MDWA
           return singular_name
         end
 		  end
+		  
+		  def to_route_url
+		    url = []
+		    url << space if namespace?
+		    url << plural_name
+		    url.join('/')
+	    end
 			
 			def to_route_object(prefix = '')
 			  return "#{prefix}#{singular_name}" if !specific? or !namespace?
