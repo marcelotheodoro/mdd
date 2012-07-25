@@ -178,9 +178,9 @@ module Mdwa
           insert_into_file path_to_routes, :after => "controller :#{model.plural_name} do" do
             routes = []
             entity.actions.generate_routes.each do |action_name, generation_string|
-              routes << generation_string
+              routes << "\n\t\t\t#{generation_string}"
             end
-            routes.join("\n")
+            routes.join
           end 
           
         end

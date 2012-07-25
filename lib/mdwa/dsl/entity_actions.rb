@@ -33,7 +33,7 @@ module MDWA
       def generate_routes
         routes = {}
         self.actions.values.select {|a| !a.resource?}.each do |action|
-          routes[action.name] == action.generate_route
+          routes[action.name] = action.generate_route
         end
         return routes
       end
@@ -41,7 +41,7 @@ module MDWA
       def generate_controller
         controller = {}
         self.actions.values.select {|a| !a.resource?}.each do |action|
-          controller[action.name] == action.generate_controller
+          controller[action.name] = action.generate_controller
         end
         return controller
       end

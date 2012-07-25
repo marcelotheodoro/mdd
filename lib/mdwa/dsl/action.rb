@@ -49,7 +49,7 @@ module MDWA
       end
       
       def generate_route
-        "#{self.method.to_s} '#{self.entity.name.underscore.pluralize}/#{self.name.to_s}' => #{self.name.to_sym}"
+        "#{self.method.to_s} '#{self.entity.name.underscore.pluralize}#{'/:id' if member?}/#{self.name.to_s}' => :#{self.name.to_sym}"
       end
       
       def generate_controller

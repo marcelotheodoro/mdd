@@ -93,6 +93,13 @@ describe MDWA::DSL::EntityActions do
     reports.actions.actions.count.must_equal 0
     
   end
+  
+  it 'should generate correct code' do
+    
+    product = MDWA::DSL.entity('Product')
+    # p product.actions.generate_controller
+    
+  end
 
   
 end
