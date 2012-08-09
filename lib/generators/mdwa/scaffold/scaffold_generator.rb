@@ -89,7 +89,10 @@ module Mdwa
       
       def locales
         
-        append_file 'config/locales/mdwa_model_specific.en.yml', :after => "en:\n" do 
+        locales_file = 'config/locales/mdwa_model_specific.en.yml'
+        create_file locales_file unless File.exist?(locales_file)
+      
+        append_file locales_file, :after => "en:\n" do 
           lines = []
           lines <<  "  #{@model.plural_name}:"
           lines <<  "    create_success: \"#{@model.singular_name.humanize} created.\""
