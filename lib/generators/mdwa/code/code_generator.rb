@@ -19,6 +19,7 @@ module Mdwa
       
       class_option :run_migrations, :type => :boolean, :default => false, :desc => 'Run rake db:migrate directly'
       class_option :only_interface, :type => :boolean, :default => false, :desc => 'Generate only user interface'
+      class_option :prototype, :type => :boolean, :default => false, :desc => 'Generate prototype files instead of ERB templates'
       
       #
       # Constructor

@@ -10,3 +10,7 @@ MDWA::DSL.users.register '<%= @user %>' do |u|
   # u.user_roles = ['<%= @user %>']
   
 end
+
+<%- unless options.requirement.blank? -%>
+MDWA::DSL.user('<%= @user %>').in_requirements << '<%= options.requirement %>'
+<%- end -%>

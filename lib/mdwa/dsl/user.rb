@@ -5,9 +5,11 @@ module MDWA
     class User
       
       attr_accessor :name, :description, :user_roles
+      attr_accessor :in_requirements
       
       def initialize(name)
         self.name = name.camelize
+        self.in_requirements = []
         
         self.clear_user_roles
       end

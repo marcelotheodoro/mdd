@@ -11,7 +11,7 @@ MDWA::DSL.entities.register "<%= name.singularize.camelize %>" do |e|
   <%- end -%>
   
   <%- unless options.no_comments -%>
-  # e.purpose   = %q{To-do} # what this entity does?
+  # e.purpose   = %q{To-do} # what does this entity do?
   # e.resource  = true      # should it be stored like a resource?
   # e.ajax      = true      # scaffold with ajax?
   # e.user      = false     # is this entity a loggable user?
@@ -21,14 +21,8 @@ MDWA::DSL.entities.register "<%= name.singularize.camelize %>" do |e|
   ##
   ## Define entity attributes
   ##
-  # e.attribute do |attr|
-  #   attr.name = 'name'
-  #   attr.type = 'string'
-  # end
-  # e.attribute do |attr|
-  #   attr.name = 'category'
-  #   attr.type = 'integer'
-  # end
+  # e.attribute 'name', 'string'
+  # e.attribute 'category', 'integer'
   
   ##
   ## Define entity associations
@@ -68,3 +62,7 @@ MDWA::DSL.entities.register "<%= name.singularize.camelize %>" do |e|
   <%- end -%>
   
 end
+
+<%- unless options.requirement.blank? -%>
+MDWA::DSL.entity('<%= name.singularize.camelize %>').in_requirements << '<%= options.requirement %>'
+<%- end -%>

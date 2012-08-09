@@ -7,7 +7,7 @@ module MDWA
     class Entity
       
       attr_accessor :name, :resource, :user, :purpose, :scaffold_name, :model_name, :ajax, :force
-      attr_accessor :attributes, :associations, :actions, :specifications, :code_generations
+      attr_accessor :attributes, :associations, :actions, :specifications, :code_generations, :in_requirements
       
       def initialize( name )
         # set the entity name
@@ -19,6 +19,7 @@ module MDWA
         self.actions          = EntityActions.new(self)
         self.specifications   = []
         self.code_generations = []
+        self.in_requirements  = []
         
         # fixed attributes
         self.resource    = true
@@ -111,7 +112,16 @@ module MDWA
       # Return an instance of Generators::Model
       #
       def generator_model
-        Generators::Model.new(self.model_name)
+        @generator_model = Generators::Model.new(self.model_name)
+        self.attributes.values.each do |attribute|
+          @generator_model.add_attribute Generators::ModelAttribute.new( "#{attribute.name}:#{attribute.type}" )
+        end
+        self.associations.values.each do |association|
+          model1 = Generators::Model.new(self.model_name)
+          model2 = Generators::Model.new(DSL.entity(association.destination).model_name)
+          @generator_model.associations << Generators::ModelAssociation.new(model1, model2, association.generator_type)
+        end
+        return @generator_model
       end
       
       #

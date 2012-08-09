@@ -5,7 +5,7 @@ module MDWA
 	module Generators
 		class Model
 
-			attr_accessor :name, :namespace, :attributes, :specific_model_name
+			attr_accessor :name, :namespace, :attributes, :specific_model_name, :associations
       
       #
 			# Sets the variables by the string
@@ -18,6 +18,7 @@ module MDWA
     		self.name = arg.split('/').last.singularize.camelize
 
     		self.attributes = []
+    		self.associations = []
 			end
 
 			def valid?

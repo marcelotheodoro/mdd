@@ -15,7 +15,6 @@ module Mdwa
       #
       # Constructor
       # Require all entities to load the DSL of the application
-      #
       def initialize(*args, &block)
         super
         
@@ -36,14 +35,18 @@ module Mdwa
         # For all requirements, generate users and entities
         @requirements.each do |requirement|
           
+          puts "============================================================================="
+          puts "Generating transformation for requirement: '#{requirement.summary}'"
+          puts "============================================================================="
+          
           # generate entities
           requirement.entities.each do |entity|
-            generate "mdwa:entity #{entity}" unless File.exist?("#{Rails.root}/#{MDWA::DSL::STRUCTURAL_PATH}#{MDWA::DSL::Entity.new(entity).file_name}.rb")
+            generate "mdwa:entity #{entity} --requirement=\"#{requirement.alias}\""
           end
           
           # generate users
           requirement.users.each do |user|
-            generate "mdwa:user #{user}" unless File.exist?("#{Rails.root}/#{MDWA::DSL::USERS_PATH}#{MDWA::DSL::Entity.new(user).file_name}.rb")
+            generate "mdwa:user #{user} --requirement=\"#{requirement.alias}\""
           end
           
         end
