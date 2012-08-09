@@ -14,22 +14,10 @@ describe MDWA::DSL::Entities do
       e.ajax      = true
       
       ## attributes
-      e.attribute do |attr|
-        attr.name = 'name'
-        attr.type = 'string'
-      end
-      e.attribute do |attr|
-        attr.name = 'category'
-        attr.type = 'integer'
-      end
-      e.attribute do |attr|
-        attr.name = 'stock'
-        attr.type = 'integer'
-      end
-      e.attribute do |attr|
-        attr.name = 'published'
-        attr.type = 'boolean'
-      end
+      e.attribute 'name', 'string'
+      e.attribute 'category', 'integer'
+      e.attribute 'stock', 'integer'
+      e.attribute 'published', 'boolean'
       
       ## associations
       e.association do |a|
@@ -83,10 +71,7 @@ describe MDWA::DSL::Entities do
     # create category entity
     MDWA::DSL.entities.register "Category" do |e|
       e.resource = false
-      e.attribute do |attr|
-        attr.name = 'name'
-        attr.type = 'string'
-      end
+      e.attribute 'name', 'string'
     end
     MDWA::DSL.entity("Category").must_be_instance_of MDWA::DSL::Entity
   end
@@ -171,18 +156,9 @@ describe MDWA::DSL::Entities do
       p.scaffold_name = 'a/project'
       p.ajax = true
       
-      p.attribute do |a|
-        a.name = 'nome'
-        a.type = 'string'
-      end
-      p.attribute do |a|
-        a.name = 'ativo'
-        a.type = 'boolean'
-      end
-      p.attribute do |a|
-        a.name = 'situacao_atual'
-        a.type = 'text'
-      end
+      p.attribute 'nome', 'string'
+      p.attribute 'ativo', 'boolean'
+      p.attribute 'situacao_atual', 'text'
       
       p.association do |assoc|
         assoc.destination = 'Group'
@@ -196,15 +172,8 @@ describe MDWA::DSL::Entities do
       p.ajax = true
       p.force = true
       
-      p.attribute do |a|
-        a.name = 'nome'
-        a.type = 'string'
-      end
-      
-      p.attribute do |a|
-        a.name = 'ativo'
-        a.type = 'boolean'
-      end
+      p.attribute 'nome', 'string'
+      p.attribute 'ativo', 'boolean'
     end
     
     project = MDWA::DSL.entity("Project")
@@ -224,15 +193,8 @@ describe MDWA::DSL::Entities do
       p.ajax = true
       p.force = true
       
-      p.attribute do |a|
-        a.name = 'name'
-        a.type = 'string'
-      end
-      
-      p.attribute do |a|
-        a.name = 'active'
-        a.type = 'boolean'
-      end
+      p.attribute 'name', 'string'
+      p.attribute 'active', 'boolean'
     end
     
     task = MDWA::DSL.entity('Task')

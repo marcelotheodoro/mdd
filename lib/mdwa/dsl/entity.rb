@@ -65,9 +65,10 @@ module MDWA
       #
       # Declares one attribute of the list using the block given.
       #
-      def attribute
+      def attribute(name, type)
         attr = EntityAttribute.new(self)
-        yield( attr ) if block_given?
+        attr.name = name
+        attr.type = type
         attr.raise_errors_if_invalid!
         self.attributes[attr.name] = attr
       end
