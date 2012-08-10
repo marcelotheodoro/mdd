@@ -23,6 +23,7 @@ module MDWA
     USERS_PATH        = 'app/mdwa/users/'
     WORKFLOW_PATH     = 'app/mdwa/workflow/'
     REQUIREMENTS_PATH = 'app/mdwa/requirements/'
+    TEMPLATES_PATH    = 'app/mdwa/templates/'
     
   end
 end
