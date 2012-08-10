@@ -55,6 +55,10 @@ module MDWA
         self.resource
       end
       
+      def ajax?
+        self.ajax
+      end
+      
       def force?
         self.force
       end

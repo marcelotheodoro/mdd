@@ -6,16 +6,16 @@ class <%= @model.controller_name %>Controller < <%= @inherit_controller || 'Appl
 	def index
 		@<%= @model.plural_name %> = <%= @model.klass %>.paginate :page => params[:page]
 
-	    respond_to do |format|
-	      format.html
-	      format.js
-	    end
+    respond_to do |format|
+      format.html
+      format.js
+    end
 	end
 
 
 	def show
-	    @<%= @model.singular_name %> = <%= @model.klass %>.find(params[:id])
-	    render :layout => false
+    @<%= @model.singular_name %> = <%= @model.klass %>.find(params[:id])
+    render :layout => false
 	end
 
 	def new
@@ -34,8 +34,7 @@ class <%= @model.controller_name %>Controller < <%= @inherit_controller || 'Appl
 	def create
 	    @<%= @model.singular_name %> = <%= @model.klass %>.new(params[:<%= @model.to_params %>])
 	    @system_notice = t('<%= @model.plural_name %>.create_success') if @<%= @model.singular_name %>.save
-	    # loads all <%= @model.plural_name %> to display in the list
-	    load_list
+      load_list # loads all <%= @model.plural_name %> to display in the list
 
 	    respond_to do |format|
 	      format.js
@@ -46,8 +45,7 @@ class <%= @model.controller_name %>Controller < <%= @inherit_controller || 'Appl
 	    @<%= @model.singular_name %> = <%= @model.klass %>.find(params[:id])
 	    @system_notice = t('<%= @model.plural_name %>.update_success') if @<%= @model.singular_name %>.update_attributes(params[:<%= @model.to_params %>])
 	    
-	    # loads all <%= @model.plural_name %> to display in the list
-	    load_list
+      load_list # loads all <%= @model.plural_name %> to display in the list
 
 	    respond_to do |format|
 	      format.js
@@ -58,8 +56,7 @@ class <%= @model.controller_name %>Controller < <%= @inherit_controller || 'Appl
 	    @<%= @model.singular_name %> = <%= @model.klass %>.find(params[:id])
 	    @system_notice = t('<%= @model.plural_name %>.destroy_success') if @<%= @model.singular_name %>.destroy
 
-	    # loads all <%= @model.plural_name %> to display in the list
-	    load_list
+	    load_list # loads all <%= @model.plural_name %> to display in the list
 
 	    respond_to do |format|
 	      format.js

@@ -24,7 +24,6 @@ module Mdwa
       #
       # Constructor
       # Require all entities to load the DSL of the application
-      #
       def initialize(*args, &block)
         super
         
