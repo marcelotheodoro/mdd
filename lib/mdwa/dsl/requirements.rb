@@ -40,6 +40,10 @@ module MDWA
       def all
         @nodes.values
       end
+      
+      def clear
+        @nodes.clear
+      end
 
     end # class
     
