@@ -19,52 +19,56 @@ module Mdwa
       end
       
       def generate_model
-        @project_entity = MDWA::DSL.entity('Project')
-        generator_model = @project_entity.generator_model
-        
-        mdwa_template "#{@project_entity.file_name}/model.rb", "app/models/#{generator_model.space}/#{generator_model.singular_name}.rb"
+        @entities.each do |entity|
+          generator_model = entity.generator_model
+          mdwa_template "#{entity.file_name}/model.rb", "app/models/#{generator_model.space}/#{generator_model.singular_name}.rb"
+        end
       end
       
       def generate_controller
-        @project_entity = MDWA::DSL.entity('Project')
-        generator_model = @project_entity.generator_model
-        
-        mdwa_template "#{@project_entity.file_name}/controller.rb", "app/controllers/#{generator_model.space}/#{generator_model.plural_name}_controller.rb"
+        @entities.each do |entity|
+          generator_model = entity.generator_model
+          mdwa_template "#{entity.file_name}/controller.rb", "app/controllers/#{generator_model.space}/#{generator_model.plural_name}_controller.rb"
+        end
       end
       
       def generate_views
-        @project_entity = MDWA::DSL.entity('Project')
-        generator_model = @project_entity.generator_model
+        @entities.each do |entity|
+          generator_model = entity.generator_model
 
-        mdwa_template "#{@project_entity.file_name}/views/edit.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/edit.html.erb"        
-        mdwa_template "#{@project_entity.file_name}/views/index.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/index.html.erb"
-        mdwa_template "#{@project_entity.file_name}/views/index.js.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/index.js.erb"
-        mdwa_template "#{@project_entity.file_name}/views/new.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/new.html.erb"
-        mdwa_template "#{@project_entity.file_name}/views/show.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/show.html.erb"
-        mdwa_template "#{@project_entity.file_name}/views/_form.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/_form.html.erb"
-        mdwa_template "#{@project_entity.file_name}/views/_form_fields.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/_form_fields.html.erb"
-        mdwa_template "#{@project_entity.file_name}/views/_list.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/_#{generator_model.plural_name}.html.erb"
+          mdwa_template "#{entity.file_name}/views/edit.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/edit.html.erb"        
+          mdwa_template "#{entity.file_name}/views/index.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/index.html.erb"
+          mdwa_template "#{entity.file_name}/views/index.js.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/index.js.erb"
+          mdwa_template "#{entity.file_name}/views/new.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/new.html.erb"
+          mdwa_template "#{entity.file_name}/views/show.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/show.html.erb"
+          mdwa_template "#{entity.file_name}/views/_form.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/_form.html.erb"
+          mdwa_template "#{entity.file_name}/views/_form_fields.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/_form_fields.html.erb"
+          mdwa_template "#{entity.file_name}/views/_list.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/_#{generator_model.plural_name}.html.erb"
         
-        if @project_entity.ajax?
-          mdwa_template "#{@project_entity.file_name}/views/create.js.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/create.js.erb"
-          mdwa_template "#{@project_entity.file_name}/views/update.js.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/update.js.erb"
-          mdwa_template "#{@project_entity.file_name}/views/destroy.js.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/destroy.js.erb"
+          if entity.ajax?
+            mdwa_template "#{entity.file_name}/views/create.js.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/create.js.erb"
+            mdwa_template "#{entity.file_name}/views/update.js.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/update.js.erb"
+            mdwa_template "#{entity.file_name}/views/destroy.js.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/destroy.js.erb"
+          end
         end
       end
       
       def generate_routes
-        @project_entity = MDWA::DSL.entity('Project')
-        generator_model = @project_entity.generator_model
         
         route 'mdwa_router(self)'
-        append_to_file 'config/routes.rb', "require File.expand_path('../../app/mdwa/templates/routes.rb', __FILE__)"
+        path_to_routes = 'app/mdwa/templates/routes.rb'
+        append_to_file 'config/routes.rb', "require File.expand_path('../../#{path_to_routes}', __FILE__)"
         
-        insert_into_file path_to_routes, :after => "controller :#{generator_model.plural_name} do" do
-          routes = []
-          @project_entity.actions.generate_routes.each do |action_name, generation_string|
-            routes << "\n\t\t\t#{generation_string}"
+        @entities.each do |entity|
+          generator_model = entity.generator_model
+        
+          insert_into_file path_to_routes, :after => "controller :#{generator_model.plural_name} do" do
+            routes = []
+            entity.actions.generate_routes.each do |action_name, generation_string|
+              routes << "\n\t\t\t#{generation_string}"
+            end
+            routes.join
           end
-          routes.join
         end
       end
       
@@ -72,26 +76,28 @@ module Mdwa
       end
       
       def generate_migration
-        @project_entity = MDWA::DSL.entity('Project')
-        generator_model = @project_entity.generator_model
         
-        migration_string = []
-        # create table
-        migration_string << "\n\tdef self.up"
-        migration_string << "\t\tcreate_table :#{generator_model.plural_name} do |t|"
-        generator_model.simple_attributes.each do |attr|
-        	migration_string << "\t\t\tt.#{attr.migration_field} :#{attr.name}"
-      	end
-        migration_string << "\t\t\tt.timestamps"
-        migration_string << "\t\tend\n\tend"
+        @entities.each do |entity|
+          generator_model = entity.generator_model
+        
+          migration_string = []
+          # create table
+          migration_string << "\n\tdef self.up"
+          migration_string << "\t\tcreate_table :#{generator_model.plural_name} do |t|"
+          generator_model.simple_attributes.each do |attr|
+          	migration_string << "\t\t\tt.#{attr.migration_field} :#{attr.name}"
+        	end
+          migration_string << "\t\t\tt.timestamps"
+          migration_string << "\t\tend\n\tend"
 
-        # drop table
-        migration_string << "\n\tdef self.down"
-        migration_string << "\t\tdrop_table :#{generator_model.plural_name}"
-        migration_string << "\tend"
+          # drop table
+          migration_string << "\n\tdef self.down"
+          migration_string << "\t\tdrop_table :#{generator_model.plural_name}"
+          migration_string << "\tend"
         
-        migration_name = "create_#{generator_model.plural_name}"
-        migration_from_string(migration_name, migration_string.join("\n"))
+          migration_name = "create_#{generator_model.plural_name}"
+          migration_from_string(migration_name, migration_string.join("\n"))
+        end
         
         rake('db:migrate') if yes?('Run rake db:migrate')
         
