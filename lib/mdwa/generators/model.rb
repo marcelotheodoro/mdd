@@ -54,7 +54,8 @@ module MDWA
 			end
 
 			def object_name
-				space + '_' + singular_name
+			  return (space + '_' + singular_name) if !space.blank?
+			  return singular_name
 			end
 			
 			def to_params

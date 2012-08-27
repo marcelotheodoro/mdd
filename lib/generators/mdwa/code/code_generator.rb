@@ -30,14 +30,14 @@ module Mdwa
         # include files with entities
         # select entities that will be generated
         inside Rails.root do
-          if entities.count.zero?
-            require_all MDWA::DSL::STRUCTURAL_PATH unless Dir.glob("#{MDWA::DSL::STRUCTURAL_PATH}/*.rb").count.zero?
-          else
-            files = entities.collect{ |e| "#{MDWA::DSL::STRUCTURAL_PATH}#{MDWA::DSL::Entity.new(e).file_name}.rb" }
-            require_all files.join(', ')
-          end
+          require_all MDWA::DSL::STRUCTURAL_PATH unless Dir.glob("#{MDWA::DSL::STRUCTURAL_PATH}/*.rb").count.zero?
         end
-        @all_entities = MDWA::DSL.entities.all
+
+        if entities.count.zero?
+          @all_entities = MDWA::DSL.entities.all 
+        else
+          @all_entities = entities.collect{ |e| MDWA::DSL.entity(e) }
+        end
         
         # entity changes and migrations
         @changes = []
@@ -121,31 +121,27 @@ module Mdwa
       #
       def entities_interface
         
-        if options.only_interface
-          puts 'arqui'
-          @all_entities.each do |entity|
+        return nil unless options.only_interface
+        @all_entities.each do |entity|
+          # if it's not a resource, ignore
+          next unless entity.resource?
 
-            # if it's not a resource, ignore
-            next unless entity.resource?
-
-            # if model has not a database yet, run the generate command
-            begin
-              # if model does not exist, should generate scaffold
-              model_class = entity.generator_model.model_class
-            rescue
-              model_class = nil
-            end
-            if entity.force? or model_class.nil? or !model_class.table_exists?
-              puts "===================================================="
-              puts "Generating code for '#{entity.name}'"
-              puts "===================================================="
-              generation_string = "#{entity.generate} --only_interface #{'--force' if options.force}"
-              generate generation_string
-              
-              # append generated code to entity
-              append_to_file "#{MDWA::DSL::STRUCTURAL_PATH}#{entity.file_name}.rb", "\n\nMDWA::DSL.entity('#{entity.name}').code_generations << '#{generation_string}'"
-            end
+          # if model has not a database yet, run the generate command
+          begin
+            # if model does not exist, should generate scaffold
+            model_class = entity.generator_model.model_class
+          rescue
+            model_class = nil
           end
+
+          puts "===================================================="
+          puts "Generating code for '#{entity.name}'"
+          puts "===================================================="
+          generation_string = "#{entity.generate} --only_interface #{'--force' if options.force}"
+          generate generation_string
+          
+          # append generated code to entity
+          append_to_file "#{MDWA::DSL::STRUCTURAL_PATH}#{entity.file_name}.rb", "\n\nMDWA::DSL.entity('#{entity.name}').code_generations << '#{generation_string}'"
         end
         
       end 
