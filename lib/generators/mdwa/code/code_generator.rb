@@ -122,6 +122,7 @@ module Mdwa
       def entities_interface
         
         if options.only_interface
+          puts 'arqui'
           @all_entities.each do |entity|
 
             # if it's not a resource, ignore
@@ -197,14 +198,16 @@ module Mdwa
           end
           
           # inject routes testing
-          insert_into_file "spec/routing/#{model.space}/#{model.plural_name}_routing_spec.rb", :after => 'describe "routing" do' do
-            routes = []
-            entity.actions.actions.values.select {|a| !a.resource}.each do |action|
-              routes << "\n\n\t\tit 'routes to ##{action.name}' do"
-              routes << "\n\t\t\t#{action.method.to_s}('#{action.entity.generator_model.to_route_url}/#{'1/' if action.member?}#{action.name}').should route_to('#{action.entity.generator_model.to_route_url}##{action.name}' #{', :id => "1"' if action.member?})"
-              routes << "\n\t\tend"
+          if File.exist?(Rails.root + "/spec/routing/#{model.space}/#{model.plural_name}_routing_spec.rb")
+            insert_into_file "spec/routing/#{model.space}/#{model.plural_name}_routing_spec.rb", :after => 'describe "routing" do' do
+              routes = []
+              entity.actions.actions.values.select {|a| !a.resource}.each do |action|
+                routes << "\n\n\t\tit 'routes to ##{action.name}' do"
+                routes << "\n\t\t\t#{action.method.to_s}('#{action.entity.generator_model.to_route_url}/#{'1/' if action.member?}#{action.name}').should route_to('#{action.entity.generator_model.to_route_url}##{action.name}' #{', :id => "1"' if action.member?})"
+                routes << "\n\t\tend"
+              end
+              routes.join
             end
-            routes.join
           end
           
           # generate the corresponding files

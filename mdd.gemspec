@@ -13,14 +13,14 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "mdd"
   
-  s.add_dependency 'rails'
-  s.add_dependency 'jquery-rails'
-  s.add_dependency 'devise'
-  s.add_dependency 'cancan'
-  s.add_dependency 'will_paginate'
-  s.add_dependency 'nested_form'
-  s.add_dependency 'require_all'
-  s.add_development_dependency 'minitest'
+  s.add_dependency 'rails', '>= 3.1'
+  s.add_dependency 'jquery-rails', '>= 2.1'
+  s.add_dependency 'devise', '>= 2.1'
+  s.add_dependency 'cancan', '>= 1.6'
+  s.add_dependency 'will_paginate', '>= 3.0'
+  s.add_dependency 'nested_form', '>= 0.2.3'
+  s.add_dependency 'require_all', '>= 1.2.1'
+  s.add_development_dependency 'minitest', '>= 3.3'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

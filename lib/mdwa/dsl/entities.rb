@@ -22,6 +22,7 @@ module MDWA
         # retrive or initialize a entity
         entity = element(name) || Entity.new( name )
         yield(entity) if block_given?
+        entity.after_declaration
         add_node entity # add to the list
       end
     

@@ -201,4 +201,17 @@ describe MDWA::DSL::Entities do
     task.generate.must_equal nil
   end
   
+  it "should create default attribute for user entity" do
+    MDWA::DSL.entities.register "TeamMember" do |p|
+      p.resource = true
+      p.ajax = true
+      p.user = true
+    end
+    
+    team_member = MDWA::DSL.entity('TeamMember')
+    team_member.attributes.count.must_equal 1
+    team_member.attributes['name'].name.must_equal 'name'
+    team_member.attributes['name'].type.must_equal 'string'
+  end
+  
 end

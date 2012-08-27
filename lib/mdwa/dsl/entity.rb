@@ -68,6 +68,18 @@ module MDWA
       end
       
       #
+      # Executed after the entity is declared, but before the inclusion in the entities singleton array.
+      #
+      def after_declaration
+        
+        # if it's a user and have no attributes, include "name" to prevent errors
+        if user? and attributes.count.zero?
+          self.attribute('name', 'string')
+        end
+        
+      end
+      
+      #
       # Declares one attribute of the list using the block given.
       #
       def attribute(name, type)
