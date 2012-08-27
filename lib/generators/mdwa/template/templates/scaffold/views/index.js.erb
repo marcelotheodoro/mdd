@@ -1,0 +1,5 @@
+<%-
+@entity = MDWA::DSL.entity('Project')
+@model = @entity.generator_model
+-%>
+$("#<%= @model.plural_name %>_list").html("<%%= escape_javascript( render :partial => "<%= @model.plural_name %>" )%>");

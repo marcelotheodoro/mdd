@@ -1,0 +1,30 @@
+<%-
+@entity = MDWA::DSL.entity('Project')
+@model = @entity.generator_model
+-%>
+<div id="<%= @model.plural_name %>_show" class="mdwa_show">
+	<div class="page_header">
+		<h1><%%= t('<%= @model.plural_name %>.show_title') %></h1>
+	</div>
+
+	<div class="inside">
+	<%- @model.attributes.each do |attr| -%>
+		<div class="field">
+			<label><%%= t '<%= @model.plural_name %>.show_<%= attr.name %>' %></label>
+			<span>
+		<%- if !attr.references? -%>
+	        <%%= @<%= @model.singular_name %>.<%= attr.name %> %>
+	    <%- elsif attr.belongs_to? || attr.nested_one? -%>
+	    	<%%= @<%= @model.singular_name %>.<%= attr.type.singular_name %>.<%= attr.reference %> %>
+	    <%- elsif attr.has_many? or attr.nested_many? -%>
+	        <ul>
+	    	<%% @<%= @model.singular_name %>.<%= attr.type.plural_name %>.each do |<%= attr.type.singular_name %>| %>
+	   	    	<li><%%= <%= attr.type.singular_name %>.<%= attr.reference %> %> </li>
+	    	<%% end %>
+	        </ul>
+	    <%- end -%>
+	    	</span>
+		</div>
+	<%- end -%>
+	</div>
+</div>

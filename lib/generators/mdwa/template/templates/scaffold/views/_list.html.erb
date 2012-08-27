@@ -1,0 +1,44 @@
+<%-
+@entity = MDWA::DSL.entity('Project')
+@model = @entity.generator_model
+-%>
+<table class="list">
+  <thead>
+      <th class="list_show"><%%= t 'system.index_id' %></th>
+      <th class="list_edit"><%%= t 'system.index_edit' %></th>
+    <%- @model.attributes.each do |attr| -%>
+      <th><%%= t '<%= @model.plural_name %>.index_<%= attr.name %>' %></th>
+    <%- end -%>
+      <th class="list_remove"><%%= t 'system.index_remove' %></th>
+  </thead>
+<%% @<%= @model.plural_name %>.each do |<%= @model.singular_name %>| %>
+  <tr class="<%%= cycle 'odd_line', 'even_line' %>" >
+    <td>
+		<%%= link_to <%= @model.singular_name %>.id, <%= @model.object_name %>_path(<%= @model.singular_name %>) <%= ", :class => 'lightbox various fancybox.ajax'" if @entity.ajax %> %>
+	</td>
+  	<td>
+		<%%= link_to t('system.index_edit_label'), edit_<%= @model.object_name %>_path(<%= @model.singular_name %>) <%= ", :class => 'lightbox various fancybox.ajax'" if @entity.ajax %> %>
+	</td>
+    <%- @model.attributes.each do |attr| -%>
+    <td>
+      <%- if !attr.references? -%>
+        <%%= <%= @model.singular_name %>.<%= attr.name %> %>
+      <%- elsif attr.belongs_to? || attr.nested_one? -%>
+        <%%= <%= @model.singular_name %>.<%= attr.type.singular_name %>.<%= attr.reference %> %>
+      <%- elsif attr.has_many? or attr.has_and_belongs_to_many? or attr.nested_many? -%>
+        <ul>
+        <%% <%= @model.singular_name %>.<%= attr.type.plural_name %>.each do |<%= attr.type.singular_name %>| %>
+          <li><%%= <%= attr.type.singular_name %>.<%= attr.reference %> %> </li>
+        <%% end %>
+        </ul>
+      <%- end -%>
+    </td>
+    <%- end -%>
+    <td>
+		<%%= link_to t('system.index_remove_label'), <%= @model.to_route_object %>, :method => :delete, <%= ':remote => true,' if @entity.ajax %> :data => {:confirm => t('system.index_confirm_deletion')} %>
+	</td>
+  </tr>
+<%% end %>
+</table>
+
+<%%= pagination_footer @<%= @model.plural_name %> %>

@@ -1,0 +1,13 @@
+<%-
+@entity = MDWA::DSL.entity('Project')
+@model = @entity.generator_model
+-%>
+<div id="<%= @model.plural_name %>_edit" class="mdwa_edit">
+	<div class="page_header">
+		<h1><%%= t('<%= @model.plural_name %>.edit_title') %></h1>
+	</div>
+
+	<div class="inside">
+		<%%= render 'form' %>
+	</div>
+</div>
