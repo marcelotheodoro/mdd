@@ -54,73 +54,73 @@ module Mdwa
           @model.add_attribute MDWA::Generators::ModelAttribute.new( attribute ) unless User.accessible_attributes.to_a.include?( attribute.split(':').first )
         end
         
-        generate "mdwa:scaffold #{scaffold_name} name:string email:string password:password password_confirmation:password #{attributes.join(' ')} #{'--force' if options.force} #{'--ajax' if options.ajax} #{"model=#{options.model}" if options.model} #{'--skip_interface' if options.skip_interface} #{'--only_interface' if options.only_interface} #{'--skip_rake_migrate' if options.skip_rake_migrate} #{'--skip_timestamp' if options.skip_timestamp} #{'--skip_questions' if options.skip_questions} --skip-migrations"
+        generate "mdwa:scaffold #{scaffold_name} name:string email:string password:password password_confirmation:password #{@model.attributes.collect{|a| a.raw}.join(' ')} #{'--force' if options.force} #{'--ajax' if options.ajax} #{"model=#{options.model}" if options.model} #{'--skip_interface' if options.skip_interface} #{'--only_interface' if options.only_interface} #{'--skip_rake_migrate' if options.skip_rake_migrate} #{'--skip_timestamp' if options.skip_timestamp} #{'--skip_questions' if options.skip_questions} --skip-migrations"
 
       end
 
       def controller_and_view
-        unless options.skip_interface
-          # controllers
-          @inherit_controller = 'A::BackendController' if @model.space == 'a'
-          template "controllers/#{'ajax_' if options.ajax}controller.rb", "app/controllers/#{@model.space}/#{@model.plural_name}_controller.rb"
-          
-          # views - update only 
-          template 'views/update.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/update.js.erb"
-        end
-      end
-      
-      def model_override
-        # locate the mdwa user to discover the roles
-        require_all "#{MDWA::DSL::USERS_PATH}#{@model.singular_name}.rb"
-        @mdwa_user = MDWA::DSL.user(@model.name)
-        if @mdwa_user.nil?
-          @roles = [@model.name]
-        else
-          @roles = @mdwa_user.user_roles
-        end
-        
-        # model override
-        gsub_file "app/models/#{@model.space}/#{@model.singular_name}.rb", 'ActiveRecord::Base', 'User'
-        inject_into_class "app/models/#{@model.space}/#{@model.singular_name}.rb", @model.model_class do 
-          inj = []
-          @roles.each do |role|
-            inj << "\n\n\tafter_create :create_#{role.underscore}_permission\n"
-            inj << "\tdef create_#{role.underscore}_permission"
-            inj << "\t\t#{role.underscore}_permission = Permission.find_by_name('#{role.underscore}')"
-            inj << "\t\t#{role.underscore}_permission = Permission.create(:name => '#{role.underscore}') if #{role.underscore}_permission.nil?" 
-            inj << "\t\tself.permissions.push #{role.underscore}_permission"
-            inj << "\tend"
-          end
-          inj.join("\n")
-        end
-      end
+         unless options.skip_interface
+           # controllers
+           @inherit_controller = 'A::BackendController' if @model.space == 'a'
+           template "controllers/#{'ajax_' if options.ajax}controller.rb", "app/controllers/#{@model.space}/#{@model.plural_name}_controller.rb"
+         
+           # views - update only 
+           template 'views/update.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/update.js.erb"
+         end
+       end
+     
+       def model_override
+         # locate the mdwa user to discover the roles
+         require_all "#{MDWA::DSL::USERS_PATH}#{@model.singular_name}.rb"
+         @mdwa_user = MDWA::DSL.user(@model.name)
+         if @mdwa_user.nil?
+           @roles = [@model.name]
+         else
+           @roles = @mdwa_user.user_roles
+         end
+       
+         # model override
+         gsub_file "app/models/#{@model.space}/#{@model.singular_name}.rb", 'ActiveRecord::Base', 'User'
+         inject_into_class "app/models/#{@model.space}/#{@model.singular_name}.rb", @model.model_class do 
+           inj = []
+           @roles.each do |role|
+             inj << "\n\n\tafter_create :create_#{role.underscore}_permission\n"
+             inj << "\tdef create_#{role.underscore}_permission"
+             inj << "\t\t#{role.underscore}_permission = Permission.find_by_name('#{role.underscore}')"
+             inj << "\t\t#{role.underscore}_permission = Permission.create(:name => '#{role.underscore}') if #{role.underscore}_permission.nil?" 
+             inj << "\t\tself.permissions.push #{role.underscore}_permission"
+             inj << "\tend"
+           end
+           inj.join("\n")
+         end
+       end
 
-      def migration_override        
+       def migration_override        
 
-        # override model attributes to not allow field duplicity (causing errors)
-        @model.attributes = []
-        attributes.each do |attribute|
-          @model.add_attribute MDWA::Generators::ModelAttribute.new( attribute ) unless @predefined_fields.include?( attribute.split(':').first )
-        end
-        migration_template 'migrate.rb', "db/migrate/add_#{@model.attributes.collect{|a| a.name}.join('_')}_to_users" unless @model.attributes.empty?
-        
-        # include type in db:seed
-        append_file 'db/seeds/site.rb' do
-          "\n\nPermission.create( :name => '#{@model.singular_name}' ) if Permission.find_by_name('#{@model.singular_name}').nil?"
-        end
-        # run rake db:seeds
-        if yes?('Run rake db:seed to create permission type?')
-          rake 'db:migrate'
-          rake 'db:seed' 
-        end
-      end
+         # override model attributes to not allow field duplicity (causing errors)
+         @model.attributes = []
+         attributes.each do |attribute|
+           @model.add_attribute MDWA::Generators::ModelAttribute.new( attribute ) unless @predefined_fields.include?( attribute.split(':').first )
+         end
+         migration_template 'migrate.rb', "db/migrate/add_#{@model.attributes.collect{|a| a.name}.join('_')}_to_users" unless @model.attributes.empty?
+       
+         # include type in db:seed
+         append_file 'db/seeds/site.rb' do
+           "\n\nPermission.create( :name => '#{@model.singular_name}' ) if Permission.find_by_name('#{@model.singular_name}').nil?"
+         end
+         # run rake db:seeds
+         if yes?('Run rake db:seed to create permission type?')
+           rake 'db:migrate'
+           rake 'db:seed' 
+         end
+       end
 
 
-      def run_rake_db_migrate
-        if !options.skip_rake_migrate and !options.skip_migrations and !options.only_interface
-          rake('db:migrate') if !options.skip_questions and yes? 'Run rake db:migrate?'
-        end
-      end
+       def run_rake_db_migrate
+         if !options.skip_rake_migrate and !options.skip_migrations and !options.only_interface
+           rake('db:migrate') if !options.skip_questions and yes? 'Run rake db:migrate?'
+         end
+       end
 
       private
 
