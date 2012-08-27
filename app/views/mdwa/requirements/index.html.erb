@@ -10,11 +10,15 @@
 				<tr>
 					<th>Requirement title</th>
 					<th>Description</th>
+					<th>Entities</th>
+					<th>Users</th>
 				</tr>
 				<% @requirements.each do |requirement| %>
 				<tr>
 					<td><%= requirement.summary %></td>
 					<td><%= requirement.description %></td>
+					<td><%= requirement.entities.join ', ' %></td>
+					<td><%= requirement.users.join ', ' %></td>
 				</tr>
 				<% end %>
 			</table>
