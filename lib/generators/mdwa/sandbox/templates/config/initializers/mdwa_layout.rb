@@ -6,4 +6,7 @@ MDWA::Layout::Base.config do |config|
   config['/a/users/passwords#*'] 		  = 'system'
   config['/a/users/sessions#new'] 	  = 'login'
   config['/a/users/sessions#create'] 	= 'login'
+  
+  # Software visualization in development environment
+  config['/mdwa/*']                   = 'mdwa_visualization'
 end

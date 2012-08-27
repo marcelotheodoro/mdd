@@ -6,6 +6,7 @@
  *= require ./template/reset
  *= require ./template/cssbase
  *= require ./template/template
+ *= require ./template/visualization
  *= require ./template/grid
  *= require_tree ../jquery
  *= require ./template/backend

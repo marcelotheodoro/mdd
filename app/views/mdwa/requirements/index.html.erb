@@ -1,0 +1,27 @@
+<div id="requirements_index">
+	<div class="page_header">
+		<h1>MDWA Requirements</h1>
+	</div>
+
+	<div class="inside">	
+
+		<% if @requirements.count > 0 %>
+			<table class="list">
+				<tr>
+					<th>Requirement title</th>
+					<th>Description</th>
+				</tr>
+				<% @requirements.each do |requirement| %>
+				<tr>
+					<td><%= requirement.summary %></td>
+					<td><%= requirement.description %></td>
+				</tr>
+				<% end %>
+			</table>
+		<% else %>
+			<p>No requirements specified.</p>
+		<% end %>
+	
+	</div>
+	
+</div>

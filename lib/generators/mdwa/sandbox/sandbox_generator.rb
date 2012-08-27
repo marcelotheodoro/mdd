@@ -140,6 +140,16 @@ module Mdwa
     
     root :to => 'home#index'
   end
+  
+  # Software visualization
+  namespace :mdwa do
+    controller :requirements do
+      get 'requirements/index' => 'requirements#index', :as => 'requirements'
+      get 'requirements/:alias' => 'requirements#show', :as => 'requirement'
+    end
+    
+    root :to => 'requirements#index'
+  end
           "
         end
       end
