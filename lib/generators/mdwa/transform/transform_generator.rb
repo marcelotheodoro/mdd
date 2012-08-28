@@ -35,24 +35,9 @@ module Mdwa
       def generate_views
         @entities.each do |entity|
           generator_model = entity.generator_model
-          
-          # Dir.glob("#{entity.file_name}/views/").each do |file|
-          #   mdwa_template file, "app/views/#{generator_model.space}/#{generator_model.plural_name}/#{file.split('/').last}"
-          # end
-
-          mdwa_template "#{entity.file_name}/views/edit.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/edit.html.erb"        
-          mdwa_template "#{entity.file_name}/views/index.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/index.html.erb"
-          mdwa_template "#{entity.file_name}/views/index.js.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/index.js.erb"
-          mdwa_template "#{entity.file_name}/views/new.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/new.html.erb"
-          mdwa_template "#{entity.file_name}/views/show.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/show.html.erb"
-          mdwa_template "#{entity.file_name}/views/_form.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/_form.html.erb"
-          mdwa_template "#{entity.file_name}/views/_form_fields.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/_form_fields.html.erb"
-          mdwa_template "#{entity.file_name}/views/_list.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/_list.html.erb"
-        
-          if entity.ajax?
-            mdwa_template "#{entity.file_name}/views/create.js.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/create.js.erb"
-            mdwa_template "#{entity.file_name}/views/update.js.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/update.js.erb"
-            mdwa_template "#{entity.file_name}/views/destroy.js.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/destroy.js.erb"
+          Dir.glob("#{Rails.root}/#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/*").each do |file|
+            file_name = File.basename(file)
+            mdwa_template "#{entity.file_name}/views/#{file_name}", "app/views/#{generator_model.space}/#{generator_model.plural_name}/#{file_name}"
           end
         end
       end
@@ -96,6 +81,9 @@ module Mdwa
       def generate_locales
       end
       
+      def generate_tests
+      end
+      
       def generate_migration
         
         @entities.each do |entity|
@@ -103,9 +91,6 @@ module Mdwa
         end
         
         rake('db:migrate') if yes?('Run rake db:migrate')
-      end
-      
-      def generate_tests
       end
       
       private
