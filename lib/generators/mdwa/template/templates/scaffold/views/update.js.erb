@@ -1,7 +1,4 @@
-<%-
-@entity = MDWA::DSL.entity('Project')
-@model = @entity.generator_model
--%>
+===entity_code===
 <%% if @<%= @model.singular_name %>.errors.any? %>
 	$("#mdwa_error").html("<%%= escape_javascript( render '/template/mdwa/crud_error', :object => @<%= @model.singular_name %> )%>");
 <%% else %>

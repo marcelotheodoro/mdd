@@ -7,7 +7,7 @@ require 'mdwa/dsl'
 
 module Mdwa
   module Generators
-    class CodeGenerator < Rails::Generators::Base
+    class TemplateGenerator < Rails::Generators::Base
       
       include Rails::Generators::Migration
       
@@ -62,9 +62,7 @@ module Mdwa
       
         def copy_with_header(source, destination, entity)
           copy_file source, destination
-          insert_into_file destination do
-            "<%- @entity = MDWA::DSL.entity('#{entity}') \n@model = @entity.generator_model \n-%>"
-          end
+          gsub_file destination, '===entity_code===', "<%- \n@entity = MDWA::DSL.entity('#{entity}') \n@model = @entity.generator_model \n-%>"
         end
       
     end

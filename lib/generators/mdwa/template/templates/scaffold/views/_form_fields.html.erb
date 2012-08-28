@@ -1,7 +1,4 @@
-<%-
-@entity = MDWA::DSL.entity('Project')
-@model = @entity.generator_model
--%>
+===entity_code===
 <%- @model.attributes.each do |attr| -%>
 <%- unless attr.references? -%>
 <div class="field">
