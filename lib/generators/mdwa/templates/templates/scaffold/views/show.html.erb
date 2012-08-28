@@ -16,7 +16,7 @@
 			<label><%%= t '<%= @model.plural_name %>.show_<%= assoc.model2.singular_name %>' %></label>
 			<span>
 			<%- if assoc.belongs_to? || assoc.nested_one? -%>
-		    	<%%= @<%= @model.singular_name %>.<%= assoc.model2.singular_name %>.<%= assoc.reference_field %> %>
+		    	<%%= @<%= @model.singular_name %>.<%= assoc.model2.singular_name %>.<%= assoc.reference_field %> unless @<%= @model.singular_name %>.<%= assoc.model2.singular_name %>.nil? %>
 		    <%- elsif assoc.has_many? or assoc.nested_many? -%>
 		        <ul>
 		    	<%% @<%= @model.singular_name %>.<%= assoc.model2.plural_name %>.each do |<%= assoc.model2.singular_name %>| %>
