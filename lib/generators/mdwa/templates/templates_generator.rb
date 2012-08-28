@@ -54,7 +54,68 @@ module Mdwa
           copy_with_header 'scaffold/views/show.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/show.html.erb", entity.name
           copy_with_header 'scaffold/views/update.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/update.js.erb", entity.name
         end
+      end
         
+        
+      def entity_actions
+        
+        @entities.each do |entity|
+          # next iteration if entity doesn't have specifications
+          next if entity.actions.actions.count.zero?
+
+          model = entity.generator_model
+
+          path_to_controller  = "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/controller.rb"
+          controller_string   = File.read("#{Rails.root}/#{path_to_controller}")
+
+          # hooks for code generations
+          controller_hook = '#===controller_init==='
+          test_hook = '#===test_init==='
+
+          # insert in controller
+          insert_into_file path_to_controller, :after => controller_hook do 
+            actions = []
+            entity.actions.generate_controller.each do |action_name, generation_string|
+              # write the generated code only if it is not declared in the controller
+              actions << "\n\n#{generation_string}" unless controller_string.include? "def #{action_name}"
+            end
+            actions.join
+          end
+          
+          # generate the corresponding files
+          entity.actions.actions.values.select{ |a| !a.resource? }.each do |action|
+            action.template_names.each do |request, file_name|          
+              case request.to_sym
+              when :modalbox, :html
+                copy_with_header 'actions/view.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}", entity unless File.exist?("#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}")
+              when :ajax
+                copy_with_header 'actions/view.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}", entity unless File.exist?("#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}")
+              when :ajax_js
+                copy_with_header 'actions/view.json.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}", entity unless File.exist?("#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}")
+              else
+                copy_with_header 'actions/view.custom.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}", entity unless File.exist?("#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}")
+              end
+            end
+          end
+
+          # inject routes testing
+          # if File.exist?(Rails.root + "/spec/routing/#{model.space}/#{model.plural_name}_routing_spec.rb")
+          #   insert_into_file "spec/routing/#{model.space}/#{model.plural_name}_routing_spec.rb", :after => 'describe "routing" do' do
+          #     routes = []
+          #     entity.actions.actions.values.select {|a| !a.resource}.each do |action|
+          #       routes << "\n\n\t\tit 'routes to ##{action.name}' do"
+          #       routes << "\n\t\t\t#{action.method.to_s}('#{action.entity.generator_model.to_route_url}/#{'1/' if action.member?}#{action.name}').should route_to('#{action.entity.generator_model.to_route_url}##{action.name}' #{', :id => "1"' if action.member?})"
+          #       routes << "\n\t\tend"
+          #     end
+          #     routes.join
+          #   end
+          # end
+
+        end # @entities loop
+        
+      end
+      
+      def tests
       end
       
       

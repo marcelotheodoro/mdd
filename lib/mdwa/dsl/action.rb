@@ -52,15 +52,15 @@ module MDWA
       
       def generate_route
         str = []
-        str << self.method.to_s
+        str << "#{self.method.to_s} "
         str << "'#{self.entity.name.underscore.pluralize}"
         str << '/:id' if member?
-        str << "/#{self.name.to_s}'"
-        str << "=> :#{self.name.to_sym}"
+        str << "/#{self.name.to_s}' "
+        str << "=> '#{self.entity.name.underscore.pluralize}##{self.name.to_sym}'"
         str << ", :as => '"
         str << "#{self.name.to_s}_#{member? ? self.entity.name.underscore.singularize : self.entity.name.underscore.pluralize}" # action_entity(s)
         str << "'"
-        str.join ' '
+        str.join
       end
       
       def generate_controller

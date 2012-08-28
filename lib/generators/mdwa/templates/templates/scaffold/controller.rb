@@ -5,6 +5,9 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
   <%- if @entity.resource? -%>
   load_and_authorize_resource :class => "<%= @model.klass %>"
   <%- end -%>
+  
+  # Hook for code generations. Do not delete.
+  #===controller_init===
 
 	def index
 	  @<%= @model.plural_name %> = <%= @model.klass %>.paginate :page => params[:page]
