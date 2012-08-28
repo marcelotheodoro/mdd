@@ -37,6 +37,11 @@ module Mdwa
       def entities_scaffold
         
         @entities.each do |entity|
+          
+          puts '--------------------------------------'
+          puts "- Code for: #{entity.name} -"
+          puts '--------------------------------------'
+        
           copy_with_header 'scaffold/controller.rb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/controller.rb", entity.name
           copy_with_header 'scaffold/helper.rb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/helper.rb", entity.name
           copy_with_header 'scaffold/model.rb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/model.rb", entity.name
@@ -58,6 +63,10 @@ module Mdwa
         
         
       def entity_actions
+        
+        puts '--------------------------------------'
+        puts "- Generating actions -"
+        puts '--------------------------------------'
         
         @entities.each do |entity|
           # next iteration if entity doesn't have specifications
@@ -124,7 +133,7 @@ module Mdwa
         def copy_with_header(source, destination, entity)
           if !File.exist?(Rails.root + destination) or options.force
             copy_file source, destination
-            gsub_file destination, '===entity_code===', "<%- \n@entity = MDWA::DSL.entity('#{entity}') \n@model = @entity.generator_model \n-%>"
+            gsub_file destination, '===entity_code===', "<%- \n@entity = MDWA::DSL.entity('#{entity}') \n@model = @entity.generator_model \n-%>", {:verbose => false}
           end
         end
       

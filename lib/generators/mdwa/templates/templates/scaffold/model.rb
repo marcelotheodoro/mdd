@@ -9,8 +9,7 @@ class <%= @model.klass %> < <%= !@entity.user? ? 'ActiveRecord::Base' : 'User' %
 
 <%- if @entity.user? -%>
   <%- require_all "#{MDWA::DSL::USERS_PATH}#{@entity.file_name}.rb" ->
-  <%- @mdwa_user = MDWA::DSL.user(@entity.name) -%>
-  <%- @roles = (@mdwa_user.nil? ? @roles = [@model.name] : @mdwa_user.user_roles)
+  <%- @roles = ( MDWA::DSL.user(@entity.name).nil? ? @roles = [@model.name] : MDWA::DSL.user(@entity.name).user_roles ) -%>
   <%- @roles.each do |role| -%>
     after_create :create_<%= role.underscore %>_permission
     def create_<%= role.underscore %>_permission
