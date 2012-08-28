@@ -6,15 +6,16 @@ module MDWA
     
     class ModelAssociation
       
-      attr_accessor :model1, :model2, :relation
+      attr_accessor :model1, :model2, :relation, :reference_field
       
       ACCEPTED_RELATIONS = [:has_many, :belongs_to, :has_and_belongs_to_many, :nested_many, :nested_one, :has_one]
       
-      def initialize(model1_name, model2_name, relation_name)
+      def initialize(model1_name, model2_name, relation_name, reference_field)
         
         self.model1   = model1_name
         self.model2   = model2_name
         self.relation = relation_name
+        self.reference_field = reference_field || 'id'
 
         # validation
         raise "Invalid model name: #{@model1.name}" unless self.model1.valid?

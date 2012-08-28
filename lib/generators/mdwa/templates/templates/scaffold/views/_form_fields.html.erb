@@ -1,4 +1,7 @@
-===entity_code===
+<%- 
+@entity = MDWA::DSL.entity('Projeto') 
+@model = @entity.generator_model 
+-%>
 <%- @model.attributes.each do |attr| -%>
 <%- unless attr.references? -%>
 <div class="field">
@@ -6,26 +9,30 @@
    	<%%= f.<%= attr.form_field %> :<%= attr.name %> %>
 </div>
 <%- end # unless -%>
-<%- if attr.belongs_to? -%>
+<%- end # model.attributes.each -%>
+
+<%- @model.associations.each do |assoc| -%>
+<%- if assoc.belongs_to? -%>
 <div class="field">
-	<%%= f.label :<%= attr.name %> %> 
-	<%%= f.select :<%= attr.name %>, 
-		  options_for_select( <%= attr.type.klass %>.order('<%= attr.reference %> ASC').collect{ |c| [c.<%= attr.reference %>, c.id] }, f.object.<%= attr.name %> ), 
+	<%%= f.label :<%= assoc.model2.singular_name.foreign_key %> %> 
+	<%%= f.select :<%= assoc.model2.singular_name.foreign_key %>, 
+		  options_for_select( <%= assoc.model2.klass %>.order('<%= assoc.reference_field %> ASC').collect{ |c| [c.<%= assoc.reference_field %>, c.id] }, f.object.<%= assoc.model2.singular_name.foreign_key %> ), 
 			:prompt => '-- Select --' %>
 </div>
 <%- end # if -%>
-<%- if attr.nested? -%>
+<%- if assoc.nested? -%>
 <div class="nested">
-	<%%= f.fields_for :<%= (attr.nested_many?) ? attr.type.plural_name : attr.type.singular_name %> do |ff| %>
-		<%%= render '<%= attr.type.space %>/<%= attr.type.plural_name %>/form_fields', :f => ff %>
-	<%- unless attr.nested_one? -%>
+	<%%= f.fields_for :<%= (assoc.nested_many?) ? assoc.model2.plural_name : assoc.model2.singular_name %> do |ff| %>
+		<%%= render '<%= assoc.model2.space %>/<%= assoc.model2.plural_name %>/form_fields', :f => ff %>
+	<%- unless assoc.nested_one? -%>
 		<%%= ff.link_to_remove t('nested.remove') %>
 	<%- end -%>
 	
 	<%% end %>
-	<%- unless attr.nested_one? -%>
-	<%%= f.link_to_add t('nested.add', :name => '<%= attr.type.singular_name %>'), :<%= attr.type.plural_name %> %>
+	<%- unless assoc.nested_one? -%>
+	<%%= f.link_to_add t('nested.add', :name => '<%= assoc.model2.singular_name %>'), :<%= assoc.model2.plural_name %> %>
 	<%- end -%>
 </div>
 <%- end # if -%>
-<%- end # model.attributes.each -%>
+
+<%- end # associations loop -%>

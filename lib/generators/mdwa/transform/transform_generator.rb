@@ -230,6 +230,7 @@ module Mdwa
           create_file "#{Rails.root}/#{file_to_write}", erb.result, :force => true
         end
         
+        
         def migration_for_entity(entity)
           # ignores user
           return nil if entity.user?
@@ -240,11 +241,22 @@ module Mdwa
           # create table
           migration_string << "\n\tdef self.up"
           migration_string << "\t\tcreate_table :#{generator_model.plural_name} do |t|"
-          generator_model.simple_attributes.each do |attr|
+          generator_model.attributes.each do |attr|
           	migration_string << "\t\t\tt.#{attr.migration_field} :#{attr.name}"
         	end
+        	generator_model.associations.each do |assoc|
+        	  if assoc.belongs_to? or assoc.nested_one?
+          	  migration_string << "\t\t\tt.integer :#{assoc.model2.singular_name.foreign_key}"
+        	  end
+        	end
           migration_string << "\t\t\tt.timestamps"
-          migration_string << "\t\tend\n\tend"
+          migration_string << "\t\tend"
+        	generator_model.associations.each do |assoc|
+            if assoc.belongs_to? or assoc.nested_one?
+          	  migration_string << "\t\tadd_index :#{assoc.model1.plural_name}, :#{assoc.model2.singular_name.foreign_key}"
+        	  end
+      	  end
+          migration_string << "\n\tend"
 
           # drop table
           migration_string << "\n\tdef self.down"

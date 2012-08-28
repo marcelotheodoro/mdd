@@ -134,8 +134,9 @@ module MDWA
         end
         self.associations.values.each do |association|
           model1 = Generators::Model.new(self.model_name)
-          model2 = Generators::Model.new(DSL.entity(association.destination).model_name)
-          @generator_model.associations << Generators::ModelAssociation.new(model1, model2, association.generator_type)
+          entity2 = DSL.entity(association.destination)
+          model2 = Generators::Model.new(entity2.model_name)
+          @generator_model.associations << Generators::ModelAssociation.new(model1, model2, association.generator_type, entity2.default_attribute.name)
         end
         return @generator_model
       end

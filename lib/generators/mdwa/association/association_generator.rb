@@ -70,7 +70,7 @@ module Mdwa
         end
         if @association.nested_many?
           inject_into_class "app/models/#{@association.model1.space}/#{@association.model1.singular_name}.rb", @association.model1.model_class do
-            # belongs_to
+            # has_many
             # attr_accessible attributes
             # attr_nested_attributes 
             "\n\thas_many :#{@association.model2.plural_name}, :class_name => '#{@association.model2.klass}', :dependent => :destroy\n\tattr_accessible :#{@association.model2.plural_name}_attributes\n\taccepts_nested_attributes_for :#{@association.model2.plural_name}, :allow_destroy => true\n"
