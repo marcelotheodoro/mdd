@@ -61,7 +61,7 @@ module Mdwa
       private
       
         def copy_with_header(source, destination, entity)
-          unless File.exist?(Rails.root + destination)
+          if !File.exist?(Rails.root + destination) or options.force
             copy_file source, destination
             gsub_file destination, '===entity_code===', "<%- \n@entity = MDWA::DSL.entity('#{entity}') \n@model = @entity.generator_model \n-%>"
           end

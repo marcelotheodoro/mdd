@@ -1,8 +1,5 @@
 # -*- encoding : utf-8 -*-
-<%-
-@entity = MDWA::DSL.entity('Project')
-@model = @entity.generator_model
--%>
+===entity_code===
 class <%= @model.klass %> < <%= !@entity.user? ? 'ActiveRecord::Base' : 'User' %>
 
 <%- # model attributes -%>

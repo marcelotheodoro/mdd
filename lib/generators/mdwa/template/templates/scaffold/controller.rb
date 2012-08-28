@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+===entity_code===
 class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::BackendController' : 'ApplicationController' %>
 
   <%- if @entity.resource? -%>

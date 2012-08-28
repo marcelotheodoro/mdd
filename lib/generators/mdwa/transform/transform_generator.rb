@@ -35,6 +35,10 @@ module Mdwa
       def generate_views
         @entities.each do |entity|
           generator_model = entity.generator_model
+          
+          # Dir.glob("#{entity.file_name}/views/").each do |file|
+          #   mdwa_template file, "app/views/#{generator_model.space}/#{generator_model.plural_name}/#{file.split('/').last}"
+          # end
 
           mdwa_template "#{entity.file_name}/views/edit.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/edit.html.erb"        
           mdwa_template "#{entity.file_name}/views/index.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/index.html.erb"
@@ -43,7 +47,7 @@ module Mdwa
           mdwa_template "#{entity.file_name}/views/show.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/show.html.erb"
           mdwa_template "#{entity.file_name}/views/_form.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/_form.html.erb"
           mdwa_template "#{entity.file_name}/views/_form_fields.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/_form_fields.html.erb"
-          mdwa_template "#{entity.file_name}/views/_list.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/_#{generator_model.plural_name}.html.erb"
+          mdwa_template "#{entity.file_name}/views/_list.html.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/_list.html.erb"
         
           if entity.ajax?
             mdwa_template "#{entity.file_name}/views/create.js.erb", "app/views/#{generator_model.space}/#{generator_model.plural_name}/create.js.erb"
@@ -59,13 +63,30 @@ module Mdwa
         path_to_routes = 'app/mdwa/templates/routes.rb'
         append_to_file 'config/routes.rb', "require File.expand_path('../../#{path_to_routes}', __FILE__)"
         
+        # clear routes file contents
+        File.truncate(path_to_routes, 0)
+        append_file path_to_routes, "def mdwa_router(router)\n\nend"
+        
         @entities.each do |entity|
           generator_model = entity.generator_model
+          
+          # inject scaffold code
+          inject_into_file path_to_routes, :after => "def mdwa_router(router)\n" do
+            route_str = []
+            route_str << "\n\tnamespace :#{generator_model.space} do" if generator_model.namespace?
+            route_str << "\t\tcontroller :#{generator_model.plural_name} do"
+            route_str << "\t\tend"
+            route_str << "\t\tresources :#{generator_model.plural_name}"
+            route_str << "\tend\n" if generator_model.namespace?
+
+            route_str.join "\n"
+          end
         
-          insert_into_file path_to_routes, :after => "controller :#{generator_model.plural_name} do" do
+          # inject specific actions
+          inject_into_file path_to_routes, :after => "controller :#{generator_model.plural_name} do" do
             routes = []
             entity.actions.generate_routes.each do |action_name, generation_string|
-              routes << "\n\t\t\t#{generation_string}"
+              routes << "\n\t#{generation_string}"
             end
             routes.join
           end
@@ -78,8 +99,30 @@ module Mdwa
       def generate_migration
         
         @entities.each do |entity|
-          generator_model = entity.generator_model
+          migration_for_entity(entity)
+        end
         
+        rake('db:migrate') if yes?('Run rake db:migrate')
+      end
+      
+      def generate_tests
+      end
+      
+      private
+        
+        def mdwa_template(file_to_read, file_to_write)
+          read = File.read("#{Rails.root}/#{MDWA::DSL::TEMPLATES_PATH}/#{file_to_read}")
+          erb = ERB.new(read, nil, '-')
+
+          create_file "#{Rails.root}/#{file_to_write}", erb.result, :force => true
+        end
+        
+        def migration_for_entity(entity)
+          # ignores user
+          return nil if entity.user?
+
+          generator_model = entity.generator_model
+
           migration_string = []
           # create table
           migration_string << "\n\tdef self.up"
@@ -94,25 +137,11 @@ module Mdwa
           migration_string << "\n\tdef self.down"
           migration_string << "\t\tdrop_table :#{generator_model.plural_name}"
           migration_string << "\tend"
-        
+
           migration_name = "create_#{generator_model.plural_name}"
           migration_from_string(migration_name, migration_string.join("\n"))
-        end
-        
-        rake('db:migrate') if yes?('Run rake db:migrate')
-        
-      end
-      
-      def generate_tests
-      end
-      
-      private
-        
-        def mdwa_template(file_to_read, file_to_write)
-          read = File.read("#{Rails.root}/#{MDWA::DSL::TEMPLATES_PATH}/#{file_to_read}")
-          erb = ERB.new(read, nil, '-')
 
-          create_file "#{Rails.root}/#{file_to_write}", erb.result, :force => true
+          sleep 1 # aguarda 1 seg para trocar o timestamp
         end
         
         def migration_from_string(file_name, migration_string)
