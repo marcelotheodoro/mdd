@@ -120,7 +120,7 @@ module Mdwa
            "\n\nPermission.create( :name => '#{@model.singular_name}' ) if Permission.find_by_name('#{@model.singular_name}').nil?"
          end
          # run rake db:seeds
-         if yes?('Run rake db:seed to create permission type?')
+         if !options.skip_questions and yes?('Run rake db:seed to create permission type?')
            rake 'db:migrate'
            rake 'db:seed' 
          end
