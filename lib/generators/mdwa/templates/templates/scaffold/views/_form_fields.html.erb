@@ -1,14 +1,9 @@
-<%- 
-@entity = MDWA::DSL.entity('Projeto') 
-@model = @entity.generator_model 
--%>
+===entity_code===
 <%- @model.attributes.each do |attr| -%>
-<%- unless attr.references? -%>
 <div class="field">
    	<%%= f.label :<%= attr.name %> %> 
    	<%%= f.<%= attr.form_field %> :<%= attr.name %> %>
 </div>
-<%- end # unless -%>
 <%- end # model.attributes.each -%>
 
 <%- @model.associations.each do |assoc| -%>
@@ -20,6 +15,7 @@
 			:prompt => '-- Select --' %>
 </div>
 <%- end # if -%>
+
 <%- if assoc.nested? -%>
 <div class="nested">
 	<%%= f.fields_for :<%= (assoc.nested_many?) ? assoc.model2.plural_name : assoc.model2.singular_name %> do |ff| %>

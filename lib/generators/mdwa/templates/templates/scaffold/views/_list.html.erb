@@ -6,6 +6,9 @@
     <%- @model.attributes.each do |attr| -%>
       <th><%%= t '<%= @model.plural_name %>.index_<%= attr.name %>' %></th>
     <%- end -%>
+    <%- @model.associations.each do |assoc| -%>
+      <th><%%= t '<%= @model.plural_name %>.index_<%= assoc.model2.singular_name %>' %></th>
+    <%- end -%>
       <th class="list_remove"><%%= t 'system.index_remove' %></th>
   </thead>
 <%% @<%= @model.plural_name %>.each do |<%= @model.singular_name %>| %>
@@ -17,15 +20,17 @@
 		<%%= link_to t('system.index_edit_label'), edit_<%= @model.object_name %>_path(<%= @model.singular_name %>) <%= ", :class => 'lightbox various fancybox.ajax'" if @entity.ajax %> %>
 	</td>
     <%- @model.attributes.each do |attr| -%>
+	<td><%%= <%= @model.singular_name %>.<%= attr.name %> %></td>
+	<%- end -%>
+		
+	<%- @model.associations.each do |assoc| -%>
     <td>
-      <%- if !attr.references? -%>
-        <%%= <%= @model.singular_name %>.<%= attr.name %> %>
-      <%- elsif attr.belongs_to? || attr.nested_one? -%>
-        <%%= <%= @model.singular_name %>.<%= attr.type.singular_name %>.<%= attr.reference %> %>
-      <%- elsif attr.has_many? or attr.has_and_belongs_to_many? or attr.nested_many? -%>
+      <%- if assoc.belongs_to? || assoc.nested_one? -%>
+        <%%= <%= @model.singular_name %>.<%= assoc.model2.singular_name %>.<%= assoc.reference_field %> %>
+      <%- elsif assoc.has_many? or assoc.has_and_belongs_to_many? or assoc.nested_many? -%>
         <ul>
-        <%% <%= @model.singular_name %>.<%= attr.type.plural_name %>.each do |<%= attr.type.singular_name %>| %>
-          <li><%%= <%= attr.type.singular_name %>.<%= attr.reference %> %> </li>
+        <%% <%= @model.singular_name %>.<%= assoc.model2.plural_name %>.each do |<%= assoc.model2.singular_name %>| %>
+          <li><%%= <%= assoc.model2.singular_name %>.<%= assoc.reference_field %> %> </li>
         <%% end %>
         </ul>
       <%- end -%>
