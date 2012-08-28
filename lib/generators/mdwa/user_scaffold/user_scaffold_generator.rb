@@ -24,6 +24,7 @@ module Mdwa
       class_option :skip_questions, :desc => 'Answer no for all questions by default.', :type => :boolean, :default => false
       class_option :skip_interface, :desc => 'Cretes only models, migrations and associations.', :type => :boolean, :default => false
       class_option :only_interface, :desc => 'Skips models, associations and migrations.', :type => :boolean, :default => false
+      class_option :only_diff_migration, :desc => 'Generates only the migration for fields addition.', :type => :boolean, :default => true
 
       def initialize(*args, &block)
 
@@ -54,22 +55,30 @@ module Mdwa
           @model.add_attribute MDWA::Generators::ModelAttribute.new( attribute ) unless User.accessible_attributes.to_a.include?( attribute.split(':').first )
         end
         
-        generate "mdwa:scaffold #{scaffold_name} name:string email:string password:password password_confirmation:password #{@model.attributes.collect{|a| a.raw}.join(' ')} #{'--force' if options.force} #{'--ajax' if options.ajax} #{"model=#{options.model}" if options.model} #{'--skip_interface' if options.skip_interface} #{'--only_interface' if options.only_interface} #{'--skip_rake_migrate' if options.skip_rake_migrate} #{'--skip_timestamp' if options.skip_timestamp} #{'--skip_questions' if options.skip_questions} --skip-migrations"
+        unless options.only_diff_migration
+          generate "mdwa:scaffold #{scaffold_name} name:string email:string password:password password_confirmation:password #{@model.attributes.collect{|a| a.raw}.join(' ')} #{'--force' if options.force} #{'--ajax' if options.ajax} #{"model=#{options.model}" if options.model} #{'--skip_interface' if options.skip_interface} #{'--only_interface' if options.only_interface} #{'--skip_rake_migrate' if options.skip_rake_migrate} #{'--skip_timestamp' if options.skip_timestamp} #{'--skip_questions' if options.skip_questions} --skip-migrations"
+        end
 
       end
 
       def controller_and_view
-         unless options.skip_interface
-           # controllers
-           @inherit_controller = 'A::BackendController' if @model.space == 'a'
-           template "controllers/#{'ajax_' if options.ajax}controller.rb", "app/controllers/#{@model.space}/#{@model.plural_name}_controller.rb"
-         
-           # views - update only 
-           template 'views/update.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/update.js.erb"
-         end
+        
+        return nil if options.only_diff_interface        
+        return nil if options.skip_interface
+
+        # controllers
+        @inherit_controller = 'A::BackendController' if @model.space == 'a'
+        template "controllers/#{'ajax_' if options.ajax}controller.rb", "app/controllers/#{@model.space}/#{@model.plural_name}_controller.rb"
+
+        # views - update only 
+        template 'views/update.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/update.js.erb"
+
        end
      
        def model_override
+         
+         return nil if options.only_diff_interface        
+       
          # locate the mdwa user to discover the roles
          require_all "#{MDWA::DSL::USERS_PATH}#{@model.singular_name}.rb"
          @mdwa_user = MDWA::DSL.user(@model.name)

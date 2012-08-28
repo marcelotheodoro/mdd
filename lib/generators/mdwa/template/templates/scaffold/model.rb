@@ -6,6 +6,20 @@ class <%= @model.klass %> < <%= !@entity.user? ? 'ActiveRecord::Base' : 'User' %
 <%- unless @model.attributes.count.zero? -%>
     attr_accessible <%= @model.attributes.collect {|a| ":" + a.name }.join(', ') %>
 <%- end -%>
+
+<%- if @entity.user? -%>
+  <%- require_all "#{MDWA::DSL::USERS_PATH}#{@entity.file_name}.rb" ->
+  <%- @mdwa_user = MDWA::DSL.user(@entity.name) -%>
+  <%- @roles = (@mdwa_user.nil? ? @roles = [@model.name] : @mdwa_user.user_roles)
+  <%- @roles.each do |role| -%>
+    after_create :create_<%= role.underscore %>_permission
+    def create_<%= role.underscore %>_permission
+      <%= role.underscore %>_permission = Permission.find_by_name('<%= role.underscore %>')
+      <%= role.underscore %>_permission = Permission.create(:name => '<%= role.underscore %>') if <%= role.underscore %>_permission.nil?
+      self.permissions.push <%= role.underscore %>_permission
+    end
+  <%- end -%>
+<%- end -%>
   
 <%- # model associations -%>
 <%- @model.associations.each do |association| -%>
@@ -17,7 +31,7 @@ class <%= @model.klass %> < <%= !@entity.user? ? 'ActiveRecord::Base' : 'User' %
     has_one :<%= association.model2.singular_name %>, :class_name => '<%= association.model2.klass %>'
   <%- end -%>
   <%- if association.has_many? -%>
-    has_many :<%= association.model2.plural_name %>, :class_name => '<%= association.model2.klass %>'"
+    has_many :<%= association.model2.plural_name %>, :class_name => '<%= association.model2.klass %>'
   <%- end -%>
   <%- if association.has_and_belongs_to_many? -%>
     has_and_belongs_to_many :<%= association.model2.plural_name %>, :join_table => :<%= many_to_many_table_name %>

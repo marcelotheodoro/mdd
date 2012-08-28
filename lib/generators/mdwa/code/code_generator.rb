@@ -89,7 +89,7 @@ module Mdwa
             entity_attribute = entity.attributes[column.name]
             # model attribute exists, but not in entity -> was erased
             if entity_attribute.nil?
-              @changes << {:entity => entity, :type => 'remove_column', :column => column.name}
+              @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type}
             # attribute exists in model and entity, but changed type
             elsif entity_attribute.type.to_sym != column.type.to_sym
               next if entity_attribute.type.to_sym == :file or entity_attribute.type.to_sym == :password

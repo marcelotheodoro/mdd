@@ -79,6 +79,13 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
 	def update
     @<%= @model.singular_name %> = <%= @model.klass %>.find(params[:id])
   <%- if @entity.ajax? -%>
+    # if password is blank, delete from params
+    if params[:<%= @model.object_name %>][:password].blank?
+      params[:<%= @model.object_name %>].delete :password
+      params[:<%= @model.object_name %>].delete :password_confirmation
+    end
+  <%- end -%>
+  <%- if @entity.ajax? -%>
     @system_notice = t('<%= @model.plural_name %>.update_success') if @<%= @model.singular_name %>.update_attributes(params[:<%= @model.to_params %>])
     load_list # loads all <%= @model.plural_name %> to display in the list
   <%- end -%>
