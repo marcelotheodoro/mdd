@@ -141,8 +141,12 @@ module Mdwa
             model_class = nil
           end
           
+          # if table is not created yet, ignore
+          next unless model_class.table_exists?
+          
           # search for changes in this entity
           model_class.columns.each do |column|
+            
             # ignore rails default columns and attributes used in associations
             next if column.name == 'id' or column.name == 'created_at' or column.name == 'updated_at' or column.name.end_with? '_id'
             

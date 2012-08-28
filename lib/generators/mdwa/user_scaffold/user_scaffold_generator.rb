@@ -24,7 +24,7 @@ module Mdwa
       class_option :skip_questions, :desc => 'Answer no for all questions by default.', :type => :boolean, :default => false
       class_option :skip_interface, :desc => 'Cretes only models, migrations and associations.', :type => :boolean, :default => false
       class_option :only_interface, :desc => 'Skips models, associations and migrations.', :type => :boolean, :default => false
-      class_option :only_diff_migration, :desc => 'Generates only the migration for fields addition.', :type => :boolean, :default => true
+      class_option :only_diff_migration, :desc => 'Generates only the migration for fields addition.', :type => :boolean, :default => false
 
       def initialize(*args, &block)
 
@@ -63,21 +63,21 @@ module Mdwa
 
       def controller_and_view
         
-        return nil if options.only_diff_interface        
+        return nil if options.only_diff_migration
         return nil if options.skip_interface
-
+        
         # controllers
         @inherit_controller = 'A::BackendController' if @model.space == 'a'
         template "controllers/#{'ajax_' if options.ajax}controller.rb", "app/controllers/#{@model.space}/#{@model.plural_name}_controller.rb"
 
         # views - update only 
         template 'views/update.js.erb', "app/views/#{@model.space}/#{@model.plural_name}/update.js.erb"
-
+        
        end
      
        def model_override
          
-         return nil if options.only_diff_interface        
+        return nil if options.only_diff_migration
        
          # locate the mdwa user to discover the roles
          require_all "#{MDWA::DSL::USERS_PATH}#{@model.singular_name}.rb"
@@ -87,10 +87,11 @@ module Mdwa
          else
            @roles = @mdwa_user.user_roles
          end
-       
+     
          # model override
-         gsub_file "app/models/#{@model.space}/#{@model.singular_name}.rb", 'ActiveRecord::Base', 'User'
-         inject_into_class "app/models/#{@model.space}/#{@model.singular_name}.rb", @model.model_class do 
+         model_path = (@model.specific?) ? "app/models/#{@model.specific_model.space}/#{@model.specific_model.singular_name}.rb" : "app/models/#{@model.space}/#{@model.singular_name}.rb"
+         gsub_file model_path, 'ActiveRecord::Base', 'User'
+         inject_into_class model_path, @model.model_class do 
            inj = []
            @roles.each do |role|
              inj << "\n\n\tafter_create :create_#{role.underscore}_permission\n"
@@ -102,6 +103,7 @@ module Mdwa
            end
            inj.join("\n")
          end
+           
        end
 
        def migration_override        
