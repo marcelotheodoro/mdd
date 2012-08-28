@@ -12,17 +12,28 @@ module Mdwa
       
       include Rails::Generators::Migration
       
+      attr_accessor :pending_migrations
+      
+      argument :entities, :type => :array, :banner => 'Entities to transform', :default => []
+      
       source_root File.expand_path("../templates", __FILE__)
       
       def initialize(*args, &block)
         super
         
+        # control if there are any migrations to execute
+        @pending_migrations = false
+        
         # include files with entities
-        # select entities that will be generated
         inside Rails.root do
           require_all MDWA::DSL::STRUCTURAL_PATH unless Dir.glob("#{MDWA::DSL::STRUCTURAL_PATH}/*.rb").count.zero?
         end
-        @entities = MDWA::DSL.entities.all
+        # select entities that will be generated
+        if entities.count.zero?
+          @entities = MDWA::DSL.entities.all 
+        else
+          @entities = entities.collect{ |e| MDWA::DSL.entity(e) }
+        end
         
         # entity changes and migrations
         @changes = []
@@ -90,9 +101,36 @@ module Mdwa
       end
       
       def generate_locales
-      end
-      
-      def generate_tests
+
+        locales_file = 'config/locales/mdwa_model_specific.en.yml'
+        locales_content = File.read(locales_file)
+        # make sure the file exist
+        create_file locales_file unless File.exist?(Rails.root + locales_file)
+        
+        @entities.each do |entity|
+          model = entity.generator_model
+          if !locales_content.include?( "  #{model.plural_name}:" )
+            append_file locales_file, :after => "en:\n" do 
+              lines = []
+              lines <<  "  #{model.plural_name}:"
+              lines <<  "    create_success: \"#{model.singular_name.humanize} created.\""
+              lines <<  "    update_success: \"#{model.singular_name.humanize} updated.\""
+              lines <<  "    destroy_success: \"#{model.singular_name.humanize} destroyed.\""
+              lines <<  "    index_title: \"#{model.plural_name.humanize}\""
+              lines <<  "    show_title: \"#{model.singular_name.humanize}\""
+              lines <<  "    new_title: \"New #{model.singular_name.humanize}\""
+              lines <<  "    edit_title: \"Edit #{model.singular_name.humanize}\""
+              model.attributes.each do |attr|
+                lines <<  "    index_#{attr.name}: \"#{attr.name.humanize}\""
+                lines <<  "    show_#{attr.name}: \"#{attr.name.humanize}\""
+              end
+              lines << "\n"
+              lines.join("\n")
+            end
+          end
+          
+        end # @entities loop
+
       end
       
       def generate_migrations
@@ -121,8 +159,6 @@ module Mdwa
           end
           
         end # @entities loop
-        
-        rake('db:migrate') if yes?('Run rake db:migrate')
       end
       
       
@@ -173,9 +209,16 @@ module Mdwa
         # generate changed code
         unless @changes.empty?
           migration_template 'changes_migration.rb', "db/migrate/alter_#{@entities.select{|e| e.resource?}.collect{|e| e.file_name}.join('_')}#{@random_migration_key}.rb"
+          @pending_migrations = true
         end
         
-        rake('db:migrate') if yes?('Run rake db:migrate')
+      end
+      
+      def run_rake_migrate
+        rake('db:migrate') if @pending_migrations and yes?('Run rake db:migrate')
+      end
+      
+      def generate_tests
       end
       
       private
@@ -212,6 +255,8 @@ module Mdwa
           migration_from_string(migration_name, migration_string.join("\n"))
 
           sleep 1 # aguarda 1 seg para trocar o timestamp
+          
+          @pending_migrations = true
         end
         
         def migration_from_string(file_name, migration_string)

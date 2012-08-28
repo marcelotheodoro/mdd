@@ -4,10 +4,10 @@
 <%% else %>
 	if( $('#<%= @model.plural_name %>_list').length > 0 ) {
 		$.fancybox.close(true);
-		$("#<%= @model.plural_name %>_list").html("<%%= escape_javascript( render '<%= @model.plural_name %>' )%>");
+		$("#<%= @model.plural_name %>_list").html("<%%= j( render 'list' )%>");
 	}
 	else if( $("#edit_<%= @model.plural_name %>").length > 0 ) {
-		$("#edit_<%= @model.plural_name %> .inside").html("<%%= escape_javascript( render 'form' )%>");
+		$("#edit_<%= @model.plural_name %> .inside").html("<%%= j( render 'form' )%>");
 	}
-	$('body').append("<%%= escape_javascript( render '/template/mdwa/notice', :notice => @system_notice )%>");
+	$('body').append("<%%= j( render '/template/mdwa/notice', :notice => @system_notice )%>");
 <%% end %>
