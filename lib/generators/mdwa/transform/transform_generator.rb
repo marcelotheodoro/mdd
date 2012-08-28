@@ -35,7 +35,7 @@ module Mdwa
           mdwa_template "#{entity.file_name}/model.rb", "app/models/#{generator_model.space}/#{generator_model.singular_name}.rb"
         end
       end
-      
+            
       def generate_controller
         @entities.each do |entity|
           generator_model = entity.generator_model
@@ -57,7 +57,7 @@ module Mdwa
         
         route 'mdwa_router(self)'
         path_to_routes = 'app/mdwa/templates/routes.rb'
-        append_to_file 'config/routes.rb', "require File.expand_path('../../#{path_to_routes}', __FILE__)"
+        insert_into_file 'config/routes.rb', "require File.expand_path('../../#{path_to_routes}', __FILE__)\n\n", :before => /.+::Application\.routes\.draw do(?:\s*\|map\|)?\s*$/
         
         # clear routes file contents
         File.truncate(path_to_routes, 0)
@@ -74,7 +74,7 @@ module Mdwa
             route_str << "\t\tend"
             route_str << "\t\tresources :#{generator_model.plural_name}"
             route_str << "\tend\n" if generator_model.namespace?
-
+                
             route_str.join "\n"
           end
         
@@ -95,7 +95,7 @@ module Mdwa
       def generate_tests
       end
       
-      def generate_migrations_or_changes
+      def generate_migrations
         
         @entities.each do |entity|
           # if it's not a resource, ignore
