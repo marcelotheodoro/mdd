@@ -7,7 +7,7 @@ require 'mdwa/dsl'
 
 module Mdwa
   module Generators
-    class TemplateGenerator < Rails::Generators::Base
+    class TemplatesGenerator < Rails::Generators::Base
       
       include Rails::Generators::Migration
       
