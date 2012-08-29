@@ -213,6 +213,15 @@ module Mdwa
               @changes << {:entity => entity, :type => 'add_column', :column => attr.name, :attr_type => attr.type}
             end
           end
+          
+          # new foreign keys
+          # belongs_to and nested_one associations that are in the entity, but not database
+          entity.generator_model.associations.select{|a| a.belongs_to? or a.nested_one?}.each do |assoc|
+            if model_class.columns.select{|c| c.name == assoc.model2.singular_name.foreign_key}.count.zero?
+              @changes << {:entity => entity, :type => 'add_column', :column => assoc.model2.name.foreign_key, :attr_type => 'integer'}
+            end
+          end
+          
         end # @entities loop
         
         # generate changed code

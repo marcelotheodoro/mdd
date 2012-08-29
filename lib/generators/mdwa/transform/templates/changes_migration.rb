@@ -3,7 +3,7 @@ class Alter<%= @entities.select{|e| e.resource?}.collect{|e| e.file_name.cameliz
   
   def self.up
   <%- @changes.each do |change| -%>
-    <%= change[:type] %> :<%= MDWA::Generators::Model.new(change[:entity].model_name).plural_name %>, :<%= change[:column] %> <%= ", :#{change[:attr_type]}" unless change[:attr_type].blank? %>
+    <%= change[:type] %> :<%= MDWA::Generators::Model.new(change[:entity].model_name).plural_name %>, :<%= change[:column] %> <%= ", :#{change[:attr_type]}" unless change[:attr_type].blank? or change[:type] == 'remove_column' %>
   <%- end -%>
   end
   
