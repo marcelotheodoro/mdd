@@ -73,8 +73,11 @@ module MDWA
       def after_declaration
         
         # if it's a user and have no attributes, include "name" to prevent errors
-        if user? and attributes.count.zero?
+        if user?
           self.attribute('name', 'string')
+          self.attribute('email', 'string')
+          self.attribute('password', 'password')
+          self.attribute('password_confirmation', 'password')
         end
         
       end
