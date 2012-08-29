@@ -10,7 +10,7 @@ module MDWA
       
       ACCEPTED_RELATIONS = [:has_many, :belongs_to, :has_and_belongs_to_many, :nested_many, :nested_one, :has_one]
       
-      def initialize(model1_name, model2_name, relation_name, reference_field)
+      def initialize(model1_name, model2_name, relation_name, reference_field = nil)
         
         self.model1   = model1_name
         self.model2   = model2_name

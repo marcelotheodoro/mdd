@@ -22,6 +22,7 @@ module MDWA
         self.name = value.downcase if self.name.blank?
         @destination = value
       end
+    
       
       #
       # Return the mapped type for the code generation.
@@ -51,6 +52,26 @@ module MDWA
         gen << generator_type
         
         gen.join(':')
+      end
+      
+      def one_to_many?
+        self.type.to_sym == :one_to_many
+      end
+      
+      def many_to_one?
+        self.type.to_sym == :many_to_one
+      end
+      
+      def one_to_one?
+        self.type.to_sym == :one_to_one
+      end
+      
+      def many_to_many?
+        self.type.to_sym == :many_to_many
+      end
+      
+      def one_to_one_not_navigable?
+        self.type.to_sym == :one_to_one_not_navigable
       end
       
     end

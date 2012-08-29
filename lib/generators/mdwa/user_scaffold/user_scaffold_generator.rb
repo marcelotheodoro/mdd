@@ -111,7 +111,14 @@ module Mdwa
          # override model attributes to not allow field duplicity (causing errors)
          @model.attributes = []
          attributes.each do |attribute|
-           @model.add_attribute MDWA::Generators::ModelAttribute.new( attribute ) unless @predefined_fields.include?( attribute.split(':').first )
+           attr = MDWA::Generators::ModelAttribute.new( attribute ) 
+           
+           # add to model attributes
+           # if it's not predefined in devise
+           # if it's a belongs_to or nested_one association
+           if (!attr.references? and !@predefined_fields.include?( attribute.split(':').first )) or attr.belongs_to? or attr.nested_one?
+             @model.add_attribute attr
+           end
          end
          migration_template 'migrate.rb', "db/migrate/add_#{@model.attributes.collect{|a| a.name}.join('_')}_to_users" unless @model.attributes.empty?
        

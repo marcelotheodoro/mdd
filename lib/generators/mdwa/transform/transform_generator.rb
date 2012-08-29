@@ -223,6 +223,16 @@ module Mdwa
         
       end
       
+      # 
+      # Search for many to many tables.
+      def many_to_many_tables
+        @entities.each do |entity|
+          entity.generator_model.associations.select{|a| a.has_and_belongs_to_many?}.each do |association|
+            generate "mdwa:association #{association.model1.singular_name} has_and_belongs_to_many #{association.model2.singular_name} --skip-models"
+          end
+        end
+      end
+      
       def run_rake_migrate
         rake('db:migrate') if @pending_migrations and yes?('Run rake db:migrate')
       end

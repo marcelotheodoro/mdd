@@ -22,6 +22,7 @@ module Mdwa
       class_option :with_opposite, :desc => 'Generate the opposite relation too. For example, the oposite of belongs_to is has_many.', :type => :boolean, :default => false
       class_option :skip_rake_migrate, :desc => 'Skips rake db:migrate', :type => :boolean, :default => false
       class_option :skip_migrations, :desc => 'Skips migration files', :type => :boolean, :default => false
+      class_option :skip_models, :desc => 'Skips model code injection', :type => :boolean, :default => false
       class_option :ask, :desc => 'Asks if the opposite should be generated.', :type => :boolean, :default => false
 
       def initialize(*args, &block)
@@ -34,6 +35,9 @@ module Mdwa
       
 
       def model
+        
+        return nil if options.skip_models
+        
         if @association.belongs_to?
           inject_into_class "app/models/#{@association.model1.space}/#{@association.model1.singular_name}.rb", @association.model1.model_class do
             ret = []
@@ -80,20 +84,23 @@ module Mdwa
       end
       
       def migrate
-        unless options.skip_migrations
+        return nil if options.skip_migrations
           
-          @pending_migrations = true
-          case @association.relation.to_sym 
-          when :belongs_to, :nested_one
-            @table = @association.model1
-            @field = @association.model2
-            migration_template 'migrate/one_field.rb', "db/migrate/add_#{@field.singular_name.foreign_key}_to_#{@table.plural_name}.rb"
-          when :has_and_belongs_to_many
+        @pending_migrations = true
+        case @association.relation.to_sym 
+        when :belongs_to, :nested_one
+          @table = @association.model1
+          @field = @association.model2
+          migration_template 'migrate/one_field.rb', "db/migrate/add_#{@field.singular_name.foreign_key}_to_#{@table.plural_name}.rb"
+        when :has_and_belongs_to_many
+          # only generates if table does not exist yet
+          if Dir.glob("db/migrate/*create_#{many_to_many_table_name}.rb").count.zero?
             migration_template 'migrate/many_to_many.rb', "db/migrate/create_#{many_to_many_table_name}.rb"
           else
             @pending_migrations = false
           end
-          
+        else
+          @pending_migrations = false
         end
 
       end

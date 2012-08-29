@@ -33,7 +33,7 @@ class <%= @model.klass %> < <%= !@entity.user? ? 'ActiveRecord::Base' : 'User' %
     has_many :<%= association.model2.plural_name %>, :class_name => '<%= association.model2.klass %>'
   <%- end -%>
   <%- if association.has_and_belongs_to_many? -%>
-    has_and_belongs_to_many :<%= association.model2.plural_name %>, :join_table => :<%= many_to_many_table_name %>
+    has_and_belongs_to_many :<%= association.model2.plural_name %>, :join_table => :<%= association.ordered.first.plural_name %>_<%= association.ordered.last.plural_name %>
   <%- end -%>
   <%- if association.nested_one? -%>
     belongs_to :<%= association.model2.singular_name %>, :class_name => '<%= association.model2.klass %>'
