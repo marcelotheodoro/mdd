@@ -139,7 +139,9 @@ module MDWA
           model1 = Generators::Model.new(self.model_name)
           entity2 = DSL.entity(association.destination)
           model2 = Generators::Model.new(entity2.model_name)
-          @generator_model.associations << Generators::ModelAssociation.new(model1, model2, association.generator_type, entity2.default_attribute.name)
+          assoc = Generators::ModelAssociation.new(model1, model2, association.generator_type, entity2.default_attribute.name)
+          assoc.composition = true if association.composition
+          @generator_model.associations << assoc
         end
         return @generator_model
       end

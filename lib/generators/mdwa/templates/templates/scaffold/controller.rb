@@ -60,18 +60,27 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
 
 	def create
     @<%= @model.singular_name %> = <%= @model.klass %>.new(params[:<%= @model.to_params %>])
-    
+    saved_ok = @<%= @model.singular_name %>.save
+    @system_notice = t('<%= @model.plural_name %>.create_success') if saved_ok    
   <%- if @entity.ajax? -%>
-    @system_notice = t('<%= @model.plural_name %>.create_success') if @<%= @model.singular_name %>.save
     load_list # loads all <%= @model.plural_name %> to display in the list
+  <%- end -%>
+  
+  <%- @model.associations.select{|a| a.has_and_belongs_to_many? and a.composition?}.each do |association| -%>
+    unless params[:<%= association.model2.plural_name %>].nil?
+      @<%= @model.singular_name %>.<%= association.model2.plural_name %>.clear
+      params[:<%= association.model2.plural_name %>].each do |<%= association.model2.singular_name.foreign_key %>|
+        @<%= @model.singular_name %>.<%= association.model2.plural_name %>.push <%= association.model2.klass %>.find <%= association.model2.singular_name.foreign_key %>
+      end
+    end
   <%- end -%>
 
     respond_to do |format|
     <%- if @entity.ajax? -%>
       format.js
     <%- else -%>  
-      if @<%= @model.singular_name %>.save
-        format.html { redirect_to <%= @model.object_name.pluralize %>_path, notice: t('<%= @model.plural_name %>.create_success') }
+      if saved_ok
+        format.html { redirect_to <%= @model.object_name.pluralize %>_path, notice: @system_notice }
       else
         format.html { render action: "new" }
       end
@@ -81,16 +90,26 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
 
 	def update
     @<%= @model.singular_name %> = <%= @model.klass %>.find(params[:id])
-  <%- if @entity.ajax? -%>
+  <%- if @entity.user? -%>
     # if password is blank, delete from params
     if params[:<%= @model.object_name %>][:password].blank?
       params[:<%= @model.object_name %>].delete :password
       params[:<%= @model.object_name %>].delete :password_confirmation
     end
   <%- end -%>
+    saved_ok = @<%= @model.singular_name %>.update_attributes(params[:<%= @model.to_params %>])
   <%- if @entity.ajax? -%>
-    @system_notice = t('<%= @model.plural_name %>.update_success') if @<%= @model.singular_name %>.update_attributes(params[:<%= @model.to_params %>])
+    @system_notice = t('<%= @model.plural_name %>.update_success') if saved_ok
     load_list # loads all <%= @model.plural_name %> to display in the list
+  <%- end -%>
+  
+  <%- @model.associations.select{|a| a.has_and_belongs_to_many? and a.composition?}.each do |association| -%>
+    unless params[:<%= association.model2.plural_name %>].nil?
+      @<%= @model.singular_name %>.<%= association.model2.plural_name %>.clear
+      params[:<%= association.model2.plural_name %>].each do |<%= association.model2.singular_name.foreign_key %>|
+        @<%= @model.singular_name %>.<%= association.model2.plural_name %>.push <%= association.model2.klass %>.find <%= association.model2.singular_name.foreign_key %>
+      end
+    end
   <%- end -%>
     
     respond_to do |format|

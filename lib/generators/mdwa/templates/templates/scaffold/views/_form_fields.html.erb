@@ -16,6 +16,17 @@
 </div>
 <%- end # if -%>
 
+<%- if assoc.has_and_belongs_to_many? and assoc.composition? -%>
+<div class="nested">
+	<%%- <%= assoc.model2.klass %>.order('<%= assoc.reference_field %> ASC').each do |<%= assoc.model2.singular_name %>| -%>
+	<div class="checkbox">
+		<%%= check_box_tag '<%= assoc.model2.plural_name %>[]', <%= assoc.model2.singular_name %>.id, (@<%= @model.singular_name %>.<%= assoc.model2.plural_name %>.include?(<%= assoc.model2.singular_name %>) ? true : false) %>
+		<span><%%= <%= assoc.model2.singular_name %>.<%= assoc.reference_field %> %></span>
+	</div>
+	<%%- end -%>
+</div>
+<%- end -%>
+
 <%- if assoc.nested? -%>
 <div class="nested">
 	<%%= f.fields_for :<%= (assoc.nested_many?) ? assoc.model2.plural_name : assoc.model2.singular_name %> do |ff| %>

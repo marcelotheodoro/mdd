@@ -6,7 +6,7 @@ module MDWA
     
     class ModelAssociation
       
-      attr_accessor :model1, :model2, :relation, :reference_field
+      attr_accessor :model1, :model2, :relation, :reference_field, :composition
       
       ACCEPTED_RELATIONS = [:has_many, :belongs_to, :has_and_belongs_to_many, :nested_many, :nested_one, :has_one]
       
@@ -16,11 +16,12 @@ module MDWA
         self.model2   = model2_name
         self.relation = relation_name
         self.reference_field = reference_field || 'id'
+        self.composition = false
 
         # validation
         raise "Invalid model name: #{@model1.name}" unless self.model1.valid?
         raise "Invalid model name: #{@model2.name}" unless self.model2.valid?
-        raise "Invalid relation type: #{@relation}" unless relation_valid?
+        raise "Invalid relation type: #{@relation}" unless self.relation_valid?
       end
       
       def model1=(value)
@@ -37,6 +38,10 @@ module MDWA
         elsif value.is_a? Generators::Model
           @model2 = value
         end
+      end
+      
+      def composition?
+        self.composition
       end
       
       def relation_valid?

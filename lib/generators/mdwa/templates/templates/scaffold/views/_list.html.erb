@@ -26,7 +26,7 @@
 		
 	<%- @model.associations.each do |assoc| -%>
     <td>
-      <%- if assoc.belongs_to? || assoc.nested_one? -%>
+      <%- if assoc.belongs_to? || assoc.nested_one? || assoc.has_one? -%>
         <%%= <%= @model.singular_name %>.<%= assoc.model2.singular_name %>.<%= assoc.reference_field %> unless <%= @model.singular_name %>.<%= assoc.model2.singular_name %>.nil? %>
       <%- elsif assoc.has_many? or assoc.has_and_belongs_to_many? or assoc.nested_many? -%>
         <ul>

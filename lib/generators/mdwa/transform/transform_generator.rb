@@ -68,7 +68,7 @@ module Mdwa
         
         route 'mdwa_router(self)'
         path_to_routes = 'app/mdwa/templates/routes.rb'
-        insert_into_file 'config/routes.rb', "require File.expand_path('../../#{path_to_routes}', __FILE__)\n\n", :before => /.+::Application\.routes\.draw do(?:\s*\|map\|)?\s*$/
+        insert_into_file 'config/routes.rb', "load File.expand_path('../../#{path_to_routes}', __FILE__)\n\n", :before => /.+::Application\.routes\.draw do(?:\s*\|map\|)?\s*$/
         
         # clear routes file contents
         File.truncate(path_to_routes, 0)
