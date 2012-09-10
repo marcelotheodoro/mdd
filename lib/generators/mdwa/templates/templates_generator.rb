@@ -38,26 +38,28 @@ module Mdwa
         
         @entities.each do |entity|
           
+          model = entity.generator_model
+          
           puts '--------------------------------------'
           puts "- Code for: #{entity.name} -"
           puts '--------------------------------------'
         
-          copy_with_header 'scaffold/controller.rb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/controller.rb", entity.name
-          copy_with_header 'scaffold/helper.rb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/helper.rb", entity.name
-          copy_with_header 'scaffold/model.rb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/model.rb", entity.name
+          copy_with_header 'scaffold/controller.rb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}controller.rb", entity.name
+          copy_with_header 'scaffold/helper.rb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}helper.rb", entity.name
+          copy_with_header 'scaffold/model.rb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}model.rb", entity.name
           
           # views
-          copy_with_header 'scaffold/views/_form_fields.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/_form_fields.html.erb", entity.name
-          copy_with_header 'scaffold/views/_form.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/_form.html.erb", entity.name
-          copy_with_header 'scaffold/views/_list.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/_list.html.erb", entity.name
-          copy_with_header 'scaffold/views/create.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/create.js.erb", entity.name
-          copy_with_header 'scaffold/views/destroy.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/destroy.js.erb", entity.name
-          copy_with_header 'scaffold/views/edit.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/edit.html.erb", entity.name
-          copy_with_header 'scaffold/views/index.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/index.html.erb", entity.name
-          copy_with_header 'scaffold/views/index.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/index.js.erb", entity.name
-          copy_with_header 'scaffold/views/new.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/new.html.erb", entity.name
-          copy_with_header 'scaffold/views/show.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/show.html.erb", entity.name
-          copy_with_header 'scaffold/views/update.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/update.js.erb", entity.name
+          copy_with_header 'scaffold/views/_form_fields.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/_form_fields.html.erb", entity.name
+          copy_with_header 'scaffold/views/_form.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/_form.html.erb", entity.name
+          copy_with_header 'scaffold/views/_list.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/_list.html.erb", entity.name
+          copy_with_header 'scaffold/views/create.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/create.js.erb", entity.name
+          copy_with_header 'scaffold/views/destroy.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/destroy.js.erb", entity.name
+          copy_with_header 'scaffold/views/edit.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/edit.html.erb", entity.name
+          copy_with_header 'scaffold/views/index.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/index.html.erb", entity.name
+          copy_with_header 'scaffold/views/index.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/index.js.erb", entity.name
+          copy_with_header 'scaffold/views/new.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/new.html.erb", entity.name
+          copy_with_header 'scaffold/views/show.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/show.html.erb", entity.name
+          copy_with_header 'scaffold/views/update.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/update.js.erb", entity.name
         end
       end
         
@@ -74,7 +76,7 @@ module Mdwa
 
           model = entity.generator_model
 
-          path_to_controller  = "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/controller.rb"
+          path_to_controller  = "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}controller.rb"
           controller_string   = File.read("#{Rails.root}/#{path_to_controller}")
 
           # hooks for code generations
@@ -96,13 +98,13 @@ module Mdwa
             action.template_names.each do |request, file_name|          
               case request.to_sym
               when :modalbox, :html
-                copy_with_header 'actions/view.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}", entity unless File.exist?("#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}")
+                copy_with_header 'actions/view.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/#{file_name}", entity unless File.exist?("#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}")
               when :ajax
-                copy_with_header 'actions/view.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}", entity unless File.exist?("#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}")
+                copy_with_header 'actions/view.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/#{file_name}", entity unless File.exist?("#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}")
               when :ajax_js
-                copy_with_header 'actions/view.json.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}", entity unless File.exist?("#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}")
+                copy_with_header 'actions/view.json.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/#{file_name}", entity unless File.exist?("#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}")
               else
-                copy_with_header 'actions/view.custom.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}", entity unless File.exist?("#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}")
+                copy_with_header 'actions/view.custom.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/#{file_name}", entity unless File.exist?("#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/#{file_name}")
               end
             end
           end

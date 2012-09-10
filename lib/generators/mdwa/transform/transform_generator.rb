@@ -40,23 +40,13 @@ module Mdwa
         @random_migration_key = rand.to_s.gsub('.','').to_i
       end
       
-      def generate_model
+      def generate_model_controller_helper_views
         @entities.each do |entity|
           generator_model = entity.generator_model
           mdwa_template "#{entity.file_name}/model.rb", "app/models/#{generator_model.space}/#{generator_model.singular_name}.rb"
-        end
-      end
-            
-      def generate_controller
-        @entities.each do |entity|
-          generator_model = entity.generator_model
+          mdwa_template "#{entity.file_name}/helper.rb", "app/controllers/#{generator_model.space}/#{generator_model.plural_name}_helper.rb"
           mdwa_template "#{entity.file_name}/controller.rb", "app/controllers/#{generator_model.space}/#{generator_model.plural_name}_controller.rb"
-        end
-      end
-      
-      def generate_views
-        @entities.each do |entity|
-          generator_model = entity.generator_model
+
           Dir.glob("#{Rails.root}/#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/*").each do |file|
             file_name = File.basename(file)
             mdwa_template "#{entity.file_name}/views/#{file_name}", "app/views/#{generator_model.space}/#{generator_model.plural_name}/#{file_name}"
