@@ -195,24 +195,12 @@ module Mdwa
           # if table is not created yet, ignore
           next if model_class.nil? or !model_class.table_exists?
           
-          # entity file fields -> used to decide if model columns should be ignored
-          entity_file_fields = entity.attributes.values.select{|attr| attr.type.to_sym == :file}
-          
           # search for changes in this entity
           model_class.columns.each do |column|
             
             # ignore rails default columns and attributes used in associations
             next if column.name == 'id' or column.name == 'created_at' or column.name == 'updated_at' or column.name.end_with? '_id'
-            
-            # ignores files
-            unless entity_file_fields.count.zero?
-              ignore = false
-              entity_file_fields.each do |f|
-                ignore = true if(column.name == "#{f.name}_file_name" or column.name == "#{f.name}_content_type" or column.name == "#{f.name}_file_size" or column.name == "#{f.name}_updated_at")
-              end
-              next if ignore
-            end
-            
+                        
             entity_attribute = entity.attributes[column.name]
             # model attribute exists, but not in entity -> was erased
             if entity_attribute.nil?
@@ -227,15 +215,8 @@ module Mdwa
           # new attributes
           # no column with that name -> column must be added
           entity.attributes.each do |key, attr|
-            if model_class.columns.select {|c| c.name == attr.name || c.name == "#{attr.name}_file_name" }.count.zero?
-              if attr.type.to_sym == :file
-                @changes << {:entity => entity, :type => 'add_column', :column => "#{attr.name}_file_name", :attr_type => 'string'}
-                @changes << {:entity => entity, :type => 'add_column', :column => "#{attr.name}_file_size", :attr_type => 'string'}
-                @changes << {:entity => entity, :type => 'add_column', :column => "#{attr.name}_content_type", :attr_type => 'string'}
-                @changes << {:entity => entity, :type => 'add_column', :column => "#{attr.name}_updated_at", :attr_type => 'string'}
-              else
-                @changes << {:entity => entity, :type => 'add_column', :column => attr.name, :attr_type => attr.type}
-              end
+            if model_class.columns.select {|c| c.name == attr.name }.count.zero?
+              @changes << {:entity => entity, :type => 'add_column', :column => attr.name, :attr_type => attr.type}
             end
           end
           
