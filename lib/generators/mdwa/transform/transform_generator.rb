@@ -38,6 +38,8 @@ module Mdwa
         # entity changes and migrations
         @changes = []
         @random_migration_key = rand.to_s.gsub('.','').to_i
+        
+        run 'rake db:migrate'
       end
       
       def generate_model_controller_helper_views
@@ -230,7 +232,7 @@ module Mdwa
         
         # generate changed code
         unless @changes.empty?
-          migration_template 'changes_migration.rb', "db/migrate/alter_#{@entities.select{|e| e.resource?}.collect{|e| e.file_name}.join('_')}#{@random_migration_key}.rb"
+          migration_template 'changes_migration.rb', "db/migrate/alter_#{@changes.collect{|c| c[:entity].file_name}.join('_')}#{@random_migration_key}.rb"
           @pending_migrations = true
         end
         

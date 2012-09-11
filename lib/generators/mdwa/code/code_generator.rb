@@ -118,7 +118,7 @@ module Mdwa
         
         # generate changed code
         unless @changes.empty?
-          migration_template 'migration.rb', "db/migrate/alter_#{@all_entities.select{|e| e.resource?}.collect{|e| e.file_name}.join('_')}#{@random_migration_key}.rb"
+          migration_template 'migration.rb', "db/migrate/alter_#{@changes.collect{|c| c[:entity].file_name}.join('_')}#{@random_migration_key}.rb"
         end
         
       end
