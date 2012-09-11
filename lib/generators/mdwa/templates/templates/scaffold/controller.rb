@@ -33,8 +33,8 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
 
 	def new
     @<%= @model.singular_name %> = <%= @model.klass %>.new
-    <%- @model.attributes.select {|a| a.nested_one?}.each do |attr| -%>
-    @<%= @model.singular_name %>.<%= attr.type.singular_name %> = <%= attr.type.klass %>.new
+    <%- @model.associations.select {|a| a.nested_one?}.each do |assoc| -%>
+    @<%= @model.singular_name %>.<%= assoc.model2.singular_name %> = <%= assoc.model2.klass %>.new
     <%- end -%>
 
   <%- if @entity.ajax? -%>
