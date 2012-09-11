@@ -2,6 +2,11 @@
 <%- @model.attributes.each do |attr| -%>
 <div class="field">
    	<%%= f.label :<%= attr.name %> %> 
+	<%- if attr.type.to_sym == :file -%>
+	<%% unless @<%= @model.singular_name %>.new_record? %>
+		<span><%%= link_to image_tag(file_icon_path(@<%= @model.singular_name %>.<%= attr.name %>_file_name)), @<%= @model.singular_name %>.<%= attr.name %>.url, :target => '_blank' %></span>
+	<%% end %>
+	<%- end -%>
    	<%%= f.<%= attr.form_field %> :<%= attr.name %> %>
 </div>
 <%- end # model.attributes.each -%>

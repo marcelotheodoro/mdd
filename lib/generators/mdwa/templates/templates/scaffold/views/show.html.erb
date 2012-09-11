@@ -8,7 +8,15 @@
 	<%- @model.attributes.each do |attr| -%>
 		<div class="field">
 			<label><%%= t '<%= @model.plural_name %>.show_<%= attr.name %>' %></label>
+		<%- if attr.type.to_sym == :file -%>
+			<%% unless @<%= @model.singular_name %>.<%= attr.name %>.nil? %>
+			<span><%%= link_to image_tag(file_icon_path(@<%= @model.singular_name %>.<%= attr.name %>_file_name)), @<%= @model.singular_name %>.<%= attr.name %>.url, :target => '_blank' %></span>
+			<%% else %>
+			No file.
+			<%% end %>
+		<%- else -%>
 			<span><%%= @<%= @model.singular_name %>.<%= attr.name %> %></span>
+		<%- end -%>
 		</div>
 	<%- end -%>
 	<%- @model.associations.each do |assoc| -%>

@@ -1,5 +1,5 @@
 ===entity_code===
-<%%= <%= 'nested_' if @model.nested_many? %>form_for(<%= @model.to_route_object('@') %><%= ', :remote => true, :html => {:class => :mdwa_ajax}' if @entity.ajax %>) do |f| %>
+<%%= <%= 'nested_' if @model.nested_many? %>form_for(<%= @model.to_route_object('@') %><%= ", :remote => true, :html => {:class => :mdwa_ajax #{',:multipart => true' if @model.attributes.select{|attr| attr.type.to_sym == :file}.count.zero?}}" if @entity.ajax %>) do |f| %>
 
 	<div id="mdwa_error">
 	   	<%%= render '/template/mdwa/crud_error', :object => @<%= @model.singular_name %> %>

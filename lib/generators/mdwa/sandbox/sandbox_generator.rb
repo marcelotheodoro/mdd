@@ -34,6 +34,26 @@ module Mdwa
           run "bundle install"
           remove_file 'public/index.html'
         end
+        
+        if yes?('Include Paperclip for file uploads?')
+          gem 'paperclip'
+          puts 'Which OS you use?'
+          if yes?('Ubuntu?')
+            puts 'Make sure to install the binary: sudo apt-get install imagemagick'
+            application do
+              "#Paperclip ImageMagick"
+              "Paperclip.options[:command_path] = '/usr/bin/'"
+            end
+          elsif yes?('Mac OS X?')
+            puts 'Make sure to install the binary: brew install imagemagick'
+            application do
+              "#Paperclip ImageMagick"
+              "Paperclip.options[:command_path] = '/usr/local/bin'"
+            end
+          else
+            puts 'Paperclip uses ImageMagick. Install it manually.'
+          end
+        end
       end
 
       def images

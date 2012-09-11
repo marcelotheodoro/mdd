@@ -20,9 +20,19 @@
   	<td>
 		<%%= link_to t('system.index_edit_label'), edit_<%= @model.object_name %>_path(<%= @model.singular_name %>) <%= ", :class => 'lightbox various fancybox.ajax'" if @entity.ajax %> %>
 	</td>
-    <%- @model.attributes.each do |attr| -%>
-	<td><%%= <%= @model.singular_name %>.<%= attr.name %> %></td>
-	<%- end -%>
+  <%- @model.attributes.each do |attr| -%>
+	<td>
+		<%- if attr.type.to_sym == :file -%>
+		<%% unless <%= @model.singular_name %>.<%= attr.name %>_file_name.blank? %>
+			<%%= link_to image_tag(file_icon_path(<%= @model.singular_name %>.<%= attr.name %>_file_name)), <%= @model.singular_name %>.<%= attr.name %>.url, :target => '_blank' %>
+		<%% else %>
+			No file.
+		<%% end %>
+		<%- else -%>
+		<%%= <%= @model.singular_name %>.<%= attr.name %> %>
+		<%- end -%>
+	</td>
+  <%- end -%>
 		
 	<%- @model.associations.each do |assoc| -%>
     <td>

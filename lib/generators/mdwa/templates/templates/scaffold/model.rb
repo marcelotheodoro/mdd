@@ -6,6 +6,10 @@ class <%= @model.klass %> < <%= !@entity.user? ? 'ActiveRecord::Base' : 'User' %
 <%- unless @model.attributes.count.zero? -%>
     attr_accessible <%= @model.attributes.collect {|a| ":" + a.name }.join(', ') %>
 <%- end -%>
+<%- # paperclip file uploads -%>
+<%- unless @model.attributes.select{|attr| attr.type.to_sym == :file}.count.zero? -%>
+    has_attached_file <%= @model.attributes.select{|attr| attr.type.to_sym == :file}.collect {|a| ":" + a.name }.join(', ') %>
+<%- end -%>
 
 <%- if @entity.user? -%>
   <%- require_all "#{MDWA::DSL::USERS_PATH}#{@entity.file_name}.rb" -%>
