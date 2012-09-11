@@ -30,7 +30,6 @@ MDWA::DSL.entities.register "<%= name.singularize.camelize %>" do |e|
   # e.association do |a|
   #   a.type = 'many_to_one'
   #   a.destination = 'Category' # entity name
-  #   a.description = '<%= name.singularize.humanize %> belongs to category'
   # end
   # 
   # e.association do |a|
@@ -39,6 +38,7 @@ MDWA::DSL.entities.register "<%= name.singularize.camelize %>" do |e|
   #   a.destination = 'Address' 
   #   a.composition = true
   #   a.description = 'This entity has a composite address.'
+  #   a.skip_views  = false
   # end
 
   ##

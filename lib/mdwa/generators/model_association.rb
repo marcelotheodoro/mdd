@@ -6,7 +6,7 @@ module MDWA
     
     class ModelAssociation
       
-      attr_accessor :model1, :model2, :relation, :reference_field, :composition
+      attr_accessor :model1, :model2, :relation, :reference_field, :composition, :skip_views
       
       ACCEPTED_RELATIONS = [:has_many, :belongs_to, :has_and_belongs_to_many, :nested_many, :nested_one, :has_one]
       
@@ -17,6 +17,7 @@ module MDWA
         self.relation = relation_name
         self.reference_field = reference_field || 'id'
         self.composition = false
+        self.skip_views = false
 
         # validation
         raise "Invalid model name: #{@model1.name}" unless self.model1.valid?
@@ -42,6 +43,10 @@ module MDWA
       
       def composition?
         self.composition
+      end
+      
+      def skip_views?
+        self.skip_views
       end
       
       def relation_valid?

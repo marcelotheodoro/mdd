@@ -97,6 +97,10 @@ module MDWA
 			def space
 				namespace.underscore
 			end
+			
+			def nested_many?
+			  self.attributes.select{|a| a.nested_many?}.count.zero? or self.associations.select{|a| a.nested_many?}.count.zero?
+		  end
 
 			def add_attribute(model_attribute)
 				self.attributes << model_attribute

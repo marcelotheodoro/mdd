@@ -141,6 +141,7 @@ module MDWA
           model2 = Generators::Model.new(entity2.model_name)
           assoc = Generators::ModelAssociation.new(model1, model2, association.generator_type, entity2.default_attribute.name)
           assoc.composition = true if association.composition
+          assoc.skip_views  = association.skip_views
           @generator_model.associations << assoc
         end
         return @generator_model

@@ -1,5 +1,5 @@
 ===entity_code===
-<%%= <%= 'nested_' unless @model.attributes.select{|a| a.nested_many?}.count.zero? %>form_for(<%= @model.to_route_object('@') %><%= ', :remote => true, :html => {:class => :mdwa_ajax}' if @entity.ajax %>) do |f| %>
+<%%= <%= 'nested_' if @model.nested_many? %>form_for(<%= @model.to_route_object('@') %><%= ', :remote => true, :html => {:class => :mdwa_ajax}' if @entity.ajax %>) do |f| %>
 
 	<div id="mdwa_error">
 	   	<%%= render '/template/mdwa/crud_error', :object => @<%= @model.singular_name %> %>

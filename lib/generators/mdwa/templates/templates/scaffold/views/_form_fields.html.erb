@@ -7,6 +7,7 @@
 <%- end # model.attributes.each -%>
 
 <%- @model.associations.each do |assoc| -%>
+<%- next if assoc.skip_views? %>
 <%- if assoc.belongs_to? -%>
 <div class="field">
 	<%%= f.label :<%= assoc.model2.singular_name.foreign_key %> %> 

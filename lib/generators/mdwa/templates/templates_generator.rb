@@ -15,6 +15,8 @@ module Mdwa
       
       attr_accessor :entities
       
+      argument :entities, :type => :array, :banner => 'Entities to transform', :default => []
+      
       #
       # Constructor
       # Require all entities to load the DSL of the application
@@ -26,7 +28,13 @@ module Mdwa
         inside Rails.root do
           require_all MDWA::DSL::STRUCTURAL_PATH unless Dir.glob("#{MDWA::DSL::STRUCTURAL_PATH}/*.rb").count.zero?
         end
-        @entities = MDWA::DSL.entities.all
+        
+        # select entities that will be generated
+        if entities.count.zero?
+          @entities = MDWA::DSL.entities.all 
+        else
+          @entities = entities.collect{ |e| MDWA::DSL.entity(e) }
+        end
       end
       
       
