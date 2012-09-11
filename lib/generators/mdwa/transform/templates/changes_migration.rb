@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class Alter<%= @entities.select{|e| e.resource?}.collect{|e| e.file_name.camelize}.join('') %><%= @random_migration_key %> < ActiveRecord::Migration
+class Alter<%= @changes.collect{|c| c[:entity].file_name.camelize}.join('') %><%= @random_migration_key %> < ActiveRecord::Migration
   
   def self.up
   <%- @changes.each do |change| -%>
