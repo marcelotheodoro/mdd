@@ -43,13 +43,27 @@ module Mdwa
       def generate_model_controller_helper_views
         @entities.each do |entity|
           generator_model = entity.generator_model
-          mdwa_template "#{entity.file_name}/model.rb", "app/models/#{generator_model.space}/#{generator_model.singular_name}.rb"
-          mdwa_template "#{entity.file_name}/helper.rb", "app/controllers/#{generator_model.space}/#{generator_model.plural_name}_helper.rb"
-          mdwa_template "#{entity.file_name}/controller.rb", "app/controllers/#{generator_model.space}/#{generator_model.plural_name}_controller.rb"
-
-          Dir.glob("#{Rails.root}/#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/views/*").each do |file|
-            file_name = File.basename(file)
-            mdwa_template "#{entity.file_name}/views/#{file_name}", "app/views/#{generator_model.space}/#{generator_model.plural_name}/#{file_name}"
+          
+          namespaces = Dir.glob("#{Rails.root}/#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/*").select{|d| File.directory?(d) and File.basename(d) != 'views'}
+          if !namespaces.count.zero?
+            namespaces.each do |namespace|
+              mdwa_template "#{entity.file_name}/#{File.basename namespace}/model.rb", "app/models/#{File.basename namespace}/#{generator_model.singular_name}.rb"
+              mdwa_template "#{entity.file_name}/#{File.basename namespace}/helper.rb", "app/helpers/#{File.basename namespace}/#{generator_model.plural_name}_helper.rb"
+              mdwa_template "#{entity.file_name}/#{File.basename namespace}/controller.rb", "app/controllers/#{File.basename namespace}/#{generator_model.plural_name}_controller.rb"
+              Dir.glob("#{namespace}/views/*").each do |file|
+                file_name = File.basename(file)
+                mdwa_template "#{entity.file_name}/#{File.basename namespace}/views/#{file_name}", "app/views/#{File.basename namespace}/#{generator_model.plural_name}/#{file_name}"
+              end
+            end
+          else
+            entity_name = "#{Rails.root}/#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}"
+            mdwa_template "#{entity_name}/model.rb", "app/models/#{generator_model.space}/#{generator_model.singular_name}.rb"
+            mdwa_template "#{entity_name}/helper.rb", "app/helpers/#{generator_model.space}/#{generator_model.plural_name}_helper.rb"
+            mdwa_template "#{entity_name}/controller.rb", "app/controllers/#{generator_model.space}/#{generator_model.plural_name}_controller.rb"
+            Dir.glob("#{entity_name}/views/*").each do |file|
+              file_name = File.basename(file)
+              mdwa_template "#{entity.file_name}/views/#{file_name}", "app/views/#{generator_model.space}/#{generator_model.plural_name}/#{file_name}"
+            end
           end
         end
       end
@@ -177,7 +191,7 @@ module Mdwa
           end
           
           # if table is not created yet, ignore
-          next unless model_class.table_exists?
+          next if model_class.nil? or !model_class.table_exists?
           
           # search for changes in this entity
           model_class.columns.each do |column|
@@ -242,7 +256,8 @@ module Mdwa
       private
         
         def mdwa_template(file_to_read, file_to_write)
-          read = File.read("#{Rails.root}/#{MDWA::DSL::TEMPLATES_PATH}/#{file_to_read}")
+          file_path = "#{Rails.root}/#{MDWA::DSL::TEMPLATES_PATH}/#{file_to_read}"
+          read = File.read(file_path)
           erb = ERB.new(read, nil, '-')
 
           create_file "#{Rails.root}/#{file_to_write}", erb.result, :force => true

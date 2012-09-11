@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 ===entity_code===
-module <%= @entity.klass %>Helper
+module <%= @model.controller_name %>Helper
 end
