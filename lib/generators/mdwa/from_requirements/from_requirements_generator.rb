@@ -12,6 +12,8 @@ module Mdwa
       source_root File.expand_path("../templates", __FILE__)
       attr_accessor :requirements
       
+      argument :defined_requirements, :type => :array, :banner => 'Generate only defined requirements (use the alias)', :default => []
+      
       #
       # Constructor
       # Require all entities to load the DSL of the application
@@ -22,7 +24,12 @@ module Mdwa
         inside Rails.root do
           require_all MDWA::DSL::REQUIREMENTS_PATH
         end
-        @requirements = MDWA::DSL.requirements.all
+        # select entities that will be generated
+        if defined_requirements.count.zero?
+          @requirements = MDWA::DSL.requirements.all
+        else
+          @requirements = defined_requirements.collect{ |r| MDWA::DSL.requirement(r) }
+        end
 
       end
       
