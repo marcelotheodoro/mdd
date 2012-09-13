@@ -1,5 +1,5 @@
 ===entity_code===
-<%- @model.attributes.each do |attr| -%>
+<%- @model.attributes.select{|a| a.name != 'id' and a.name != 'created_at' and a.name != 'updated_at'}.each do |attr| -%>
 <div class="field">
    	<%%= f.label :<%= attr.name %> %> 
 	<%- if attr.type.to_sym == :file -%>

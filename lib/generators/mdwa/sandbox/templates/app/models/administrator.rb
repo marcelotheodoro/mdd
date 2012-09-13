@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class Administrator < User
+class A::Administrator < User
   after_create :create_super_admin_permission
   
   def create_super_admin_permission

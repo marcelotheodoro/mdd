@@ -5,7 +5,7 @@
 	</div>
 
 	<div class="inside">
-	<%- @model.attributes.each do |attr| -%>
+	<%- @model.attributes.select{|a| a.name != 'id' and a.name != 'created_at' and a.name != 'updated_at'}.each do |attr| -%>
 		<div class="field">
 			<label><%%= t '<%= @model.plural_name %>.show_<%= attr.name %>' %></label>
 		<%- if attr.type.to_sym == :file -%>

@@ -73,6 +73,9 @@ module MDWA
       def after_declaration
         
         # if it's a user and have no attributes, include "name" to prevent errors
+        self.attribute('id', 'integer')
+        self.attribute('created_at', 'datetime')
+        self.attribute('updated_at', 'datetime')
         if user?
           self.attribute('name', 'string')
           self.attribute('email', 'string')
@@ -141,7 +144,8 @@ module MDWA
       # Return an instance of Generators::Model
       #
       def generator_model
-        @generator_model = Generators::Model.new(self.model_name)
+        @generator_model = Generators::Model.new(self.scaffold_name)
+        @generator_model.specific_model_name = self.model_name if(!self.model_name.blank? and self.model_name != self.scaffold_name)
         self.attributes.values.each do |attribute|
           @generator_model.add_attribute Generators::ModelAttribute.new( "#{attribute.name}:#{attribute.type}" )
         end
@@ -168,7 +172,7 @@ module MDWA
       # Selects the default attribute of the entity
       #
       def default_attribute
-        default_attr = self.attributes.first.last # first element value
+        default_attr = self.attributes.values.first # first element value
         self.attributes.each do |key, attr|
           default_attr = attr if attr.default?
         end

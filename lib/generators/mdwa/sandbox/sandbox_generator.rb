@@ -110,7 +110,7 @@ module Mdwa
         if ask_question("Generate models?")
           copy_file 'app/models/ability.rb', 'app/models/ability.rb'
           copy_file 'app/models/user.rb', 'app/models/user.rb'
-          copy_file 'app/models/administrator.rb', 'app/models/administrator.rb'
+          copy_file 'app/models/administrator.rb', 'app/models/a/administrator.rb'
           copy_file 'app/models/permission.rb', 'app/models/permission.rb'
         end
       end

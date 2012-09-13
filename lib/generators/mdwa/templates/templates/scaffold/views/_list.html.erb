@@ -3,7 +3,7 @@
   <thead>
       <th class="list_show"><%%= t 'system.index_id' %></th>
       <th class="list_edit"><%%= t 'system.index_edit' %></th>
-    <%- @model.attributes.each do |attr| -%>
+    <%- @model.attributes.select{|a| a.name != 'id' and a.name != 'created_at' and a.name != 'updated_at'}.each do |attr| -%>
       <th><%%= t '<%= @model.plural_name %>.index_<%= attr.name %>' %></th>
     <%- end -%>
     <%- @model.associations.each do |assoc| -%>
@@ -20,7 +20,7 @@
   	<td>
 		<%%= link_to t('system.index_edit_label'), edit_<%= @model.object_name %>_path(<%= @model.singular_name %>) <%= ", :class => 'lightbox various fancybox.ajax'" if @entity.ajax %> %>
 	</td>
-  <%- @model.attributes.each do |attr| -%>
+  <%- @model.attributes.select{|a| a.name != 'id' and a.name != 'created_at' and a.name != 'updated_at'}.each do |attr| -%>
 	<td>
 		<%- if attr.type.to_sym == :file -%>
 		<%% unless <%= @model.singular_name %>.<%= attr.name %>_file_name.blank? %>

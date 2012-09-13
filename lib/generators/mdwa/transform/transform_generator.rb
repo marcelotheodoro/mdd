@@ -199,7 +199,7 @@ module Mdwa
           model_class.columns.each do |column|
             
             # ignore rails default columns and attributes used in associations
-            next if column.name == 'id' or column.name == 'created_at' or column.name == 'updated_at' or column.name.end_with? '_id'
+            next if column.name.end_with? '_id'
                         
             entity_attribute = entity.attributes[column.name]
             # model attribute exists, but not in entity -> was erased
@@ -207,7 +207,8 @@ module Mdwa
               @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type}
             # attribute exists in model and entity, but changed type
             elsif entity_attribute.type.to_sym != column.type.to_sym
-              next if entity_attribute.type.to_sym == :file or entity_attribute.type.to_sym == :password or (column.type.to_sym == :integer and entity_attribute.type.to_sym == :float)
+              # ignores files, passwords and float, decimal, integer variations
+              next if entity_attribute.type.to_sym == :file or entity_attribute.type.to_sym == :password or ((column.type.to_sym == :integer or column.type.to_sym == :decimal) and entity_attribute.type.to_sym == :float)
               @changes << {:entity => entity, :type => 'change_column', :column => column.name, :attr_type => entity_attribute.type, :from => column.type}
             end
           end
@@ -310,6 +311,7 @@ module Mdwa
           # migration number
           if ActiveRecord::Base.timestamped_migrations
             @migration_number = Time.now.utc.strftime("%Y%m%d%H%M%S")
+            sleep 1
           else
             @migration_number = "%.3d" % (current_migration_number(Rails.root + 'db/migrate') + 1)
           end
