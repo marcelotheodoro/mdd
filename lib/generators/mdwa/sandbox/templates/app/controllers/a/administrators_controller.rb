@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 class A::AdministratorsController < A::BackendController
   
-  load_and_authorize_resource
+  load_and_authorize_resource :class => 'A::Administrator'
   
   def index
     @administrators = A::Administrator.paginate :page => params[:page]
