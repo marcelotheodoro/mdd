@@ -1,0 +1,42 @@
+<script type="text/javascript">
+	function splitAutocomplete( val ) {
+		return val.split( /,\s*/ );
+	}
+	function extractLastAutocomplete( term ) {
+		return splitAutocomplete( term ).pop();
+	}
+
+
+  $(function() {
+    $('<%= dom_element %>')
+	// don't navigate away from the field on tab when selecting an item
+		.bind( "keydown", function( event ) {
+			if ( event.keyCode === $.ui.keyCode.TAB &&
+					$( this ).data( "autocomplete" ).menu.active ) {
+				event.preventDefault();
+			}
+		})
+		.autocomplete({
+	        minLength: 0,
+			source: function( request, response ) {
+				// delegate back to autocomplete, but extract the last term
+				response( $.ui.autocomplete.filter(
+					[<%= encode_results_to_autocomplete( data, field_name ) %>], extractLastAutocomplete( request.term ) ) );
+			},
+			focus: function() {
+				// prevent value inserted on focus
+				return false;
+			},
+			select: function( event, ui ) {
+			  	$(this).val('');
+				$('<%= ul %>').append( "<li><span>" + ui.item.label + '</span><input type="hidden" value="' + ui.item.value + '" id="<%= dom_element_id %>_' + ui.item.value + '" name="<%= dom_element_id %>[' + ui.item.value + ']" /><a href="#" class="<%= dom_element_id %>_remove_autocomplete">(X)</a></li>' );
+				return false;
+			}
+	    });
+	
+	  $( ".<%= dom_element_id %>_remove_autocomplete").live( "click", function() {
+	    $(this).parent().remove();
+	  });
+  });
+
+</script>
