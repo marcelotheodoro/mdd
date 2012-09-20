@@ -1,4 +1,4 @@
 # -*- encoding : utf-8 -*-
 module MDWA
-  VERSION = "3.0.15"
+  VERSION = "3.0.16"
 end

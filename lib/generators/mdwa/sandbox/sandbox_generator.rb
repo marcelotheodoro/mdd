@@ -66,6 +66,7 @@ module Mdwa
         if ask_question("Create javascripts?")
           directory 'app/assets/javascripts/jquery', 'app/assets/javascripts/jquery'
           directory 'app/assets/javascripts/mdwa/template', 'app/assets/javascripts/mdwa/template'
+          empty_directory 'app/assets/javascripts/app'
 
           if ask_question("Create manifests?")
             copy_file 'app/assets/javascripts/mdwa/login_manifest.js', 'app/assets/javascripts/mdwa/login_manifest.js'
@@ -80,6 +81,7 @@ module Mdwa
           directory 'app/assets/stylesheets/jquery', 'app/assets/stylesheets/jquery'
           directory 'app/assets/stylesheets/mdwa/template', 'app/assets/stylesheets/mdwa/template'
           directory 'app/assets/stylesheets/mdwa/login', 'app/assets/stylesheets/mdwa/login'
+          empty_directory 'app/assets/stylesheets/app'
 
           if ask_question("Create manifests?")
             copy_file 'app/assets/stylesheets/mdwa/login_manifest.css', 'app/assets/stylesheets/mdwa/login_manifest.css'
@@ -124,6 +126,7 @@ module Mdwa
 
         if ask_question("Generate views?")
           copy_file 'app/views/template/_leftbar.html.erb', 'app/views/template/mdwa/_leftbar.html.erb'
+          empty_directory 'app/views/template/leftbar'
           directory 'app/views/public', 'app/views/public'
           directory 'app/views/a/administrators', 'app/views/a/administrators'
           directory 'app/views/a/home', 'app/views/a/home'
@@ -176,12 +179,18 @@ module Mdwa
       
       def migrations
         if ask_question( "Generate migrations?" )
-          migration_template 'db/migrate/devise_create_users.rb', 'db/migrate/devise_create_users.rb'
-          sleep( 1.0 )
-          migration_template 'db/migrate/create_permissions.rb', 'db/migrate/create_permissions.rb'
-          sleep( 1.0 )
-          migration_template 'db/migrate/create_user_permissions.rb', 'db/migrate/create_user_permissions.rb'
-          sleep( 1.0 )
+          unless User.table_exists?
+            migration_template 'db/migrate/devise_create_users.rb', 'db/migrate/devise_create_users.rb'
+            sleep 1
+          end
+          unless Permission.table_exists?
+            migration_template 'db/migrate/create_permissions.rb', 'db/migrate/create_permissions.rb'
+            sleep 1
+          end
+          unless User.table_exists?
+            migration_template 'db/migrate/create_user_permissions.rb', 'db/migrate/create_user_permissions.rb'
+            sleep 1
+          end
           
           rake "db:migrate" if ask_question( "Run rake db:migrate?" )
         end

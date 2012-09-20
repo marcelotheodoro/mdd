@@ -11,4 +11,5 @@
  *= require_tree ../jquery
  *= require ./template/backend
  *= require ./template/leftbar
+ *= require_tree ../app
 */

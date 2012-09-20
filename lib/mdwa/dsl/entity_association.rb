@@ -5,7 +5,7 @@ module MDWA
     class EntityAssociation
       
       attr_accessor :source, :destination, :destination_view
-      attr_accessor :name, :type, :composition, :description, :skip_views
+      attr_accessor :name, :type, :composition, :description, :skip_views, :style
       
       ACCEPTED_TYPES = [:one_to_many, :many_to_one, :one_to_one, :one_to_one_not_navigable, :many_to_many]
       
@@ -26,6 +26,10 @@ module MDWA
       
       def skip_views?
         skip_views
+      end
+      
+      def skip_views!
+        self.skip_views = true
       end
       
       #

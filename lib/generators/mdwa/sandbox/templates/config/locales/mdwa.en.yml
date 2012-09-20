@@ -11,6 +11,7 @@ en:
     logged_info_logout: "(Logout)"
     logged_info_edit_account: "My Account"
     cancel_button: "Cancel"
+    save_button: "Save"
     index_id: "ID"
     index_edit: "Edit"
     index_edit_label: "Edit"

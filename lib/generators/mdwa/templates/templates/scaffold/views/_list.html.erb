@@ -14,10 +14,10 @@
 
 <%% @<%= @model.plural_name %>.each do |<%= @model.singular_name %>| %>
   <tr class="<%%= cycle 'odd_line', 'even_line' %>" >
-    <td>
+    <td class="list_show">
 		<%%= link_to <%= @model.singular_name %>.id, <%= @model.object_name %>_path(<%= @model.singular_name %>) <%= ", :class => 'lightbox various fancybox.ajax'" if @entity.ajax %> %>
 	</td>
-  	<td>
+  	<td class="list_edit">
 		<%%= link_to t('system.index_edit_label'), edit_<%= @model.object_name %>_path(<%= @model.singular_name %>) <%= ", :class => 'lightbox various fancybox.ajax'" if @entity.ajax %> %>
 	</td>
   <%- @model.attributes.select{|a| a.name != 'id' and a.name != 'created_at' and a.name != 'updated_at'}.each do |attr| -%>
@@ -47,7 +47,7 @@
       <%- end -%>
     </td>
     <%- end -%>
-    <td>
+    <td class="list_remove">
 		<%%= link_to t('system.index_remove_label'), <%= @model.to_route_object %>, :method => :delete, <%= ':remote => true,' if @entity.ajax %> :data => {:confirm => t('system.index_confirm_deletion')} %>
 	</td>
   </tr>

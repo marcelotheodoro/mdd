@@ -8,15 +8,20 @@ MDWA::DSL.entities.register "<%= name.singularize.camelize %>" do |e|
   # "reset_password_sent_at", "remember_created_at", "sign_in_count", "current_sign_in_at", "last_sign_in_at", 
   # "current_sign_in_ip", "last_sign_in_ip", "created_at", "updated_at"
   e.user        = true
+  e.ajax        = false  # ajax works fine, but it can create errors in the "My Account" button.
+  e.resource    = true
+  e.scaffold_name = 'a/<%= name.singularize.underscore %>' # mdwa sandbox specific code?
+  e.model_name = 'a/<%= name.singularize.underscore %>' # use specific model name? or different namespace?
   <%- end -%>
   
   <%- unless options.no_comments -%>
+  <%- if !options.user %>
   # e.purpose   = %q{To-do} # what does this entity do?
   # e.resource  = true      # should it be stored like a resource?
   # e.ajax      = true      # scaffold with ajax?
-  # e.user      = false     # is this entity a loggable user?
   # e.scaffold_name = 'a/<%= name.singularize.underscore %>' # mdwa sandbox specific code?
   # e.model_name = 'a/<%= name.singularize.underscore %>' # use specific model name? or different namespace?
+  <% end %>
 
   ##
   ## Define entity attributes
@@ -39,6 +44,7 @@ MDWA::DSL.entities.register "<%= name.singularize.camelize %>" do |e|
   #   a.composition = true
   #   a.description = 'This entity has a composite address.'
   #   a.skip_views  = false
+  #   a.style       = :default
   # end
 
   ##

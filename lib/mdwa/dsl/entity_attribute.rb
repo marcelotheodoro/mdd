@@ -6,7 +6,7 @@ module MDWA
 
     class EntityAttribute
       
-      attr_accessor :entity, :name, :type, :default
+      attr_accessor :entity, :name, :type, :default, :style
       
       ACCEPTED_TYPES = MDWA::Generators::ModelAttribute::STATIC_TYPES
       
