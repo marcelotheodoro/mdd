@@ -179,20 +179,23 @@ module Mdwa
       
       def migrations
         if ask_question( "Generate migrations?" )
-          unless User.table_exists?
-            migration_template 'db/migrate/devise_create_users.rb', 'db/migrate/devise_create_users.rb'
-            sleep 1
-          end
-          unless Permission.table_exists?
-            migration_template 'db/migrate/create_permissions.rb', 'db/migrate/create_permissions.rb'
-            sleep 1
-          end
-          unless User.table_exists?
-            migration_template 'db/migrate/create_user_permissions.rb', 'db/migrate/create_user_permissions.rb'
-            sleep 1
+          
+          create_migrations = true
+          begin
+            create_migrations = false if User.table_exists?
+          rescue
           end
           
-          rake "db:migrate" if ask_question( "Run rake db:migrate?" )
+          if create_migrations
+            migration_template 'db/migrate/devise_create_users.rb', 'db/migrate/devise_create_users.rb'
+            sleep 1
+            migration_template 'db/migrate/create_permissions.rb', 'db/migrate/create_permissions.rb'
+            sleep 1
+            migration_template 'db/migrate/create_user_permissions.rb', 'db/migrate/create_user_permissions.rb'
+            sleep 1
+          
+            rake "db:migrate" if ask_question( "Run rake db:migrate?" )
+          end
         end
       end
 

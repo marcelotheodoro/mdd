@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :permissions
   
   def has_permission?(permission)
-    return !!self.permissions.find_by_name(permissao.to_s.camelize)
+    return !!self.permissions.find_by_name(permission.to_s.camelize)
   end
   
 end
