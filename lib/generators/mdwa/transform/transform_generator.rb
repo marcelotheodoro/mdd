@@ -250,7 +250,7 @@ module Mdwa
       end
       
       def run_rake_migrate
-        rake('db:migrate') if @pending_migrations and yes?('Run rake db:migrate')
+        rake('db:migrate') if @pending_migrations and yes?('Run rake db:migrate?')
       end
       
       def generate_tests

@@ -126,7 +126,7 @@ module Mdwa
 
         if ask_question("Generate views?")
           copy_file 'app/views/template/_leftbar.html.erb', 'app/views/template/mdwa/_leftbar.html.erb'
-          empty_directory 'app/views/template/leftbar'
+          empty_directory 'app/views/template/mdwa/leftbar'
           directory 'app/views/public', 'app/views/public'
           directory 'app/views/a/administrators', 'app/views/a/administrators'
           directory 'app/views/a/home', 'app/views/a/home'
