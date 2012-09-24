@@ -129,11 +129,13 @@ module Mdwa
               model.attributes.each do |attr|
                 lines <<  "    index_#{attr.name}: \"#{attr.name.humanize}\""
                 lines <<  "    show_#{attr.name}: \"#{attr.name.humanize}\""
+                lines <<  "    edit_#{attr.name}: \"#{attr.name.humanize}\""
               end
               model.associations.each do |assoc|
                 if assoc.belongs_to? or assoc.nested_one? or assoc.has_one?
                   lines <<  "    index_#{assoc.model2.singular_name}: \"#{assoc.model2.singular_name.humanize}\""
                   lines <<  "    show_#{assoc.model2.singular_name}: \"#{assoc.model2.singular_name.humanize}\""
+                  lines <<  "    edit_#{assoc.model2.singular_name}: \"#{assoc.model2.singular_name.humanize}\""
                 else
                   lines <<  "    index_#{assoc.model2.singular_name}: \"#{assoc.model2.plural_name.humanize}\""
                   lines <<  "    show_#{assoc.model2.singular_name}: \"#{assoc.model2.plural_name.humanize}\""

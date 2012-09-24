@@ -1,7 +1,7 @@
 ===entity_code===
 <%- @model.attributes.select{|a| a.name != 'id' and a.name != 'created_at' and a.name != 'updated_at'}.each do |attr| -%>
 <div class="field">
-   	<%%= f.label :<%= attr.name %> %> 
+   	<%%= f.label :<%= attr.name %>, t('<%= @model.plural_name %>.edit_<%= attr.name %>') %> 
 	<%- if attr.type.to_sym == :file -%>
 	<%% unless @<%= @model.singular_name %>.new_record? %>
 		<span><%%= link_to image_tag(file_icon_path(@<%= @model.singular_name %>.<%= attr.name %>_file_name)), @<%= @model.singular_name %>.<%= attr.name %>.url, :target => '_blank' %></span>
@@ -15,7 +15,7 @@
 <%- next if assoc.skip_views? %>
 <%- if assoc.belongs_to? -%>
 <div class="field">
-	<%%= f.label :<%= assoc.model2.singular_name.foreign_key %> %> 
+	<%%= f.label :<%= assoc.model2.singular_name.foreign_key %>, t('<%= @model.plural_name %>.edit_<%= assoc.model2.singular_name %>') %> 
 	<%%= f.select :<%= assoc.model2.singular_name.foreign_key %>, 
 		  options_for_select( <%= assoc.model2.klass %>.order('<%= assoc.reference_field %> ASC').collect{ |c| [c.<%= assoc.reference_field %>, c.id] }, f.object.<%= assoc.model2.singular_name.foreign_key %> ), 
 			:prompt => '-- Select --' %>
