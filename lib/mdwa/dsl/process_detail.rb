@@ -18,7 +18,7 @@ module MDWA
       # Unique alias for detailing
       # Default: Detail name underscored
       def alias
-        @alias ||= self.description.gsub(' ', '_').underscore
+        @alias ||= self.description.to_alias
       end
       
       # Refered action

@@ -15,7 +15,7 @@ module MDWA
       end
       
       def alias
-        @alias ||= self.description.gsub(' ', '_').underscore
+        @alias ||= self.description.to_alias
       end
       
       def start_for(role, detail_alias)

@@ -80,7 +80,7 @@ module Mdwa
         File.truncate(path_to_routes, 0)
         append_file path_to_routes, "def mdwa_router(router)\n\nend"
         
-        @entities.each do |entity|
+        MDWA::DSL.entities.all.each do |entity|
           generator_model = entity.generator_model
           
           # inject scaffold code

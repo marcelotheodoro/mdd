@@ -14,7 +14,7 @@ module MDWA
       end
       
       def alias
-        @alias ||= self.summary.gsub(' ', '_').underscore
+        @alias ||= self.summary.to_alias
       end
       
     end
