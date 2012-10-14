@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Marcelo Theodoro"]
   s.email       = ["marcelo.theodorojr@gmail.com"]
   s.homepage    = "https://github.com/marcelotheodoro/mdd"
-  s.summary     = %q{MDD-based code generation tools to avoid repetitive tasks in Rails dev.}
-  s.description = %q{Implements a set of tools for code generation for Rails apps. It's based on Theodoro's MDWA approach for web applications.}
+  s.summary     = %q{Model-driven development for Ruby on Rails.}
+  s.description = %q{Implements the MDWA approach for Ruby on Rails.}
 
   s.rubyforge_project = "mdd"
   
@@ -20,6 +20,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'will_paginate', '>= 3.0'
   s.add_dependency 'nested_form', '>= 0.2'
   s.add_dependency 'require_all', '>= 1.2.1'
+  s.add_dependency 'rspec'
+  s.add_dependency 'rspec-rails'
   s.add_development_dependency 'minitest', '>= 3.3'
 
   s.files         = `git ls-files`.split("\n")
