@@ -10,6 +10,7 @@
 				<tr>
 					<th>Requirement title</th>
 					<th>Description</th>
+					<th>Non-functional concerns</th>
 					<th>Entities</th>
 					<th>Users</th>
 				</tr>
@@ -17,6 +18,7 @@
 				<tr>
 					<td><%= requirement.summary %></td>
 					<td><%= requirement.description %></td>
+					<td><%= requirement.non_functional_description %></td>
 					<td><%= requirement.entities.join ', ' %></td>
 					<td><%= requirement.users.join ', ' %></td>
 				</tr>
