@@ -5,6 +5,7 @@ MDWA::DSL.requirements.register do |r|
   r.summary     = '<%= @summary %>'
   r.alias       = '<%= @requirement.alias %>' # alias is the unique requirement name and it's created automatically, you can override it with this argument.
   r.description = %q{Detailed description of the requirement.}
+  r.non_functional_description = %q{Explain the non-functional concerns involved in this requirement.}
   
   <%- unless options.no_comments %>
   #

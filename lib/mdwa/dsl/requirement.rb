@@ -4,7 +4,7 @@ module MDWA
     
     class Requirement
       
-      attr_accessor :summary, :description, :alias, :users, :entities
+      attr_accessor :summary, :description, :alias, :users, :entities, :non_functional_description
       
       def initialize(summary = nil)
         self.summary  = summary
@@ -15,6 +15,10 @@ module MDWA
       
       def alias
         @alias ||= self.summary.to_alias
+      end
+      
+      def non_functional?
+        !self.non_functional_description.blank?
       end
       
     end
