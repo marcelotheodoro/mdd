@@ -270,3 +270,27 @@ a#system_notice_close {
 .fancybox-inner {
   background: #fff;
 }
+
+/* List formatting */
+th.list_show {
+  width: 5%;
+}
+
+th.list_edit {
+  width: 5%;
+}
+
+td.list_edit {
+  text-align: center !important;
+}
+
+td.list_edit a {
+  background: url("<%= asset_path "mdwa/icons/edit.png" %>") no-repeat;
+    padding-left: 24px;
+}
+
+td.list_remove a {
+  background: url("<%= asset_path "mdwa/icons/delete.png" %>") no-repeat;
+    padding-left: 24px;
+    padding-bottom: 1px;
+}
