@@ -11,7 +11,7 @@ module MdwaHelper
   end
 
   def encode_results_to_autocomplete(results, field_name)
-    return results.collect{ |c| "{label: '#{c.send field_name}', value: '#{c.id}'}"  }.join( ',' ).html_safe
+    results.collect{ |c| "{label: \"#{c.send(field_name).html_safe}\", value: \"#{c.id}\"}"  }.join( ',' ).html_safe
   end
   
   def file_icon_path( file_name, size = 'medium' )
