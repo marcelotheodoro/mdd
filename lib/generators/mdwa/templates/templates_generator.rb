@@ -49,7 +49,7 @@ module Mdwa
           model = entity.generator_model
           
           puts '--------------------------------------'
-          puts "- Code for: #{entity.name} -"
+          puts "- Templates for: #{entity.name} -"
           puts '--------------------------------------'
         
           copy_with_header 'scaffold/controller.rb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}controller.rb", entity.name
