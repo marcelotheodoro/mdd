@@ -40,7 +40,7 @@
 			}
 	    });
 	
-	  $( ".<%= dom_element_id %>_remove_autocomplete").live( "click", function() {
+	  $( ".<%= dom_element_id %>_remove_autocomplete").on( "click", function() {
 	    $(this).parent().remove();
 	  });
   });
