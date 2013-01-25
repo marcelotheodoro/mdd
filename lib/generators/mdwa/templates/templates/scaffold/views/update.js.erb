@@ -1,6 +1,6 @@
 ===entity_code===
 <%% if @<%= @model.singular_name %>.errors.any? %>
-	$("#mdwa_error").html("<%%= escape_javascript( render '/template/mdwa/crud_error', :object => @<%= @model.singular_name %> )%>");
+	$("#mdwa_error").html("<%%= j( render '/template/mdwa/crud_error', :object => @<%= @model.singular_name %> )%>");
 <%% else %>
 	if( $('#<%= @model.plural_name %>_list').length > 0 ) {
 		$.fancybox.close(true);

@@ -1,18 +1,18 @@
 ===entity_code===
 <div id="<%= @model.plural_name %>_show" class="mdwa_show">
 	<div class="page_header">
-		<h1><%%= t('<%= @model.plural_name %>.show_title') %></h1>
+		<h1><%%= t('<%= @model.plural_name %>.title.show') %></h1>
 	</div>
 
 	<div class="inside">
-	<%- @model.attributes.select{|a| a.name != 'id' and a.name != 'created_at' and a.name != 'updated_at'}.each do |attr| -%>
+	<%- @model.attributes.each do |attr| -%>
 		<div class="field">
-			<label><%%= t '<%= @model.plural_name %>.show_<%= attr.name %>' %></label>
+			<label><%%= t '<%= @model.plural_name %>.show.<%= attr.name %>' %></label>
 		<%- if attr.type.to_sym == :file -%>
 			<%% unless @<%= @model.singular_name %>.<%= attr.name %>.nil? %>
 			<span><%%= link_to image_tag(file_icon_path(@<%= @model.singular_name %>.<%= attr.name %>_file_name)), @<%= @model.singular_name %>.<%= attr.name %>.url, :target => '_blank' %></span>
 			<%% else %>
-			No file.
+				<%%= t('system.no_file') %>
 			<%% end %>
 		<%- else -%>
 			<span><%%= @<%= @model.singular_name %>.<%= attr.name %> %></span>
@@ -21,7 +21,7 @@
 	<%- end -%>
 	<%- @model.associations.each do |assoc| -%>
 		<div class="field">
-			<label><%%= t '<%= @model.plural_name %>.show_<%= assoc.model2.singular_name %>' %></label>
+			<label><%%= t '<%= @model.plural_name %>.show.<%= assoc.model2.singular_name %>' %></label>
 			<span>
 			<%- if assoc.belongs_to? || assoc.nested_one? -%>
 		    	<%%= @<%= @model.singular_name %>.<%= assoc.model2.singular_name %>.<%= assoc.reference_field %> unless @<%= @model.singular_name %>.<%= assoc.model2.singular_name %>.nil? %>

@@ -3,11 +3,11 @@
   <thead>
       <th class="list_show"><%%= t 'system.index_id' %></th>
       <th class="list_edit"><%%= t 'system.index_edit' %></th>
-    <%- @model.attributes.select{|a| a.name != 'id' and a.name != 'created_at' and a.name != 'updated_at'}.each do |attr| -%>
+    <%- @model.attributes.select{|a| !['id', 'created_at', 'updated_at'].include?(a.name)}.each do |attr| -%>
       <th><%%= t '<%= @model.plural_name %>.index_<%= attr.name %>' %></th>
     <%- end -%>
     <%- @model.associations.each do |assoc| -%>
-      <th><%%= t '<%= @model.plural_name %>.index_<%= assoc.model2.singular_name %>' %></th>
+      <th><%%= t '<%= @model.plural_name %>.index.<%= assoc.model2.singular_name %>' %></th>
     <%- end -%>
       <th class="list_remove"><%%= t 'system.index_remove' %></th>
   </thead>

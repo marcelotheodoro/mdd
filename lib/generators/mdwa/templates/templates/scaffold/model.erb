@@ -1,10 +1,11 @@
 # -*- encoding : utf-8 -*-
 ===entity_code===
+
 class <%= @model.klass %> < <%= !@entity.user? ? 'ActiveRecord::Base' : 'User' %>
 
 <%- # model attributes -%>
 <%- unless @model.attributes.count.zero? -%>
-    attr_accessible <%= @model.attributes.collect {|a| ":" + a.name }.join(', ') %>
+    attr_accessible <%= @model.attributes.select{|a| !['id', 'created_at', 'updated_at'].include?(a.name)}.collect {|a| ":" + a.name }.join(', ') %>
 <%- end -%>
 <%- # paperclip file uploads -%>
 <%- unless @model.attributes.select{|attr| attr.type.to_sym == :file}.count.zero? -%>

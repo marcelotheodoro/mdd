@@ -76,7 +76,7 @@ module Mdwa
             @model.add_attribute attr
           end
         end
-        migration_template 'migrate.rb', "db/migrate/add_#{@model.attributes.collect{|a| a.name}.join('_')}_to_users" unless @model.attributes.empty?
+        migration_template 'migrate.erb', "db/migrate/add_#{@model.attributes.collect{|a| a.name}.join('_')}_to_users" unless @model.attributes.empty?
       
         # include type in db:seed
         append_file 'db/seeds/site.rb' do

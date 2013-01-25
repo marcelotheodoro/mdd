@@ -49,9 +49,9 @@ module Mdwa
           namespaces = Dir.glob("#{Rails.root}/#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/*").select{|d| File.directory?(d) and File.basename(d) != 'views'}
           if !namespaces.count.zero?
             namespaces.each do |namespace|
-              mdwa_template "#{entity.file_name}/#{File.basename namespace}/model.rb", "app/models/#{File.basename namespace}/#{generator_model.singular_name}.rb"
-              mdwa_template "#{entity.file_name}/#{File.basename namespace}/helper.rb", "app/helpers/#{File.basename namespace}/#{generator_model.plural_name}_helper.rb"
-              mdwa_template "#{entity.file_name}/#{File.basename namespace}/controller.rb", "app/controllers/#{File.basename namespace}/#{generator_model.plural_name}_controller.rb"
+              mdwa_template "#{entity.file_name}/#{File.basename namespace}/model.erb", "app/models/#{File.basename namespace}/#{generator_model.singular_name}.rb"
+              mdwa_template "#{entity.file_name}/#{File.basename namespace}/helper.erb", "app/helpers/#{File.basename namespace}/#{generator_model.plural_name}_helper.rb"
+              mdwa_template "#{entity.file_name}/#{File.basename namespace}/controller.erb", "app/controllers/#{File.basename namespace}/#{generator_model.plural_name}_controller.rb"
               Dir.glob("#{namespace}/views/*").each do |file|
                 file_name = File.basename(file)
                 mdwa_template "#{entity.file_name}/#{File.basename namespace}/views/#{file_name}", "app/views/#{File.basename namespace}/#{generator_model.plural_name}/#{file_name}"
@@ -79,6 +79,18 @@ module Mdwa
         # clear routes file contents
         File.truncate(path_to_routes, 0)
         append_file path_to_routes, "def mdwa_router(router)\n\nend"
+
+        inject_into_file path_to_routes, :after => "def mdwa_router(router)\n" do
+  "\n# Software visualization
+    namespace :mdwa do
+      controller :requirements do
+        get 'requirements/index' => 'requirements#index', :as => 'requirements'
+        get 'requirements/:alias' => 'requirements#show', :as => 'requirement'
+      end
+      
+      root :to => 'requirements#index'
+    end"
+        end
         
         MDWA::DSL.entities.all.each do |entity|
           generator_model = entity.generator_model
@@ -86,11 +98,11 @@ module Mdwa
           # inject scaffold code
           inject_into_file path_to_routes, :after => "def mdwa_router(router)\n" do
             route_str = []
-            route_str << "\n\tnamespace :#{generator_model.space} do" if generator_model.namespace?
-            route_str << "\t\tcontroller :#{generator_model.plural_name} do"
-            route_str << "\t\tend"
-            route_str << "\t\tresources :#{generator_model.plural_name}"
-            route_str << "\tend\n" if generator_model.namespace?
+            route_str << "\n  namespace :#{generator_model.space} do" if generator_model.namespace?
+            route_str << "    controller :#{generator_model.plural_name} do"
+            route_str << "    end"
+            route_str << "    resources :#{generator_model.plural_name}"
+            route_str << "  end\n" if generator_model.namespace?
                 
             route_str.join "\n"
           end
@@ -108,7 +120,7 @@ module Mdwa
       
       def generate_locales
 
-        locales_file = 'config/locales/mdwa_model_specific.en.yml'
+        locales_file = 'config/locales/mdwa.specific.en.yml'
         locales_content = File.read(locales_file)
         # make sure the file exist
         create_file locales_file unless File.exist?(Rails.root + locales_file)
@@ -119,28 +131,40 @@ module Mdwa
             append_file locales_file, :after => "en:\n" do 
               lines = []
               lines <<  "  #{model.plural_name}:"
-              lines <<  "    create_success: \"#{model.singular_name.humanize} created.\""
-              lines <<  "    update_success: \"#{model.singular_name.humanize} updated.\""
-              lines <<  "    destroy_success: \"#{model.singular_name.humanize} destroyed.\""
-              lines <<  "    index_title: \"#{model.plural_name.humanize}\""
-              lines <<  "    show_title: \"#{model.singular_name.humanize}\""
-              lines <<  "    new_title: \"New #{model.singular_name.humanize}\""
-              lines <<  "    edit_title: \"Edit #{model.singular_name.humanize}\""
+              lines <<  "    notice:"
+              lines <<  "      create: \"#{model.singular_name.humanize} created.\""
+              lines <<  "      update: \"#{model.singular_name.humanize} updated.\""
+              lines <<  "      destroy: \"#{model.singular_name.humanize} destroyed.\""
+              lines <<  "    title:"
+              lines <<  "      index: \"#{model.plural_name.humanize}\""
+              lines <<  "      show: \"#{model.singular_name.humanize}\""
+              lines <<  "      new: \"New #{model.singular_name.humanize}\""
+              lines <<  "      edit: \"Edit #{model.singular_name.humanize}\""
+              # INDEX
+              lines <<  "    index:"
               model.attributes.each do |attr|
-                lines <<  "    index_#{attr.name}: \"#{attr.name.humanize}\""
-                lines <<  "    show_#{attr.name}: \"#{attr.name.humanize}\""
-                lines <<  "    edit_#{attr.name}: \"#{attr.name.humanize}\""
+                lines <<  "      #{attr.name}: \"#{attr.name.humanize}\""
               end
               model.associations.each do |assoc|
-                if assoc.belongs_to? or assoc.nested_one? or assoc.has_one?
-                  lines <<  "    index_#{assoc.model2.singular_name}: \"#{assoc.model2.singular_name.humanize}\""
-                  lines <<  "    show_#{assoc.model2.singular_name}: \"#{assoc.model2.singular_name.humanize}\""
-                  lines <<  "    edit_#{assoc.model2.singular_name}: \"#{assoc.model2.singular_name.humanize}\""
-                else
-                  lines <<  "    index_#{assoc.model2.singular_name}: \"#{assoc.model2.plural_name.humanize}\""
-                  lines <<  "    show_#{assoc.model2.singular_name}: \"#{assoc.model2.plural_name.humanize}\""
-                end
+                lines << ((assoc.belongs_to? or assoc.nested_one? or assoc.has_one?) ? "      #{assoc.model2.singular_name}: \"#{assoc.model2.singular_name.humanize}\"" : "      #{assoc.model2.singular_name}: \"#{assoc.model2.plural_name.humanize}\"")
               end
+              # EDIT
+              lines <<  "    edit:"
+              model.attributes.each do |attr|
+                lines <<  "      #{attr.name}: \"#{attr.name.humanize}\""
+              end
+              model.associations.each do |assoc|
+                lines << ((assoc.belongs_to? or assoc.nested_one? or assoc.has_one?) ? "      #{assoc.model2.singular_name}: \"#{assoc.model2.singular_name.humanize}\"" : "      #{assoc.model2.singular_name}: \"#{assoc.model2.plural_name.humanize}\"")
+              end
+              # SHOW
+              lines <<  "    show:"
+              model.attributes.each do |attr|
+                lines <<  "      #{attr.name}: \"#{attr.name.humanize}\""
+              end
+              model.associations.each do |assoc|
+                lines << ((assoc.belongs_to? or assoc.nested_one? or assoc.has_one?) ? "      #{assoc.model2.singular_name}: \"#{assoc.model2.singular_name.humanize}\"" : "      #{assoc.model2.singular_name}: \"#{assoc.model2.plural_name.humanize}\"")
+              end
+
               lines << "\n"
               lines.join("\n")
             end
@@ -206,11 +230,20 @@ module Mdwa
             entity_attribute = entity.attributes[column.name]
             # model attribute exists, but not in entity -> was erased
             if entity_attribute.nil?
-              @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type}
+              # atributo não é derivado de file, pode apagar na moral
+              if !column.name.ends_with?("_file_name") and !column.name.ends_with?("_content_type") and !column.name.ends_with?("_file_size") and !column.name.ends_with?("_updated_at") 
+                @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type}
+              else
+                # se o atributo é derivado de file e não existe o file na entidade, apaga
+                @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type} if column.name.ends_with?("_file_name") and entity.attributes[column.name.delete("_file_name")].nil?
+                @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type} if column.name.ends_with?("_content_type") and entity.attributes[column.name.delete("_content_type")].nil?
+                @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type} if column.name.ends_with?("_file_size") and entity.attributes[column.name.delete("_file_size")].nil?
+                @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type} if column.name.ends_with?("_updated_at") and entity.attributes[column.name.delete("_updated_at")].nil?
+              end
             # attribute exists in model and entity, but changed type
             elsif entity_attribute.type.to_sym != column.type.to_sym
               # ignores files, passwords and float, decimal, integer variations
-              next if entity_attribute.type.to_sym == :file or entity_attribute.type.to_sym == :password or ((column.type.to_sym == :integer or column.type.to_sym == :decimal) and entity_attribute.type.to_sym == :float)
+              next if entity_attribute.type.to_sym == :password or ((column.type.to_sym == :integer or column.type.to_sym == :decimal) and entity_attribute.type.to_sym == :float)
               @changes << {:entity => entity, :type => 'change_column', :column => column.name, :attr_type => entity_attribute.type, :from => column.type}
             end
           end
@@ -218,7 +251,15 @@ module Mdwa
           # new attributes
           # no column with that name -> column must be added
           entity.attributes.each do |key, attr|
-            if model_class.columns.select {|c| c.name == attr.name }.count.zero?
+            # se a entidade for file e não existir seus atributos no banco de dados, corrige
+            if attr.type.to_sym == :file
+              @changes << {:entity => entity, :type => 'add_column', :column => "#{attr.name}_file_name", :attr_type => 'string'} if model_class.columns.select{|c| c.name == "#{attr.name}_file_name"}.count.zero?
+              @changes << {:entity => entity, :type => 'add_column', :column => "#{attr.name}_content_type", :attr_type => 'string'} if model_class.columns.select{|c| c.name == "#{attr.name}_content_type"}.count.zero?
+              @changes << {:entity => entity, :type => 'add_column', :column => "#{attr.name}_file_size", :attr_type => 'integer'} if model_class.columns.select{|c| c.name == "#{attr.name}_file_size"}.count.zero?
+              @changes << {:entity => entity, :type => 'add_column', :column => "#{attr.name}_updated_at", :attr_type => 'datetime'} if model_class.columns.select{|c| c.name == "#{attr.name}_updated_at"}.count.zero?
+            
+            # nenhuma coluna com esse nome
+            elsif model_class.columns.select {|c| c.name == attr.name }.count.zero?
               @changes << {:entity => entity, :type => 'add_column', :column => attr.name, :attr_type => attr.type}
             end
           end
@@ -279,22 +320,29 @@ module Mdwa
           # create table
           migration_string << "\n\tdef self.up"
           migration_string << "\t\tcreate_table :#{generator_model.plural_name} do |t|"
-          generator_model.attributes.each do |attr|
-          	migration_string << "\t\t\tt.#{attr.migration_field} :#{attr.name}"
+          generator_model.attributes.select{|a| !['id', 'created_at', 'updated_at'].include?(a.name)}.each do |attr|
+            if attr.type.to_sym != :file
+              migration_string << "\t\t\tt.#{attr.migration_field} :#{attr.name}"
+            else
+              migration_string << "\t\t\tt.string :#{attr.name}_file_name"
+              migration_string << "\t\t\tt.string :#{attr.name}_content_type"
+              migration_string << "\t\t\tt.integer :#{attr.name}_file_size"
+              migration_string << "\t\t\tt.datetime :#{attr.name}_updated_at"
+            end
         	end
         	generator_model.associations.each do |assoc|
         	  if assoc.belongs_to? or assoc.nested_one?
           	  migration_string << "\t\t\tt.integer :#{assoc.model2.singular_name.foreign_key}"
         	  end
         	end
-          migration_string << "\t\t\tt.timestamps"
-          migration_string << "\t\tend"
+          migration_string << "\n\t\tt.timestamps"
+          migration_string << "\t\tend" # fim do create_table
         	generator_model.associations.each do |assoc|
             if assoc.belongs_to? or assoc.nested_one?
           	  migration_string << "\t\tadd_index :#{assoc.model1.plural_name}, :#{assoc.model2.singular_name.foreign_key}"
         	  end
       	  end
-          migration_string << "\n\tend"
+          migration_string << "\n\tend" # fim do self.up
 
           # drop table
           migration_string << "\n\tdef self.down"

@@ -52,9 +52,9 @@ module Mdwa
           puts "- Templates for: #{entity.name} -"
           puts '--------------------------------------'
         
-          copy_with_header 'scaffold/controller.rb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}controller.rb", entity.name
-          copy_with_header 'scaffold/helper.rb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}helper.rb", entity.name
-          copy_with_header 'scaffold/model.rb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}model.rb", entity.name
+          copy_with_header 'scaffold/controller.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}controller.erb", entity.name
+          copy_with_header 'scaffold/helper.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}helper.erb", entity.name
+          copy_with_header 'scaffold/model.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}model.erb", entity.name
           
           # views
           copy_with_header 'scaffold/views/_form_fields.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/_form_fields.html.erb", entity.name
@@ -84,7 +84,7 @@ module Mdwa
 
           model = entity.generator_model
 
-          path_to_controller  = "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}controller.rb"
+          path_to_controller  = "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}controller.erb"
           controller_string   = File.read("#{Rails.root}/#{path_to_controller}")
 
           # hooks for code generations

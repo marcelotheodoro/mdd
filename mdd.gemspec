@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "mdd"
   
-  s.add_dependency 'rails', '>= 3.1'
-  s.add_dependency 'jquery-rails', '>= 2.0'
+  s.add_dependency 'rails', '>= 3.2.11'
+  s.add_dependency 'jquery-rails', '>= 2.2.0'
   s.add_dependency 'devise', '>= 2.1'
   s.add_dependency 'cancan', '>= 1.6'
   s.add_dependency 'will_paginate', '>= 3.0'

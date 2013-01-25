@@ -87,25 +87,14 @@ module MDWA
       
       #
       # Declares one attribute of the list using the block given.
-      def attribute(name, type, options = {})
-        if type.to_sym == :file
-          fields = ['_file_name','_content_type', '_file_size', '_updated_at']
-          fields.each do |f|
-            attr = EntityAttribute.new(self)
-            attr.name = "#{name}#{f}"
-            attr.type = :string
-            attr.raise_errors_if_invalid!
-            self.attributes[attr.name] = attr
-          end
-        else        
-          attr = EntityAttribute.new(self)
-          attr.name = name
-          attr.type = type
-          attr.default = options[:default] unless options[:default].blank?
-          attr.style = options[:style] unless options[:style].blank?
-          attr.raise_errors_if_invalid!
-          self.attributes[attr.name] = attr
-        end
+      def attribute(name, type, options = {})     
+        attr = EntityAttribute.new(self)
+        attr.name = name
+        attr.type = type
+        attr.default = options[:default] unless options[:default].blank?
+        attr.style = options[:style] unless options[:style].blank?
+        attr.raise_errors_if_invalid!
+        self.attributes[attr.name] = attr
       end
       
       #

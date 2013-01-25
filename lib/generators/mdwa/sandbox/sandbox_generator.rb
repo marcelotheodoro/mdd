@@ -144,7 +144,27 @@ module Mdwa
         # language files
         copy_file 'config/locales/devise.en.yml', 'config/locales/devise.en.yml'
         copy_file 'config/locales/mdwa.en.yml', 'config/locales/mdwa.en.yml'
-        copy_file 'config/locales/mdwa.en.yml', 'config/locales/mdwa_model_specific.en.yml'
+        create_file 'config/locales/mdwa.specific.en.yml', "en:\n"
+
+        # set production pre-compile directives
+        production = []
+        production << "\n  # Precompile directives"
+        production << "  #####################"
+        production << "  #Javascripts"
+        production << "  #####################"
+        production << "  assets = []"
+        production << "  assets << 'mdwa/login_manifest.js'"
+        production << "  assets << 'mdwa/public_manifest.js'"
+        production << "  assets << 'mdwa/system_manifest.js'"
+        production << "  #####################"
+        production << "  #CSS"
+        production << "  #####################"
+        production << "  assets << 'mdwa/login_manifest.css'"
+        production << "  assets << 'mdwa/public_manifest.css'"
+        production << "  assets << 'mdwa/system_manifest.js'"
+        production << "  config.assets.precompile += assets"
+        production << "\n"
+        inject_into_file 'config/environments/production.rb', production.join("\n"), :after => "config.assets.digest = true\n"
       end
 
       def routes
@@ -162,16 +182,6 @@ module Mdwa
     end
     
     root :to => 'home#index'
-  end
-  
-  # Software visualization
-  namespace :mdwa do
-    controller :requirements do
-      get 'requirements/index' => 'requirements#index', :as => 'requirements'
-      get 'requirements/:alias' => 'requirements#show', :as => 'requirement'
-    end
-    
-    root :to => 'requirements#index'
   end
           "
         end
