@@ -1,15 +1,9 @@
 /*
- * Backend screen CSS manifest file
- * For personalized layouts, use a ERB manifest
- * require_tree ./<%= Settings.layout %>
- *
  *= require ./template/reset
  *= require ./template/cssbase
- *= require ./template/template
- *= require ./template/visualization
  *= require ./template/grid
+ *= require ./template/template
  *= require_tree ../jquery
  *= require ./template/backend
- *= require ./template/leftbar
  *= require_tree ../app
 */

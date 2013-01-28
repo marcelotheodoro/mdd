@@ -2,9 +2,13 @@
 class Add<%= @model.attributes.collect{|a| a.name.camelize}.join('') %>ToUsers < ActiveRecord::Migration
 
 	def self.up
-		<%- @model.simple_attributes.each do |attr| -%>
-			<%- if !attr.type.to_sym == :file -%>
+		<%- @model.attributes.each do |attr| -%>
+			<%- if attr.type.to_sym != :file -%>
+				<%- if attr.belongs_to? or attr.nested_one? -%>
+				add_column :users, :<%= attr.name.foreign_key %>, :integer
+				<%- elsif !attr.references? -%>
 				add_column :users, :<%= attr.name %>, :<%= attr.migration_field %>
+	      <%- end -%>
 			<%- else -%>
 				add_column :users, :<%= attr.name %>_file_name, :string
 				add_column :users, :<%= attr.name %>_content_type, :string
@@ -15,9 +19,13 @@ class Add<%= @model.attributes.collect{|a| a.name.camelize}.join('') %>ToUsers <
 	end
 
 	def self.down 
-		<%- @model.simple_attributes.each do |attr| -%>
-			<%- if !attr.type.to_sym == :file -%>
+		<%- @model.attributes.each do |attr| -%>
+			<%- if attr.type.to_sym != :file -%>
+				<%- if attr.belongs_to? or attr.nested_one? -%>
+				remove_column :users, :<%= attr.name.foreign_key %>
+				<%- elsif !attr.references? -%>
 				remove_column :users, :<%= attr.name %>
+	      <%- end -%>
 			<%- else -%>
 				remove_column :users, :<%= attr.name %>_file_name
 				remove_column :users, :<%= attr.name %>_content_type

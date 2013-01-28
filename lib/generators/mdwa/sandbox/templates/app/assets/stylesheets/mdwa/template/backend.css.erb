@@ -13,50 +13,6 @@ a {
   text-decoration:none;
 }
 
-/* Fields */
-div.field {
-  padding: 5px;
-}
-
-div.field label {
-  display: block;
-  font-size: 12px;
-}
-
-div.field input[type="text"],
-div.field input[type="email"],
-div.field input[type="number"],
-div.field input[type="password"],
-div.field textarea {
-  border: 1px solid #888;
-  padding: 4px;
-  font-size: 13px;
-  box-shadow: 0 0 2px #a2a2a2;
-}
-
-div.field input[type="text"]:hover,
-div.field input[type="email"]:hover,
-div.field input[type="number"]:hover,
-div.field input[type="password"]:hover {
-  border: 1px solid #666;
-  box-shadow: 0 0 2px #999;
-}
-
-div.field textarea {
-  height: 100px;
-}
-
-div.actions {
-  text-align:center;
-  margin: 20px 0;
-}
-
-p.description {
-  padding: 0;
-  margin: 5px;
-  font-size: 11px;
-}
-
 /* Header */
 #header {
   height: 65px;
@@ -91,7 +47,9 @@ div#logged_info .welcome, div#logged_info .logout {
   margin-left: 5px;
 }
 
+/***********************/
 /* Content page header */
+/***********************/
 div.page_header {
   background: #EEEEEE; /* Old browsers */
   background: -moz-linear-gradient(top,  #FFFFFF 0%, #EEEEEE 100%); /* FF3.6+ */
@@ -127,31 +85,42 @@ div.page_header_right_tab {
   width: auto;
 }
 div.page_header_right_tab a {
-  
-  background: #EEEEEE; /* Old browsers */
-  background: -moz-linear-gradient(top,  #FFFFFF 0%, #EEEEEE 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(100%,#EEEEEE)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  #FFFFFF 0%,#EEEEEE 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  #FFFFFF 0%,#EEEEEE 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  #FFFFFF 0%,#EEEEEE 100%); /* IE10+ */
-  background: linear-gradient(top,  #FFFFFF 0%,#EEEEEE 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#EEEEEE',GradientType=0 ); /* IE6-9 */
 
-  padding: 13px;
-  border-radius: 5px 5px 0 0;
-  border-top: 1px solid #ccc;
-  border-left: 1px solid #ccc;
-  border-right: 1px solid #ccc;
+  background: #ffffff; /* Old browsers */
+  background: -moz-linear-gradient(top,  #ffffff 0%, #e6e6e6 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e6e6e6)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #ffffff 0%,#e6e6e6 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #ffffff 0%,#e6e6e6 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #ffffff 0%,#e6e6e6 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #ffffff 0%,#e6e6e6 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e6e6e6',GradientType=0 ); /* IE6-9 */
+
+
+  padding: 10px;
+  border-radius: 5px;
+  position: relative;
+  top: 3px;
+  cursor: pointer;
+  
+  background-repeat: repeat-x;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-style: solid;
+  border-width: 1px;
+  color: #333;
+  text-shadow:0 1px 1px rgba(255, 255, 255, 0.75);
 }
+
 div.page_header_right_tab a:hover {
-  background: #eeeeee; /* Old browsers */
-  background: -moz-linear-gradient(top, #eeeeee 0%, #ffffff 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #eeeeee 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #eeeeee 0%,#ffffff 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #eeeeee 0%,#ffffff 100%); /* IE10+ */
-  background: linear-gradient(top, #eeeeee 0%,#ffffff 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+    color: #333333;
+    text-decoration: none;
+    transition: background-position 0.1s linear 0s;
+    text-decoration: none;
+  background-color: #E6E6E6;
+  background-position: 0 -15px;
+  -webkit-transition: background-position 0.1s linear;
+     -moz-transition: background-position 0.1s linear;
+       -o-transition: background-position 0.1s linear;
+          transition: background-position 0.1s linear;
 }
 
 div.tab_header {

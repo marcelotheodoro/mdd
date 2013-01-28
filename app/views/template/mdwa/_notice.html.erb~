@@ -1,10 +1,10 @@
 <% unless notice.nil? and alert.nil? %>
 
-  <%= javascript_tag do %>
+  <script type="text/javascript">
 	$(function() {
 		setTimeout(deleteSystemNotice, 3000);
 	});
-  <% end %>
+  </script>
 
   <div id="system_notice">
     <%= notice || alert %>

@@ -107,8 +107,16 @@ module MDWA
 				model_attribute.model = self
 			end
 
+			def add_association(model_association)
+				self.associations << model_association
+			end
+
 			def simple_attributes
 				attributes.select{ |a| !a.references? }
+			end
+
+			def to_sym
+				self.name.to_sym
 			end
 
 			private 
