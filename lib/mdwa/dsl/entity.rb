@@ -33,7 +33,7 @@ module MDWA
       end
       
       def scaffold_name
-        return (@scaffold_name.blank? ? name : @scaffold_name)
+        return (@scaffold_name.blank? ? name.underscore : @scaffold_name)
       end
       
       def model_name

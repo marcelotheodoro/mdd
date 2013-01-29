@@ -20,7 +20,7 @@ module MDWA
       # Sets the name if not set yet.
       # 
       def destination=(value)
-        self.name = value.downcase if self.name.blank?
+        self.name = value.underscore if self.name.blank?
         @destination = value
       end
       

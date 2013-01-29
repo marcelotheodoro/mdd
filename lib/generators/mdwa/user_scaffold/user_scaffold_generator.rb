@@ -52,7 +52,10 @@ module Mdwa
         
         # sets the model attributes
         attributes.each do |attribute|
-          @model.add_attribute MDWA::Generators::ModelAttribute.new( attribute ) unless User.accessible_attributes.to_a.include?( attribute.split(':').first )
+          attr_name = attribute.split(':').first
+          if !User.accessible_attributes.to_a.include?( attr_name )
+            @model.add_attribute MDWA::Generators::ModelAttribute.new( attribute )
+          end
         end
         
         unless options.only_diff_migration
@@ -72,7 +75,11 @@ module Mdwa
           # add to model attributes
           # if it's not predefined in devise
           # if it's a belongs_to or nested_one association
-          if (!attr.references? and !@predefined_fields.include?( attribute.split(':').first )) or attr.belongs_to? or attr.nested_one?
+          if (!attr.references? and !@predefined_fields.include?(attribute.split(':').first)) or 
+             (
+              (attr.belongs_to? or attr.nested_one?) and 
+              User.column_names.to_a.select {|user_attr| user_attr == attr.name.foreign_key}.count.zero?
+              )
             @model.add_attribute attr
           end
         end
