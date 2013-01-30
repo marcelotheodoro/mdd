@@ -144,7 +144,8 @@ module Mdwa
         # language files
         copy_file 'config/locales/devise.en.yml', 'config/locales/devise.en.yml'
         copy_file 'config/locales/mdwa.en.yml', 'config/locales/mdwa.en.yml'
-        create_file 'config/locales/mdwa.specific.en.yml', "en:\n"
+        create_file 'config/locales/mdwa.specific.en.yml', "en:\n".to_s.force_encoding("UTF-8")
+
 
         # set production pre-compile directives
         production = []

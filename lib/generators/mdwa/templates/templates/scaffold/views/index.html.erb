@@ -4,12 +4,20 @@
 		<h1><%%= t '<%= @model.plural_name %>.title.index' %></h1>
 		<%- if @entity.ajax -%>
 		<div class="page_header_right_tab">
-			<%%= link_to t('system.add_by_ajax', :name => '<%= @model.singular_name.humanize %>'), new_<%= @model.object_name %>_path, :class => 'lightbox various fancybox.ajax' %>
+			<%%= link_to t('<%= @model.plural_name %>.index.add'), new_<%= @model.object_name %>_path, :class => 'lightbox various fancybox.ajax' %>
 		</div>
 		<%- end -%>
 	</div>
 
 	<div class="inside">
+
+		<div class="filtros">
+			<div class="yui3-g">
+				<%%= form_tag <%= @model.object_name.pluralize %>_path, :method => :get, :remote => true, :id => '<%= @model.plural_name %>_filter_form' do %>
+				<%% end %>
+			</div>
+		</div>
+
 		<div id="<%= @model.plural_name %>_list">
 			<%%= render 'list' %>
 		</div>

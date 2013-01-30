@@ -16,13 +16,11 @@ describe MDWA::DSL::Entity do
     end
     
     MDWA::DSL.requirements.register 'Manage clients' do |r|
-      r.alias = 'clients'
     end
   end
   
   it 'should store data correctly' do
-    
-    requirement = MDWA::DSL.requirement('manage_projects')
+    requirement = MDWA::DSL.requirement(:manage_projects)
     requirement.summary.must_equal 'Manage Projects'
     requirement.description.must_equal 'Detailed description of the requirement.'
     requirement.entities.count.must_equal 4
@@ -34,10 +32,10 @@ describe MDWA::DSL::Entity do
     requirement.users[0].must_equal 'Administrator'
     requirement.users[1].must_equal 'TeamMember'
     
-    requirement_client = MDWA::DSL.requirement('clients')
+    requirement_client = MDWA::DSL.requirement(:manage_clients)
     requirement_client.nil?.must_equal false
     requirement_client.summary.must_equal 'Manage clients'
-    requirement_client.alias.must_equal 'clients'
+    requirement_client.alias.must_equal :manage_clients
     
   end
   

@@ -1,5 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'ostruct'
+require 'extensions/string'
+
 module MDWA
   module DSL
     

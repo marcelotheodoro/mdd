@@ -1,4 +1,6 @@
 # -*- encoding : utf-8 -*-
+require 'extensions/string'
+
 module MDWA
   module DSL
     
@@ -7,7 +9,7 @@ module MDWA
       attr_accessor :alias, :method, :request, :redirect, :render, :when
       
       def initialize(next_action_alias)
-        self.alias = next_action_alias
+        self.alias = next_action_alias.to_alias
       end
       
     end

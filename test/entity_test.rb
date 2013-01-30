@@ -90,7 +90,7 @@ describe MDWA::DSL::Entities do
     product.ajax.must_equal true
     product.associations.must_be_instance_of Hash
     product.attributes.must_be_instance_of Hash
-    product.model_name.must_equal( "Product" )
+    product.model_name.must_equal( "product" )
     
     category = MDWA::DSL.entity("Category")
     category.must_be_instance_of MDWA::DSL::Entity
@@ -109,7 +109,7 @@ describe MDWA::DSL::Entities do
   it "must store attributes" do 
     product = MDWA::DSL.entity("Product")
     
-    product.attributes.count.must_equal 4
+    product.attributes.count.must_equal 7
     product.attributes['name'].type.must_equal 'string'
     product.attributes['name'].name.must_equal 'name'
     product.attributes['category'].type.must_equal 'integer'
@@ -122,7 +122,7 @@ describe MDWA::DSL::Entities do
     product.default_attribute.name.must_equal 'name'
     
     category = MDWA::DSL.entity("Category")
-    category.attributes.count.must_equal 1
+    category.attributes.count.must_equal 4
     category.default_attribute.name.must_equal 'name'
   end
   
@@ -182,8 +182,8 @@ describe MDWA::DSL::Entities do
     project.scaffold_name.must_equal 'a/project'
     project.model_name.must_equal 'a/project'
     
-    project.generate.must_equal "mdwa:scaffold a/project nome:string ativo:boolean situacao_atual:text group:a/group:nome:belongs_to --ajax"
-    group.generate.must_equal "mdwa:scaffold a/group nome:string ativo:boolean --ajax --force"
+    project.generate.must_equal "mdwa:scaffold a/project nome:string ativo:boolean situacao_atual:text id:integer created_at:datetime updated_at:datetime group:a/group:nome:belongs_to --ajax"
+    group.generate.must_equal "mdwa:scaffold a/group nome:string ativo:boolean id:integer created_at:datetime updated_at:datetime --ajax --force"
   end
   
   it "should not generate non-resource entities" do
@@ -209,7 +209,7 @@ describe MDWA::DSL::Entities do
     end
     
     team_member = MDWA::DSL.entity('TeamMember')
-    team_member.attributes.count.must_equal 1
+    team_member.attributes.count.must_equal 7
     team_member.attributes['name'].name.must_equal 'name'
     team_member.attributes['name'].type.must_equal 'string'
   end

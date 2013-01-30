@@ -4,7 +4,7 @@
 <%% else %>
 	if( $('#<%= @model.plural_name %>_list').length > 0 ) {
 		$.fancybox.close(true);
-		$("#<%= @model.plural_name %>_list").html("<%%= j( render 'list' )%>");
+		$('#<%= @model.plural_name %>_filter_form').submit();
 	}
 	else if( $("#edit_<%= @model.plural_name %>").length > 0 ) {
 		$("#edit_<%= @model.plural_name %> .inside").html("<%%= j( render 'form' )%>");

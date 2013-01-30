@@ -49,7 +49,7 @@ module MDWA
     end
     
     def self.process(name)
-      self.workflow.element(name)
+      self.workflow.element(name.to_sym)
     end
 
     

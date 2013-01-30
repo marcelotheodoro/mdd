@@ -1,4 +1,6 @@
 # -*- encoding : utf-8 -*-
+require 'extensions/string'
+
 module MDWA
   module DSL
     
@@ -12,9 +14,10 @@ module MDWA
         self.users    = []
         self.entities = []
       end
-      
-      def alias
-        @alias ||= self.summary.to_alias
+
+      def summary=(summary)
+        @summary = summary
+        @alias = summary.to_alias unless summary.nil?
       end
       
       def non_functional?

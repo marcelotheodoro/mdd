@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'mdwa/dsl'
 class Mdwa::RequirementsController < Mdwa::MDWAController
   

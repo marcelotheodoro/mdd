@@ -53,7 +53,7 @@ module MDWA
     end
     
     def self.requirement(name)
-      self.requirements.element(name)
+      self.requirements.element(name.to_sym)
     end
 
     

@@ -3,6 +3,6 @@
 	$("#mdwa_error").html("<%%= j( render '/template/mdwa/crud_error', :object => @<%= @model.singular_name %> )%>");
 <%% else %>
 	$.fancybox.close(true);
-	$("#<%= @model.plural_name %>_list").html("<%%= j( render 'list' )%>");
+	$('#<%= @model.plural_name %>_filter_form').submit();
 	$('body').append("<%%= j( render '/template/mdwa/notice', :notice => @system_notice )%>");
 <%% end %>

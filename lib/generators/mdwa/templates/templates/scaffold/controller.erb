@@ -61,10 +61,7 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
 	def create
     @<%= @model.singular_name %> = <%= @model.klass %>.new(params[:<%= @model.to_params %>])
     saved_ok = @<%= @model.singular_name %>.save
-    @system_notice = t('<%= @model.plural_name %>.create_success') if saved_ok    
-  <%- if @entity.ajax? -%>
-    load_list # loads all <%= @model.plural_name %> to display in the list
-  <%- end -%>
+    @system_notice = t('<%= @model.plural_name %>.notice.create') if saved_ok    
   
   <%- @model.associations.select{|a| a.has_and_belongs_to_many? and a.composition?}.each do |association| -%>
     unless params[:<%= association.model2.plural_name %>].nil?
@@ -97,11 +94,9 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
       params[:<%= @model.object_name %>].delete :password_confirmation
     end
   <%- end -%>
-    saved_ok = @<%= @model.singular_name %>.update_attributes(params[:<%= @model.to_params %>])
-  <%- if @entity.ajax? -%>
-    @system_notice = t('<%= @model.plural_name %>.update_success') if saved_ok
-    load_list # loads all <%= @model.plural_name %> to display in the list
-  <%- end -%>
+    @<%= @model.singular_name %>.attributes = params[:<%= @model.to_params %>]
+    saved_ok = @<%= @model.singular_name %>.save
+    @system_notice = t('<%= @model.plural_name %>.notice.update') if saved_ok
   
   <%- @model.associations.select{|a| a.has_and_belongs_to_many? and a.composition?}.each do |association| -%>
     unless params[:<%= association.model2.plural_name %>].nil?
@@ -116,8 +111,8 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
     <%- if @entity.ajax? -%>
       format.js
     <%- else -%>
-      if @<%= @model.singular_name %>.update_attributes(params[:<%= @model.object_name %>])
-        format.html { redirect_to <%= @model.object_name.pluralize %>_path, notice: t('<%= @model.plural_name %>.update_success') }
+      if saved_ok
+        format.html { redirect_to <%= @model.object_name.pluralize %>_path, notice: @system_notice }
       else
         format.html { render action: "edit" }
       end
@@ -127,10 +122,7 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
 
 	def destroy
     @<%= @model.singular_name %> = <%= @model.klass %>.find(params[:id])
-    @system_notice = t('<%= @model.plural_name %>.destroy_success') if @<%= @model.singular_name %>.destroy
-  <%- if @entity.ajax? -%>
-    load_list # loads all <%= @model.plural_name %> to display in the list
-  <%- end -%>
+    @system_notice = t('<%= @model.plural_name %>.notice.destroy') if @<%= @model.singular_name %>.destroy
     
     respond_to do |format|
     <%- if @entity.ajax? -%>
@@ -142,9 +134,4 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
 	end
 	
 	
-	private
-		def load_list
-			@<%= @model.plural_name %> = <%= @model.klass %>.paginate :page => 1
-		end
-
 end
