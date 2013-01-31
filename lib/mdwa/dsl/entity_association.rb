@@ -5,7 +5,7 @@ module MDWA
     class EntityAssociation
       
       attr_accessor :source, :destination, :destination_view
-      attr_accessor :name, :type, :composition, :description, :skip_views, :style
+      attr_accessor :name, :type, :composition, :description, :skip_views, :options
       
       ACCEPTED_TYPES = [:one_to_many, :many_to_one, :one_to_one, :one_to_one_not_navigable, :many_to_many]
       
@@ -13,6 +13,7 @@ module MDWA
         self.source = source
         self.composition = false
         self.skip_views = false
+        self.options = {}
       end
       
       #
@@ -31,7 +32,14 @@ module MDWA
       def skip_views!
         self.skip_views = true
       end
-      
+
+      #
+      # Return the model association generator.
+      #
+      def to_model_association
+        self.source.generator_model.associations.select{ |m_assoc| m_assoc.model2.name.underscore == self.name.underscore }.first
+      end
+
       #
       # Return the mapped type for the code generation.
       #

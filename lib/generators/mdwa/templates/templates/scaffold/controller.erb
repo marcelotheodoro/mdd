@@ -11,7 +11,10 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
 
   def index
     conditions = []
-    <%- atributos_com_filtro = @entity.attributes.values.select {|attr| attr.options[:filtered]} -%>
+    <%- 
+    atributos_com_filtro = @entity.attributes.values.select {|attr| attr.options[:filtered]} 
+    associacoes_com_filtro = @entity.associations.values.select {|assoc| assoc.options[:filtered]}
+    -%>
     <%- if !atributos_com_filtro.count.zero? -%>
       <%- atributos_com_filtro.each do |atributo| -%>
         <%- if [:integer, :float, :decimal, :boolean].include? atributo.type.to_sym  -%>
@@ -28,6 +31,10 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
     conditions << "(<%= @model.plural_name %>.<%= atributo.name %> <= '#{params[:<%= atributo.name %>_1].to_date.end_of_day}')" if params[:<%= atributo.name %>_0].blank? and !params[:<%= atributo.name %>_1].blank?
         <%- end -%>
       <%- end -%>
+    <%- end -%>
+
+    <%- associacoes_com_filtro.each do |associacao| -%>
+    conditions << "(<%= @model.plural_name %>.<%= associacao.name %>_id = #{params[:<%= associacao.name %>_id]})" unless params[:<%= associacao.name %>_id].blank?
     <%- end -%>
 
     @<%= @model.plural_name %> = <%= @model.klass %>.paginate :page => params[:page], :conditions => conditions.join(' AND ')

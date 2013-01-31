@@ -84,6 +84,15 @@ module MDWA
 			def has_and_belongs_to_many?
 				return (relation == 'has_and_belongs_to_many')
 			end
+
+
+      def filter_input(destination_field)
+        input = []
+        input << "render '/template/mdwa/autocomplete_tag', :dom_element => '##{self.model2.name.underscore}', :dom_element_id => '##{self.model2.name.underscore}_id', :data => #{model2.klass}.all, :field_name => '#{destination_field}'"
+        input << "text_field_tag :#{self.model2.name.underscore}"
+        input << "hidden_field_tag :#{self.model2.name.underscore}_id"
+        return input
+      end
       
     end
     

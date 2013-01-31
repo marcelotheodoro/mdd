@@ -15,13 +15,27 @@
 			<div class="yui3-g">
 				<%%= form_tag <%= @model.object_name.pluralize %>_path, :method => :get, :remote => true, :id => '<%= @model.plural_name %>_filter_form' do %>
 
-				<%- atributos_com_filtro = @entity.attributes.values.select {|attr| attr.options[:filtered]} -%>
-				<%- if !atributos_com_filtro.count.zero? -%>
+				<%- 
+				atributos_com_filtro = @entity.attributes.values.select {|attr| attr.options[:filtered]}
+				associacoes_com_filtro = @entity.associations.values.select {|assoc| assoc.options[:filtered]}
+				-%>
+				<%- if !atributos_com_filtro.count.zero? or !associacoes_com_filtro.count.zero? -%>
 					<%- atributos_com_filtro.each do |atributo| -%>
 						<div class="yui3-u-1-5">
 							<div class="field">
 								<%%= label_tag :<%= atributo.name %>, t('<%= @model.plural_name %>.filtros.<%= atributo.name %>') %>
 								<%- atributo.to_model_attribute.filter_input.each do |input| -%>
+									<%%= <%= input %> %>
+								<%- end -%>
+							</div>
+						</div>
+					<%- end -%>
+
+					<%- associacoes_com_filtro.each do |associacao| -%>
+						<div class="yui3-u-1-5">
+							<div class="field">
+								<%%= label_tag :<%= associacao.name %>, t('<%= @model.plural_name %>.filtros.<%= associacao.name %>') %>
+								<%- associacao.to_model_association.filter_input(associacao.options[:filter_field]).each do |input| -%>
 									<%%= <%= input %> %>
 								<%- end -%>
 							</div>
