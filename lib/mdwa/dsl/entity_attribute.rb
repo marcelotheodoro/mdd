@@ -40,6 +40,10 @@ module MDWA
         "#{name}:#{type}"
       end
       
+      def to_model_attribute
+        self.entity.generator_model.attributes.select{ |m_attr| m_attr.name == self.name }.first
+      end
+
     end
     
   end

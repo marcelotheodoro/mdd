@@ -72,10 +72,11 @@ module MDWA
       #
       def after_declaration
         
+        # include rails default attributes
+        self.attribute('id', 'integer') if self.attributes['id'].blank?
+        self.attribute('created_at', 'datetime') if self.attributes['created_at'].blank?
+        self.attribute('updated_at', 'datetime') if self.attributes['updated_at'].blank?
         # if it's a user and have no attributes, include "name" to prevent errors
-        self.attribute('id', 'integer')
-        self.attribute('created_at', 'datetime')
-        self.attribute('updated_at', 'datetime')
         if user?
           self.attribute('name', 'string')
           self.attribute('email', 'string')

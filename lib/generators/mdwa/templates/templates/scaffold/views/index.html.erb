@@ -14,6 +14,29 @@
 		<div class="filtros">
 			<div class="yui3-g">
 				<%%= form_tag <%= @model.object_name.pluralize %>_path, :method => :get, :remote => true, :id => '<%= @model.plural_name %>_filter_form' do %>
+
+				<%- atributos_com_filtro = @entity.attributes.values.select {|attr| attr.options[:filtered]} -%>
+				<%- if !atributos_com_filtro.count.zero? -%>
+					<%- atributos_com_filtro.each do |atributo| -%>
+						<div class="yui3-u-1-5">
+							<div class="field">
+								<%%= label_tag :<%= atributo.name %>, t('<%= @model.plural_name %>.filtros.<%= atributo.name %>') %>
+								<%- atributo.to_model_attribute.filter_input.each do |input| -%>
+									<%%= <%= input %> %>
+								<%- end -%>
+							</div>
+						</div>
+					<%- end -%>
+
+					<!-- Botão buscar -->
+					<div class="yui3-u-1-5">
+						<div class="field">
+							<label>&nbsp;</label>
+							<%%= submit_tag t('system.search_button'), :class => :button %>
+						</div>
+					</div>
+				<%- end -%>
+
 				<%% end %>
 			</div>
 		</div>

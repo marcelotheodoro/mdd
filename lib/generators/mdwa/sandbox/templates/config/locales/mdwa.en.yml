@@ -21,6 +21,9 @@ en:
     add_by_ajax: "Add new %{name}"
     edit_by_ajax: "Edit %{name}"
     no_file: "No file"
+    yes: "Yes"
+    no: "No"
+    both: "Both"
 
   administrators:
     edit_title: "Editing account: %{name}"

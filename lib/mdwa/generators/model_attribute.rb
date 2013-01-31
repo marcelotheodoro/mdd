@@ -52,33 +52,54 @@ module MDWA
 
 			def migration_field
 				@migration_field ||= case self.type.to_s.to_sym
-		          when :string, :file, :password  then 'string'
-		          when :boolean                   then 'boolean'
-		          when :date 				              then 'date'
-		          when :datetime                  then 'datetime'
-		          when :decimal, :float           then 'decimal'
-		          when :text 				              then 'text'
-		          when :time 				              then 'time'
-		          when :timestamp 			          then 'timestamp'
-		          else
-		            'integer'
-		        end
+          when :string, :file, :password  then 'string'
+          when :boolean                   then 'boolean'
+          when :date 				              then 'date'
+          when :datetime                  then 'datetime'
+          when :decimal, :float           then 'decimal'
+          when :text 				              then 'text'
+          when :time 				              then 'time'
+          when :timestamp 			          then 'timestamp'
+          else
+            'integer'
+        end
 			end
 
 			def form_field
-		        @form_field ||= case self.type.to_s.to_sym
-		          when :integer              then 'number_field'
-		          when :float, :decimal      then 'text_field'
-		          when :file				         then 'file_field'
-		          when :time                 then 'time_select'
-		          when :datetime, :timestamp then 'datetime_select'
-		          when :date                 then 'date_select'
-		          when :text                 then 'text_area'
-		          when :boolean              then 'check_box'
-	            when :password             then 'password_field'  
-		          else
-		            'text_field'
-		        end
+        @form_field ||= case self.type.to_s.to_sym
+          when :integer              then 'number_field'
+          when :float, :decimal      then 'text_field'
+          when :file				         then 'file_field'
+          when :time                 then 'time_select'
+          when :datetime, :timestamp then 'datetime_select'
+          when :date                 then 'date_select'
+          when :text                 then 'text_area'
+          when :boolean              then 'check_box'
+          when :password             then 'password_field'  
+          else
+            'text_field'
+        end
+			end
+
+			def filter_input
+				input = []
+        case self.type.to_s.to_sym
+          when :text, :string then
+          	input << "text_field_tag :#{self.name}"
+         	when :integer, :float, :decimal then
+          	input << "text_field_tag :#{self.name}, '', :onkeypress => \"mascara(this, checaNumero)\", :maxlength => 10"
+          when :file, :password then 
+          	input << 'No possible filter for file or password.'
+          when :time then 
+          	input << 'time_select'
+          when :datetime, :timestamp, :date then 
+          	input << "text_field_tag :#{self.name}_0, '', :class => :datepicker, :onkeypress => \"mascara(this, checaData)\", :maxlength => 10"
+          	input << "text_field_tag :#{self.name}_1, '', :class => :datepicker, :onkeypress => \"mascara(this, checaData)\", :maxlength => 10"
+          when :boolean then
+          	input << "select_tag :#{self.name}, options_for_select([[t('system.yes'), 1], [t('system.no'), 0]]), :prompt => t('system.both')"
+          else
+          	input << "text_field_tag :#{self.name}"
+        end
 			end
 
 			def belongs_to?
