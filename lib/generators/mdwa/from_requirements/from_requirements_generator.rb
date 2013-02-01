@@ -24,11 +24,11 @@ module Mdwa
         inside Rails.root do
           require_all MDWA::DSL::REQUIREMENTS_PATH
         end
-        # select entities that will be generated
+        # select requirements that will be generated
         if defined_requirements.count.zero?
           @requirements = MDWA::DSL.requirements.all
         else
-          @requirements = defined_requirements.collect{ |r| MDWA::DSL.requirement(r) }
+          @requirements = defined_requirements.collect{ |requirement| MDWA::DSL.requirement(requirement.to_sym) }
         end
 
       end
