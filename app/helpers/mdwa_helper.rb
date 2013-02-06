@@ -3,11 +3,18 @@ module MdwaHelper
   
   def pagination_footer( object_list )
     html = []
-    html.push '<div id="pagination">'
-    html.push will_paginate object_list
-    html.push '</div></div>'
+    html << '<div id="pagination">'
+    html << '<span class="exibir">Exibir</span>'
+    html << select_tag(:per_page, options_for_select([[10, 10], [50,50], [100,100], ['- Todos -', object_list.count]], params[:per_page]), :local_url => local_url(request, params))
+    html << will_paginate(object_list)
+    html << '</div>'
     
     return html.join('').html_safe
+  end
+
+  def local_url(request, params)
+    glue = !request.url.include?("?") ? "?" : "&"
+    return (request.url + glue + params.select{|k,v| k != :per_page}.collect {|k, v| "#{k}=#{v}"}.join('&'))
   end
 
   def encode_results_to_autocomplete(results, field_name)

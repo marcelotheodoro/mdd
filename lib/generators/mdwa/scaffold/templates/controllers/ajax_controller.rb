@@ -4,7 +4,7 @@ class <%= @model.controller_name %>Controller < <%= @inherit_controller || 'Appl
   load_and_authorize_resource :class => "<%= @model.klass %>"
 
 	def index
-		@<%= @model.plural_name %> = <%= @model.klass %>.paginate :page => params[:page]
+		@<%= @model.plural_name %> = <%= @model.klass %>.paginate :page => params[:page], :per_page => params[:per_page]
 
     respond_to do |format|
       format.html

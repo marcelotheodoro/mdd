@@ -78,10 +78,10 @@ module MDWA
         self.attribute('updated_at', 'datetime') if self.attributes['updated_at'].blank?
         # if it's a user and have no attributes, include "name" to prevent errors
         if user?
-          self.attribute('name', 'string')
-          self.attribute('email', 'string')
-          self.attribute('password', 'password')
-          self.attribute('password_confirmation', 'password')
+          self.attribute('name', 'string') if self.attributes['name'].blank?
+          self.attribute('email', 'string') if self.attributes['email'].blank?
+          self.attribute('password', 'password') if self.attributes['password'].blank?
+          self.attribute('password_confirmation', 'password') if self.attributes['password_confirmation'].blank?
         end
         
       end

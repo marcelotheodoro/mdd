@@ -5,7 +5,7 @@ class Add<%= @model.attributes.collect{|a| a.name.camelize}.join('') %>ToUsers <
 		<%- @model.attributes.each do |attr| -%>
 			<%- if attr.type.to_sym != :file -%>
 				<%- if attr.belongs_to? or attr.nested_one? -%>
-				add_column :users, :<%= attr.name.foreign_key %>, :integer
+				add_column :users, :<%= attr.name %>, :integer
 				<%- elsif !attr.references? -%>
 				add_column :users, :<%= attr.name %>, :<%= attr.migration_field %>
 	      <%- end -%>
@@ -22,7 +22,7 @@ class Add<%= @model.attributes.collect{|a| a.name.camelize}.join('') %>ToUsers <
 		<%- @model.attributes.each do |attr| -%>
 			<%- if attr.type.to_sym != :file -%>
 				<%- if attr.belongs_to? or attr.nested_one? -%>
-				remove_column :users, :<%= attr.name.foreign_key %>
+				remove_column :users, :<%= attr.name %>
 				<%- elsif !attr.references? -%>
 				remove_column :users, :<%= attr.name %>
 	      <%- end -%>
