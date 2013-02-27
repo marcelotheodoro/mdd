@@ -48,30 +48,34 @@ module Mdwa
       def generate_model_controller_helper_views
         @entities.each do |entity|
           generator_model = entity.generator_model
-          
-          namespaces = Dir.glob("#{Rails.root}/#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/*").select{|d| File.directory?(d) and File.basename(d) != 'views'}
+
+          #
+          # Para cada namespace, gera seu código  
+          #
+          # Pasta onde o código gerado vai ser colocado
+          # Namespace 'frontend' é o público e gera código nas raízes do Rails        
+          namespaces = Dir.glob("#{Rails.root}/#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/*").select{|d| File.directory?(d)}.collect {|n| File.basename(n)}
           if !namespaces.count.zero?
             namespaces.each do |namespace|
-              mdwa_template "#{entity.file_name}/#{File.basename namespace}/model.erb", "app/models/#{File.basename namespace}/#{generator_model.singular_name}.rb"
-              mdwa_template "#{entity.file_name}/#{File.basename namespace}/helper.erb", "app/helpers/#{File.basename namespace}/#{generator_model.plural_name}_helper.rb"
-              mdwa_template "#{entity.file_name}/#{File.basename namespace}/controller.erb", "app/controllers/#{File.basename namespace}/#{generator_model.plural_name}_controller.rb"
-              Dir.glob("#{namespace}/views/*").each do |file|
+
+              namespace_destino = (namespace != 'frontend') ? namespace : ''
+              templates_deste_namespace = MDWA::DSL::TEMPLATES_PATH + entity.file_name + '/' + namespace + '/'
+
+              # Gera model, controllers e helper
+              mdwa_template "#{entity.file_name}/#{namespace}/model.erb", "app/models/#{namespace_destino}/#{generator_model.singular_name}.rb" if File.exists?(templates_deste_namespace + 'model.erb')
+              mdwa_template "#{entity.file_name}/#{namespace}/helper.erb", "app/helpers/#{namespace_destino}/#{generator_model.plural_name}_helper.rb"  if File.exists?(templates_deste_namespace + 'helper.erb')
+              mdwa_template "#{entity.file_name}/#{namespace}/controller.erb", "app/controllers/#{namespace_destino}/#{generator_model.plural_name}_controller.rb"  if File.exists?(templates_deste_namespace + 'controller.erb')
+              
+              # Gera as views
+              Dir.glob("#{templates_deste_namespace}/views/*").each do |file|
                 file_name = File.basename(file)
-                mdwa_template "#{entity.file_name}/#{File.basename namespace}/views/#{file_name}", "app/views/#{File.basename namespace}/#{generator_model.plural_name}/#{file_name}"
+                mdwa_template "#{entity.file_name}/#{namespace}/views/#{file_name}", "app/views/#{namespace_destino}/#{generator_model.plural_name}/#{file_name}"
               end
-            end
-          else
-            entity_name = "#{Rails.root}/#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}"
-            mdwa_template "#{entity_name}/model.rb", "app/models/#{generator_model.space}/#{generator_model.singular_name}.rb"
-            mdwa_template "#{entity_name}/helper.rb", "app/helpers/#{generator_model.space}/#{generator_model.plural_name}_helper.rb"
-            mdwa_template "#{entity_name}/controller.rb", "app/controllers/#{generator_model.space}/#{generator_model.plural_name}_controller.rb"
-            Dir.glob("#{entity_name}/views/*").each do |file|
-              file_name = File.basename(file)
-              mdwa_template "#{entity.file_name}/views/#{file_name}", "app/views/#{generator_model.space}/#{generator_model.plural_name}/#{file_name}"
-            end
-          end
-        end
-      end
+
+            end # nm.each
+          end # if nm == 0
+        end # each
+      end # def
       
       def generate_routes
         

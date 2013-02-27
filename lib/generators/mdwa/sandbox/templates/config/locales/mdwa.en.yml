@@ -12,6 +12,7 @@ en:
     logged_info_edit_account: "My Account"
     cancel_button: "Cancel"
     save_button: "Save"
+    search_button: "Search"
     index_id: "ID"
     index_edit: "Edit"
     index_edit_label: "Edit"
