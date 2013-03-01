@@ -250,10 +250,10 @@ module Mdwa
                 @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type}
               else
                 # se o atributo é derivado de file e não existe o file na entidade, apaga
-                @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type} if column.name.ends_with?("_file_name") and entity.attributes[column.name.delete("_file_name")].nil?
-                @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type} if column.name.ends_with?("_content_type") and entity.attributes[column.name.delete("_content_type")].nil?
-                @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type} if column.name.ends_with?("_file_size") and entity.attributes[column.name.delete("_file_size")].nil?
-                @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type} if column.name.ends_with?("_updated_at") and entity.attributes[column.name.delete("_updated_at")].nil?
+                @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type} if column.name.ends_with?("_file_name") and entity.attributes[column.name.gsub("_file_name", '')].nil?
+                @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type} if column.name.ends_with?("_content_type") and entity.attributes[column.name.gsub("_content_type", '')].nil?
+                @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type} if column.name.ends_with?("_file_size") and entity.attributes[column.name.gsub("_file_size", '')].nil?
+                @changes << {:entity => entity, :type => 'remove_column', :column => column.name, :attr_type => column.type} if column.name.ends_with?("_updated_at") and entity.attributes[column.name.gsub("_updated_at", '')].nil?
               end
             # attribute exists in model and entity, but changed type
             elsif entity_attribute.type.to_sym != column.type.to_sym
@@ -266,7 +266,7 @@ module Mdwa
           # new attributes
           # no column with that name -> column must be added
           entity.attributes.each do |key, attr|
-            # se a entidade for file e não existir seus atributos no banco de dados, corrige
+            # se o atributo for file e não existir seus atributos no banco de dados, corrige
             if attr.type.to_sym == :file
               @changes << {:entity => entity, :type => 'add_column', :column => "#{attr.name}_file_name", :attr_type => 'string'} if model_class.columns.select{|c| c.name == "#{attr.name}_file_name"}.count.zero?
               @changes << {:entity => entity, :type => 'add_column', :column => "#{attr.name}_content_type", :attr_type => 'string'} if model_class.columns.select{|c| c.name == "#{attr.name}_content_type"}.count.zero?
@@ -336,14 +336,7 @@ module Mdwa
           migration_string << "\n\tdef self.up"
           migration_string << "\t\tcreate_table :#{generator_model.plural_name} do |t|"
           generator_model.attributes.select{|a| !['id', 'created_at', 'updated_at'].include?(a.name)}.each do |attr|
-            if attr.type.to_sym != :file
-              migration_string << "\t\t\tt.#{attr.migration_field} :#{attr.name}"
-            else
-              migration_string << "\t\t\tt.string :#{attr.name}_file_name"
-              migration_string << "\t\t\tt.string :#{attr.name}_content_type"
-              migration_string << "\t\t\tt.integer :#{attr.name}_file_size"
-              migration_string << "\t\t\tt.datetime :#{attr.name}_updated_at"
-            end
+            migration_string << "\t\t\tt.#{attr.migration_field} :#{attr.name}"
         	end
         	generator_model.associations.each do |assoc|
         	  if assoc.belongs_to? or assoc.nested_one?

@@ -52,7 +52,7 @@ module MDWA
 
 			def migration_field
 				@migration_field ||= case self.type.to_s.to_sym
-          when :string, :file, :password  then 'string'
+          when :string, :password         then 'string'
           when :boolean                   then 'boolean'
           when :date 				              then 'date'
           when :datetime                  then 'datetime'
@@ -60,6 +60,7 @@ module MDWA
           when :text 				              then 'text'
           when :time 				              then 'time'
           when :timestamp 			          then 'timestamp'
+          when :file                      then 'attachment'
           else
             'integer'
         end

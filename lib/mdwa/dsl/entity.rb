@@ -92,7 +92,7 @@ module MDWA
         attr = EntityAttribute.new(self)
         attr.name = name
         attr.type = type
-        attr.default = true if options.include?(:default)
+        attr.default = true if options.include?(:default) and options[:default]
         attr.options = options
         attr.raise_errors_if_invalid!
         self.attributes[attr.name] = attr
