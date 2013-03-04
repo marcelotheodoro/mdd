@@ -3,7 +3,7 @@
 <div class="field">
    	<%%= f.label :<%= attr.name %>, t('<%= @model.plural_name %>.edit.<%= attr.name %>') %> 
 	<%- if attr.type.to_sym == :file -%>
-	<%% unless @<%= @model.singular_name %>.new_record? %>
+	<%% if !@<%= @model.singular_name %>.new_record? and !@<%= @model.singular_name %>.<%= attr.name %>.blank? %>
 		<span><%%= link_to image_tag(file_icon_path(@<%= @model.singular_name %>.<%= attr.name %>_file_name)), @<%= @model.singular_name %>.<%= attr.name %>.url, :target => '_blank' %></span>
 	<%% end %>
 	<%- end -%>
