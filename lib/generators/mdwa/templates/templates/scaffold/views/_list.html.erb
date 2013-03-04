@@ -2,13 +2,13 @@
 <table class="list">
   <thead>
       <th class="list_show"><%%= t '<%= @model.plural_name %>.index.id' %></th>
-      <th class="list_edit"><%%= t '<%= @model.plural_name %>.index.edit' %></th>
     <%- @model.attributes.select{|a| !['id', 'created_at', 'updated_at'].include?(a.name)}.each do |attr| -%>
       <th><%%= t '<%= @model.plural_name %>.index.<%= attr.name %>' %></th>
     <%- end -%>
     <%- @model.associations.each do |assoc| -%>
       <th><%%= t '<%= @model.plural_name %>.index.<%= assoc.model2.singular_name %>' %></th>
     <%- end -%>
+      <th class="list_edit"><%%= t '<%= @model.plural_name %>.index.edit' %></th>
       <th class="list_remove"><%%= t '<%= @model.plural_name %>.index.remove' %></th>
   </thead>
 
@@ -17,9 +17,7 @@
     <td class="list_show">
 		<%%= link_to <%= @model.singular_name %>.id, <%= @model.object_name %>_path(<%= @model.singular_name %>) <%= ", :class => 'lightbox various fancybox.ajax'" if @entity.ajax %> %>
 	</td>
-  	<td class="list_edit">
-		<%%= link_to t('<%= @model.plural_name %>.index.edit_label'), edit_<%= @model.object_name %>_path(<%= @model.singular_name %>) <%= ", :class => 'lightbox various fancybox.ajax'" if @entity.ajax %> %>
-	</td>
+
   <%- @model.attributes.select{|a| a.name != 'id' and a.name != 'created_at' and a.name != 'updated_at'}.each do |attr| -%>
 	<td>
 		<%- if attr.type.to_sym == :file -%>
@@ -47,6 +45,9 @@
       <%- end -%>
     </td>
     <%- end -%>
+    <td class="list_edit">
+      <%%= link_to t('<%= @model.plural_name %>.index.edit_label'), edit_<%= @model.object_name %>_path(<%= @model.singular_name %>) <%= ", :class => 'lightbox various fancybox.ajax'" if @entity.ajax %> %>
+    </td>
     <td class="list_remove">
 		<%%= link_to t('<%= @model.plural_name %>.index.remove_label'), <%= @model.to_route_object %>, :method => :delete, <%= ':remote => true,' if @entity.ajax %> :data => {:confirm => t('<%= @model.plural_name %>.index.confirm_deletion')} %>
 	</td>
