@@ -2,6 +2,7 @@
 module MdwaHelper
   
   def pagination_footer( object_list )
+
     html = []
     html << '<div id="pagination">'
     html << '<span class="exibir">Exibir</span>'
