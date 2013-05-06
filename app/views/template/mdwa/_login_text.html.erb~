@@ -1,4 +1,0 @@
-<div id="login_session_text">
-	<%= image_tag 'draft_escuro.png' %>
-	<%= t('login.login_text_pre_form').html_safe %>
-</div>
