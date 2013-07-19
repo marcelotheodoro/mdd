@@ -1,12 +1,18 @@
-# -*- encoding : utf-8 -*-
 module MdwaHelper
   
   def pagination_footer( object_list )
 
+    options = [
+      [WillPaginate.per_page, WillPaginate.per_page],
+      [WillPaginate.per_page*2, WillPaginate.per_page*2],
+      [WillPaginate.per_page*3, WillPaginate.per_page*3],
+      [I18n.t('will_paginate.all'), object_list.count]
+    ]
+
     html = []
     html << '<div id="pagination">'
-    html << '<span class="exibir">Exibir</span>'
-    html << select_tag(:per_page, options_for_select([[10, 10], [50,50], [100,100], ['- Todos -', object_list.count]], params[:per_page]), :local_url => local_url(request, params))
+    html << '<span class="exibir">' + I18n.t('will_paginate.show_label') + '</span>'
+    html << select_tag(:per_page, options_for_select(options, params[:per_page]), :local_url => local_url(request, params))
     html << will_paginate(object_list)
     html << '</div>'
     
