@@ -4,8 +4,8 @@ module MdwaHelper
 
     options = [
       [WillPaginate.per_page, WillPaginate.per_page],
-      [WillPaginate.per_page*2, WillPaginate.per_page*2],
-      [WillPaginate.per_page*3, WillPaginate.per_page*3],
+      [(WillPaginate.per_page*2.5).to_i, (WillPaginate.per_page*2.5).to_i],
+      [(WillPaginate.per_page*5).to_i, (WillPaginate.per_page*5).to_i],
       [I18n.t('will_paginate.all'), object_list.count]
     ]
 
