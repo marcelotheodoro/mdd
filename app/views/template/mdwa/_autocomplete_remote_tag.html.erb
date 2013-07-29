@@ -1,0 +1,24 @@
+<script type="text/javascript">
+  $(function() {
+    $('<%= dom_element %>').autocomplete({
+        minLength: 0,
+        source: '<%= source_path %>',
+        focus: function( event, ui ) {
+          $( '<%= dom_element %>' ).val( ui.item.label );
+          return false;
+        },
+        select: function( event, ui ) {
+          $( '<%= dom_element %>' ).val( ui.item.label );
+          $( '<%= dom_element_id %>' ).val( ui.item.value ).trigger('change');
+          return false;
+        }
+    });
+
+    $(document).on('blur', "<%= dom_element %>", function() {
+      if($(this).val() == "" ) {
+        $('<%= dom_element_id %>').val("").trigger('change');
+      }
+    });
+  });
+
+</script>
