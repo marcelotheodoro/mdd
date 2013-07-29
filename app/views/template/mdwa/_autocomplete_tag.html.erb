@@ -14,7 +14,7 @@
         }
     });
 
-    $("<%= dom_element %>").on("blur", function() {
+    $(document).on('blur', "<%= dom_element %>", function() {
       if($(this).val() == "" ) {
         $('<%= dom_element_id %>').val("").trigger('change');
       }

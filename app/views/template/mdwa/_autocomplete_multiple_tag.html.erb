@@ -28,7 +28,7 @@
 				return false;
 			},
 			select: function( event, ui ) {
-			  	$(this).val('');
+		  	$(this).val('');
 				$('<%= ul %>').append( "<li><span>" + ui.item.label + '</span><input type="hidden" value="' + ui.item.value + '" id="<%= dom_element_id %>_' + ui.item.value + '" name="<%= dom_element_id %>[' + ui.item.value + ']" /><a href="#" class="<%= dom_element_id %>_remove_autocomplete">(X)</a></li>' );
 				
 				// call the callback function if exists
@@ -40,7 +40,7 @@
 			}
 	    });
 	
-	  $( ".<%= dom_element_id %>_remove_autocomplete").on( "click", function() {
+	  $(document).on('click', ".<%= dom_element_id %>_remove_autocomplete", function() {
 	    $(this).parent().remove();
 	  });
   });
