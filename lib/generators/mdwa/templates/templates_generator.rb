@@ -69,6 +69,9 @@ module Mdwa
           copy_with_header 'scaffold/views/new.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/new.html.erb", entity.name
           copy_with_header 'scaffold/views/show.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/show.html.erb", entity.name
           copy_with_header 'scaffold/views/update.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/update.js.erb", entity.name
+
+          # menu
+          copy_with_header 'scaffold/views/menu/menu.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/menu/menu.html.erb", entity.name
         end
       end
         

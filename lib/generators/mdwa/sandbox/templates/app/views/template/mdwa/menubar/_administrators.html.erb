@@ -1,5 +1,4 @@
 <% if can? :index, A::Administrator %>
-<ul>
   <li>
     <%= link_to a_administrators_path do %><span><%= t 'menu.administrators' %></span><% end %>
     <% if can? :create, A::Administrator %>
@@ -8,5 +7,4 @@
       </ul>
     <% end %>
   </li>
-</ul>
 <% end %>

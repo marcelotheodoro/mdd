@@ -67,10 +67,12 @@ module Mdwa
               mdwa_template "#{entity.file_name}/#{namespace}/controller.erb", "app/controllers/#{namespace_destino}/#{generator_model.plural_name}_controller.rb"  if File.exists?(templates_deste_namespace + 'controller.erb')
               
               # Gera as views
-              Dir.glob("#{templates_deste_namespace}/views/*").each do |file|
+              Dir.glob("#{templates_deste_namespace}/views/*").select{|d| !File.directory?(d)}.each do |file|
                 file_name = File.basename(file)
                 mdwa_template "#{entity.file_name}/#{namespace}/views/#{file_name}", "app/views/#{namespace_destino}/#{generator_model.plural_name}/#{file_name}"
               end
+              # Item de menu
+              mdwa_template "#{entity.file_name}/#{namespace}/views/menu/menu.html.erb", "app/views/template/mdwa/menubar/_#{generator_model.plural_name}.html.erb"
 
             end # nm.each
           end # if nm == 0
@@ -156,6 +158,9 @@ module Mdwa
           lines <<  "      show: \"#{model.singular_name.humanize}\""
           lines <<  "      new: \"New #{model.singular_name.humanize}\""
           lines <<  "      edit: \"Edit #{model.singular_name.humanize}\""
+          lines <<  "    menu:"
+          lines <<  "      index: \"#{model.plural_name.humanize}\""
+          lines <<  "      new: \"New #{model.singular_name.humanize}\""
           # INDEX
           lines <<  "    index:"
           lines <<  "      add: 'Add'"

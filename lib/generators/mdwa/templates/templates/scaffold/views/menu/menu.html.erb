@@ -1,0 +1,13 @@
+===entity_code===
+<%% if can? :index, <%= @model.klass %> %>
+  <li>
+    <%%= link_to <%= @model.object_name.pluralize %>_path do %><span><%%= t '<%= @model.plural_name %>.menu.index' %></span><%% end %>
+    <%- unless @entity.ajax? -%>
+    <%% if can? :create, <%= @model.klass %> %>
+      <ul class="submenu">
+        <li><%%= link_to new_<%= @model.object_name %>_path do %><span><%%= t( '<%= @model.plural_name %>.menu.new' ) %></span><%% end %></li>
+      </ul>
+    <%% end %>
+    <%- end -%>
+  </li>
+<%% end %>
