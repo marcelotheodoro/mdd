@@ -20,7 +20,7 @@
 	<div class="field">
 		<%%= f.label :<%= assoc.model2.singular_name.foreign_key %>, t('<%= @model.plural_name %>.edit.<%= assoc.model2.singular_name %>') %> 
 		<%%= f.select :<%= assoc.model2.singular_name.foreign_key %>, 
-			  options_for_select( <%= assoc.model2.klass %>.order('<%= assoc.reference_field %> ASC').collect{ |c| [c.<%= assoc.reference_field %>, c.id] }, f.object.<%= assoc.model2.singular_name.foreign_key %> ), 
+			  options_for_select( <%= assoc.model2.klass %>.not_removed.order('<%= assoc.reference_field %> ASC').collect{ |c| [c.<%= assoc.reference_field %>, c.id] }, f.object.<%= assoc.model2.singular_name.foreign_key %> ), 
 				:prompt => t('<%= @model.plural_name %>.edit.<%= assoc.model2.singular_name %>_select') %>
 	</div>
 </div>

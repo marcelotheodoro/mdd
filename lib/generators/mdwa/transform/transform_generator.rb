@@ -347,7 +347,12 @@ module Mdwa
           migration_string << "\n\tdef self.up"
           migration_string << "\t\tcreate_table :#{generator_model.plural_name} do |t|"
           generator_model.attributes.select{|a| !['id', 'created_at', 'updated_at'].include?(a.name)}.each do |attr|
-            migration_string << "\t\t\tt.#{attr.migration_field} :#{attr.name}"
+            if attr.name.to_sym == :removed
+              migration_string << "\t\t\tt.#{attr.migration_field} :#{attr.name}, default: false"
+              migration_string << "\t\t\tadd_index :#{attr.name}"
+            else
+              migration_string << "\t\t\tt.#{attr.migration_field} :#{attr.name}"
+            end
         	end
         	generator_model.associations.each do |assoc|
         	  if assoc.belongs_to? or assoc.nested_one?

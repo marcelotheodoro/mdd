@@ -37,7 +37,7 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
     conditions << "(<%= @model.plural_name %>.<%= associacao.name %>_id = #{params[:<%= associacao.name %>_id]})" unless params[:<%= associacao.name %>_id].blank?
     <%- end -%>
 
-    @<%= @model.plural_name %> = <%= @model.klass %>.where(conditions.join(' AND '))
+    @<%= @model.plural_name %> = <%= @model.klass %>.not_removed.where(conditions.join(' AND '))
     unless params[:skip_pagination]
       @<%= @model.plural_name %> = @<%= @model.plural_name %>.paginate page: params[:page], per_page: params[:per_page]
     end

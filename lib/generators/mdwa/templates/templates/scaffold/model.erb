@@ -5,51 +5,59 @@ class <%= @model.klass %> < <%= !@entity.user? ? 'ActiveRecord::Base' : 'User' %
 
 <%- # model attributes -%>
 <%- unless @model.attributes.count.zero? -%>
-    attr_accessible <%= @model.attributes.select{|a| !['id', 'created_at', 'updated_at', 'removed'].include?(a.name)}.collect {|a| ":" + a.name }.join(', ') %>
+  attr_accessible <%= @model.attributes.select{|a| !['id', 'created_at', 'updated_at', 'removed'].include?(a.name)}.collect {|a| ":" + a.name }.join(', ') %>
 <%- end -%>
 <%- # paperclip file uploads -%>
 <%- unless @model.attributes.select{|attr| attr.type.to_sym == :file}.count.zero? -%>
-    has_attached_file <%= @model.attributes.select{|attr| attr.type.to_sym == :file}.collect {|a| ":" + a.name }.join(', ') %>
+  has_attached_file <%= @model.attributes.select{|attr| attr.type.to_sym == :file}.collect {|a| ":" + a.name }.join(', ') %>
 <%- end -%>
 
 <%- if @entity.user? -%>
   <%- require_all "#{MDWA::DSL::USERS_PATH}#{@entity.file_name}.rb" -%>
   <%- @roles =  MDWA::DSL.user(@entity.name).nil? ? @roles = [@model.name] : MDWA::DSL.user(@entity.name).user_roles -%>
   <%- @roles.each do |role| -%>
-    after_create :create_<%= role.underscore %>_permission
-    def create_<%= role.underscore %>_permission
-      <%= role.underscore %>_permission = Permission.find_by_name('<%= role.underscore %>')
-      <%= role.underscore %>_permission = Permission.create(:name => '<%= role.underscore %>') if <%= role.underscore %>_permission.nil?
-      self.permissions.push <%= role.underscore %>_permission
-    end
+  after_create :create_<%= role.underscore %>_permission
+  def create_<%= role.underscore %>_permission
+    <%= role.underscore %>_permission = Permission.find_by_name('<%= role.underscore %>')
+    <%= role.underscore %>_permission = Permission.create(:name => '<%= role.underscore %>') if <%= role.underscore %>_permission.nil?
+    self.permissions.push <%= role.underscore %>_permission
+  end
   <%- end -%>
 <%- end -%>
   
 <%- # model associations -%>
 <%- @model.associations.each do |association| -%>
   <%- if association.belongs_to? -%>
-    belongs_to :<%= association.model2.singular_name %>, :class_name => '<%= association.model2.klass %>'
-    attr_accessible :<%= association.model2.singular_name.foreign_key %>
+  belongs_to :<%= association.model2.singular_name %>, :class_name => '<%= association.model2.klass %>'
+  attr_accessible :<%= association.model2.singular_name.foreign_key %>
   <%- end -%>
   <%- if association.has_one? -%>
-    has_one :<%= association.model2.singular_name %>, :class_name => '<%= association.model2.klass %>'
+  has_one :<%= association.model2.singular_name %>, :class_name => '<%= association.model2.klass %>'
   <%- end -%>
   <%- if association.has_many? -%>
-    has_many :<%= association.model2.plural_name %>, :class_name => '<%= association.model2.klass %>'
+  has_many :<%= association.model2.plural_name %>, :class_name => '<%= association.model2.klass %>'
   <%- end -%>
   <%- if association.has_and_belongs_to_many? -%>
-    has_and_belongs_to_many :<%= association.model2.plural_name %>, :join_table => :<%= association.ordered.first.plural_name %>_<%= association.ordered.last.plural_name %>
+  has_and_belongs_to_many :<%= association.model2.plural_name %>, :join_table => :<%= association.ordered.first.plural_name %>_<%= association.ordered.last.plural_name %>
   <%- end -%>
   <%- if association.nested_one? -%>
-    belongs_to :<%= association.model2.singular_name %>, :class_name => '<%= association.model2.klass %>'
-    attr_accessible :<%= association.model2.singular_name %>_attributes, :<%= association.model2.singular_name.foreign_key %>
-    accepts_nested_attributes_for :<%= association.model2.singular_name %>, :allow_destroy => true
+  belongs_to :<%= association.model2.singular_name %>, :class_name => '<%= association.model2.klass %>'
+  attr_accessible :<%= association.model2.singular_name %>_attributes, :<%= association.model2.singular_name.foreign_key %>
+  accepts_nested_attributes_for :<%= association.model2.singular_name %>, :allow_destroy => true
   <%- end -%>
   <%- if association.nested_many? -%>
-    has_many :<%= association.model2.plural_name %>, :class_name => '<%= association.model2.klass %>', :dependent => :destroy
-    attr_accessible :<%= association.model2.plural_name %>_attributes
-    accepts_nested_attributes_for :<%= association.model2.plural_name %>, :allow_destroy => true
+  has_many :<%= association.model2.plural_name %>, :class_name => '<%= association.model2.klass %>', :dependent => :destroy
+  attr_accessible :<%= association.model2.plural_name %>_attributes
+  accepts_nested_attributes_for :<%= association.model2.plural_name %>, :allow_destroy => true
   <%- end -%>
 <%- end -%>
-  
+
+  scope :not_removed, -> {where('removed != 1')}
+
+  <%- # create boolean methods for all boolean attributes %>
+  <%- @model.attributes.select{|attr| attr.type.to_sym == :boolean}.each do |attr| -%>
+  def <%= attr.name %>?
+    <%= attr.name %>
+  end
+  <%- end -%>
 end
