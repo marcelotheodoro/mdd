@@ -137,6 +137,19 @@ a {
           transition: background-position 0.1s linear;
 }
 
+a.export,
+input[type="submit"].export,
+input[type="button"].export,
+button.export {
+  background: none;
+  border:none;
+  cursor: pointer;
+  color: #0000ff;
+  text-decoration:underline;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
 a.cancel {
   background: none;
   color: #ff0000;
@@ -171,8 +184,14 @@ a.remove span {
 
 /* nested_forms buttons */
 a.add_nested_fields {
-  background: url( <%= asset_path 'mdwa/icons/add.png' %>) no-repeat scroll 0 50% padding-box transparent;
-  padding: 0 0 0 20px;
+  background: url( <%= asset_path 'mdwa/icons/add.png' %>) no-repeat scroll 10px 50% padding-box #f2f2f2;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px 4px 4px 4px;
+  display: inline-block;
+  letter-spacing: normal;
+  margin: 10px;
+  padding: 10px 10px 10px 35px;
+  word-spacing: normal;
 }
 
 a.remove_nested_fields {
@@ -292,20 +311,20 @@ table.list td, div.list div.line {
 }
 
 div.list div.head {
-	float:left;
-	width:100%;
-	padding: 8px 0;
+  float:left;
+  width:100%;
+  padding: 8px 0;
 }
 
 div.list {
-	padding: 10px 0;
-	float:left;
+  padding: 10px 0;
+  float:left;
 }
 
 div.list div.line {
-	padding: 10px 0;
-	float:left;
-	width:100%;
+  padding: 10px 0;
+  float:left;
+  width:100%;
 }
 
 .odd_line {
@@ -381,7 +400,8 @@ div.box {
 }
 
 p.descricao {
-  margin: 20px;
+  margin: 10px;
+  font-size: 13px;
 }
 
 .bordered_top {
@@ -401,6 +421,25 @@ p.descricao {
   padding-left: 10px;
   border-left: 1px solid #d2d2d2;
 }
+
+.bordered_right {
+  margin-right: 10px;
+  padding-right: 10px;
+  border-right: 1px solid #d2d2d2;
+}
+
+.bordered_right h3,
+.bordered_left h3,
+.bordered_top h3,
+.bordered_bottom h3 {
+  margin: 0;
+  padding: 0
+}
+
+.bordered_bottom h3 {
+  margin-top: 20px;
+}
+
 
 .botao_direita_titulo {
   margin-top: 8px;
@@ -542,15 +581,19 @@ div.field textarea {
 }
 
 div.topo {
-  padding: 15px 0;
+  background: none repeat scroll 0 0 #F5F5F5;
+  border: 1px solid #DDDDDD;
+  margin-bottom: 20px;
+  padding: 10px;
 }
 
-div.inside div.field input[type="text"],
-div.inside div.field input[type="email"],
-div.inside div.field input[type="number"],
-div.inside div.field input[type="password"],
-div.inside div.field select,
-div.inside div.field textarea {
+
+div.field input[type="text"],
+div.field input[type="email"],
+div.field input[type="number"],
+div.field input[type="password"],
+div.field select,
+div.field textarea {
   width: 100%;
   border: 1px solid #888;
   padding: 4px 0;
@@ -631,4 +674,14 @@ p.description {
   padding: 0;
   margin: 5px;
   font-size: 11px;
+}
+
+div.label_height {
+  display: block;
+  height: 20px;
+}
+
+div.field.datas input[type="text"].datepicker {
+  display: inline-block;
+  width: 40%;
 }

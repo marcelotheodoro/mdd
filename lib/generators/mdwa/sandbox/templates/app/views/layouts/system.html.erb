@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>MDWA Application</title>
+    <title>MDWA Application - Administration</title>
     <%= stylesheet_link_tag 'mdwa/system_manifest' %>
     <%= javascript_include_tag 'mdwa/system_manifest' %>
     
     <%= csrf_meta_tag %>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,700,600,300' rel='stylesheet' type='text/css'>
   </head>
   
   <body>
@@ -14,7 +16,7 @@
     
     <div id="header" class="yui3-g">
       <div id="logo" class="yui3-u-1-3">
-        <%= link_to "MDWA Application", a_root_path, :target => '_self' %>
+        <%= link_to image_tag('logo_backend.png'), a_root_path, :target => '_self' %>
       </div>
       <div id="logged_info" class="yui3-u-1-3">
         <%= render "/a/users/welcome" %>
@@ -22,7 +24,7 @@
       <div class="clear"></div>
     </div>
 
-    <div id="leftbar">
+    <div id="menu">
       <%= render '/template/mdwa/menubar' %>
     </div>
 

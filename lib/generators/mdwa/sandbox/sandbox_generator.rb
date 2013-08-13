@@ -59,10 +59,12 @@ module Mdwa
         end
       end
 
-      def generated_gems
+      def generated_stuff
         generate 'settings Settings'
         generate 'delayed_job:active_record'
         rake 'db:migrate' if ask_question( "Run rake db:migrate?" )
+
+        copy_file 'deploy.sh', 'deploy.sh'
       end
 
       def images
