@@ -1,7 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'mdwa/dsl'
 
-require 'minitest/spec'
 require 'minitest/autorun'
 
 describe MDWA::DSL::Entities do
@@ -109,7 +108,7 @@ describe MDWA::DSL::Entities do
   it "must store attributes" do 
     product = MDWA::DSL.entity("Product")
     
-    product.attributes.count.must_equal 7
+    product.attributes.count.must_equal 8
     product.attributes['name'].type.must_equal 'string'
     product.attributes['name'].name.must_equal 'name'
     product.attributes['category'].type.must_equal 'integer'
@@ -119,10 +118,10 @@ describe MDWA::DSL::Entities do
     product.attributes['stock'].type.must_equal 'integer'
     product.attributes['stock'].name.must_equal 'stock'
     
-    product.default_attribute.name.must_equal 'name'
+    product.default_attribute.name.must_equal 'id'
     
     category = MDWA::DSL.entity("Category")
-    category.attributes.count.must_equal 4
+    category.attributes.count.must_equal 5
     category.default_attribute.name.must_equal 'name'
   end
   
@@ -182,8 +181,8 @@ describe MDWA::DSL::Entities do
     project.scaffold_name.must_equal 'a/project'
     project.model_name.must_equal 'a/project'
     
-    project.generate.must_equal "mdwa:scaffold a/project nome:string ativo:boolean situacao_atual:text id:integer created_at:datetime updated_at:datetime group:a/group:nome:belongs_to --ajax"
-    group.generate.must_equal "mdwa:scaffold a/group nome:string ativo:boolean id:integer created_at:datetime updated_at:datetime --ajax --force"
+    project.generate.must_equal "mdwa:scaffold a/project nome:string ativo:boolean situacao_atual:text id:integer created_at:datetime updated_at:datetime destroyed:boolean group:a/group:nome:belongs_to --ajax"
+    group.generate.must_equal "mdwa:scaffold a/group nome:string ativo:boolean id:integer created_at:datetime updated_at:datetime destroyed:boolean --ajax --force"
   end
   
   it "should not generate non-resource entities" do
@@ -209,7 +208,7 @@ describe MDWA::DSL::Entities do
     end
     
     team_member = MDWA::DSL.entity('TeamMember')
-    team_member.attributes.count.must_equal 7
+    team_member.attributes.count.must_equal 8
     team_member.attributes['name'].name.must_equal 'name'
     team_member.attributes['name'].type.must_equal 'string'
   end

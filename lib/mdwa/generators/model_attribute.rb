@@ -7,7 +7,7 @@ module MDWA
 		class ModelAttribute
 			attr_accessor :name, :type, :reference, :reference_type, :model
 
-			STATIC_TYPES = [:boolean, :date, :datetime, :decimal, :float, :integer, :string, :text, :time, :timestamp, :file, :password]
+			STATIC_TYPES = [:boolean, :date, :datetime, :decimal, :float, :integer, :string, :text, :time, :timestamp, :file, :password, :status]
 
 			# Sets the attributes variables
 			# Format: <name>:<type>,<model>:<reference>:<reference_type>

@@ -1,7 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'mdwa/layout'
 
-require 'minitest/spec'
 require 'minitest/autorun'
 
 describe MDWA::Layout::Base do

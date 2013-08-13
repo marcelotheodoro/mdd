@@ -37,11 +37,15 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
     conditions << "(<%= @model.plural_name %>.<%= associacao.name %>_id = #{params[:<%= associacao.name %>_id]})" unless params[:<%= associacao.name %>_id].blank?
     <%- end -%>
 
-    @<%= @model.plural_name %> = <%= @model.klass %>.paginate :page => params[:page], :per_page => params[:per_page], :conditions => conditions.join(' AND ')
+    @<%= @model.plural_name %> = <%= @model.klass %>.where(conditions.join(' AND '))
+    unless params[:skip_pagination]
+      @<%= @model.plural_name %> = @<%= @model.plural_name %>.paginate page: params[:page], per_page: params[:per_page]
+    end
 
     respond_to do |format|
       format.html
       format.js
+      format.xls
     end
   end
 
@@ -149,7 +153,9 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
 
   def destroy
     @<%= @model.singular_name %> = <%= @model.klass %>.find(params[:id])
-    @system_notice = t('<%= @model.plural_name %>.notice.destroy') if @<%= @model.singular_name %>.destroy
+    @<%= @model.singular_name %>.removed = true
+
+    @system_notice = t('<%= @model.plural_name %>.notice.destroy') if @<%= @model.singular_name %>.save
     
     respond_to do |format|
     <%- if @entity.ajax? -%>

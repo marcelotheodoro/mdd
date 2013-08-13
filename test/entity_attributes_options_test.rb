@@ -1,7 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'mdwa/dsl'
 
-require 'minitest/spec'
 require 'minitest/autorun'
 
 describe MDWA::DSL::EntityAttribute do
@@ -22,7 +21,7 @@ describe MDWA::DSL::EntityAttribute do
   it "should store attributes correctly" do 
     entidade = MDWA::DSL.entity('Pessoa')
 
-    entidade.attributes.count.must_equal 7
+    entidade.attributes.count.must_equal 8
     entidade.attributes['nome'].options.count.must_equal 2
     entidade.attributes['nome'].default.must_equal true
     entidade.attributes['nome'].options[:filtered].must_equal true

@@ -45,8 +45,9 @@
 					<!-- Botão buscar -->
 					<div class="yui3-u-1-5">
 						<div class="field">
-							<label>&nbsp;</label>
+							<div class="label_height"></div>
 							<%%= submit_tag t('system.search_button'), :class => :button %>
+							<%%= link_to t('system.export_xls'), 'javascript:void(0)', :class => [:export, :xls], :form => :<%= @model.plural_name %>_filter_form %>
 						</div>
 					</div>
 				<%- end -%>

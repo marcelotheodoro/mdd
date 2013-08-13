@@ -76,6 +76,7 @@ module MDWA
         self.attribute('id', 'integer') if self.attributes['id'].blank?
         self.attribute('created_at', 'datetime') if self.attributes['created_at'].blank?
         self.attribute('updated_at', 'datetime') if self.attributes['updated_at'].blank?
+        self.attribute('removed', 'boolean') if self.attributes['removed'].blank?
         # if it's a user and have no attributes, include "name" to prevent errors
         if user?
           self.attribute('name', 'string') if self.attributes['name'].blank?

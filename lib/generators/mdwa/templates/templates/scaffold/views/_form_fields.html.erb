@@ -1,29 +1,33 @@
 ===entity_code===
-<%- @model.attributes.select{|a| !['id', 'created_at', 'updated_at'].include?(a.name)}.each do |attr| -%>
-<div class="field">
-   	<%%= f.label :<%= attr.name %>, t('<%= @model.plural_name %>.edit.<%= attr.name %>') %> 
-	<%- if attr.type.to_sym == :file -%>
-	<%% if !@<%= @model.singular_name %>.new_record? and !@<%= @model.singular_name %>.<%= attr.name %>.blank? %>
-		<span><%%= link_to image_tag(file_icon_path(@<%= @model.singular_name %>.<%= attr.name %>_file_name)), @<%= @model.singular_name %>.<%= attr.name %>.url, :target => '_blank' %></span>
-	<%% end %>
-	<%- end -%>
-   	<%%= f.<%= attr.form_field %> :<%= attr.name %> %>
+<%- @model.attributes.select{|a| !['id', 'created_at', 'updated_at', 'removed'].include?(a.name)}.each do |attr| -%>
+<div class="yui3-u-1-3">
+	<div class="field">
+	   	<%%= f.label :<%= attr.name %>, t('<%= @model.plural_name %>.edit.<%= attr.name %>') %> 
+		<%- if attr.type.to_sym == :file -%>
+		<%% if !@<%= @model.singular_name %>.new_record? and !@<%= @model.singular_name %>.<%= attr.name %>.blank? %>
+			<span><%%= link_to image_tag(file_icon_path(@<%= @model.singular_name %>.<%= attr.name %>_file_name)), @<%= @model.singular_name %>.<%= attr.name %>.url, :target => '_blank' %></span>
+		<%% end %>
+		<%- end -%>
+	   	<%%= f.<%= attr.form_field %> :<%= attr.name %> %>
+	</div>
 </div>
 <%- end # model.attributes.each -%>
 
 <%- @model.associations.each do |assoc| -%>
 <%- next if assoc.skip_views? %>
 <%- if assoc.belongs_to? -%>
-<div class="field">
-	<%%= f.label :<%= assoc.model2.singular_name.foreign_key %>, t('<%= @model.plural_name %>.edit.<%= assoc.model2.singular_name %>') %> 
-	<%%= f.select :<%= assoc.model2.singular_name.foreign_key %>, 
-		  options_for_select( <%= assoc.model2.klass %>.order('<%= assoc.reference_field %> ASC').collect{ |c| [c.<%= assoc.reference_field %>, c.id] }, f.object.<%= assoc.model2.singular_name.foreign_key %> ), 
-			:prompt => t('<%= @model.plural_name %>.edit.<%= assoc.model2.singular_name %>_select') %>
+<div class="yui3-u-1-3">
+	<div class="field">
+		<%%= f.label :<%= assoc.model2.singular_name.foreign_key %>, t('<%= @model.plural_name %>.edit.<%= assoc.model2.singular_name %>') %> 
+		<%%= f.select :<%= assoc.model2.singular_name.foreign_key %>, 
+			  options_for_select( <%= assoc.model2.klass %>.order('<%= assoc.reference_field %> ASC').collect{ |c| [c.<%= assoc.reference_field %>, c.id] }, f.object.<%= assoc.model2.singular_name.foreign_key %> ), 
+				:prompt => t('<%= @model.plural_name %>.edit.<%= assoc.model2.singular_name %>_select') %>
+	</div>
 </div>
 <%- end # if -%>
 
 <%- if assoc.has_and_belongs_to_many? and assoc.composition? -%>
-<div class="nested">
+<div class="yui3-u-1 nested">
 	<%%- <%= assoc.model2.klass %>.order('<%= assoc.reference_field %> ASC').each do |<%= assoc.model2.singular_name %>| -%>
 	<div class="checkbox">
 		<%%= check_box_tag '<%= assoc.model2.plural_name %>[]', <%= assoc.model2.singular_name %>.id, (@<%= @model.singular_name %>.<%= assoc.model2.plural_name %>.include?(<%= assoc.model2.singular_name %>) ? true : false) %>
@@ -34,7 +38,7 @@
 <%- end -%>
 
 <%- if assoc.nested? -%>
-<div class="nested">
+<div class="yui3-u-1 nested">
 	<%%= f.fields_for :<%= (assoc.nested_many?) ? assoc.model2.plural_name : assoc.model2.singular_name %> do |ff| %>
 		<%%= render '<%= assoc.model2.space %>/<%= assoc.model2.plural_name %>/form_fields', :f => ff %>
 	<%- unless assoc.nested_one? -%>

@@ -130,59 +130,70 @@ module Mdwa
         return nil if options.skip_locales
 
         locales_file = 'config/locales/mdwa.specific.en.yml'
-        locales_content = File.read(locales_file)
         # make sure the file exist
         create_file locales_file unless File.exist?(Rails.root + locales_file)
+        locales_content = File.read(locales_file)
+
+        # translated
+        if I18n.locale.to_sym != :en
+          locales_translated_file = "config/locales/mdwa.specific.#{I18n.locale}.yml"
+          create_file locales_translated_file unless File.exist?(Rails.root + locales_translated_file)
+          locales_translated_content = File.read(locales_translated_file)
+        end
         
         @entities.each do |entity|
           model = entity.generator_model
-          if !locales_content.include?( "  #{model.plural_name}:" )
-            puts "Não tem"
-            lines = []
-            lines << "\n"
-            lines <<  "  #{model.plural_name}:"
-            lines <<  "    notice:"
-            lines <<  "      create: \"#{model.singular_name.humanize} created.\""
-            lines <<  "      update: \"#{model.singular_name.humanize} updated.\""
-            lines <<  "      destroy: \"#{model.singular_name.humanize} destroyed.\""
-            lines <<  "    title:"
-            lines <<  "      index: \"#{model.plural_name.humanize}\""
-            lines <<  "      show: \"#{model.singular_name.humanize}\""
-            lines <<  "      new: \"New #{model.singular_name.humanize}\""
-            lines <<  "      edit: \"Edit #{model.singular_name.humanize}\""
-            # INDEX
-            lines <<  "    index:"
-            lines <<  "      add: 'Adicionar'"
-            lines <<  "      edit: 'Edit'"
-            lines <<  "      edit_label: 'Edit'"
-            lines <<  "      remove: 'Remove'"
-            lines <<  "      remove_label: 'Remove'"
-            lines <<  "      confirm_deletion: 'Are you sure?'"
-            model.attributes.each do |attr|
-              lines <<  "      #{attr.name}: \"#{attr.name.humanize}\""
-            end
-            model.associations.each do |assoc|
-              lines << ((assoc.belongs_to? or assoc.nested_one? or assoc.has_one?) ? "      #{assoc.model2.singular_name}: \"#{assoc.model2.singular_name.humanize}\"" : "      #{assoc.model2.singular_name}: \"#{assoc.model2.plural_name.humanize}\"")
-            end
-            # EDIT
-            lines <<  "    edit:"
-            model.attributes.each do |attr|
-              lines <<  "      #{attr.name}: \"#{attr.name.humanize}\""
-            end
-            model.associations.each do |assoc|
-              lines << ((assoc.belongs_to? or assoc.nested_one? or assoc.has_one?) ? "      #{assoc.model2.singular_name}: \"#{assoc.model2.singular_name.humanize}\"" : "      #{assoc.model2.singular_name}: \"#{assoc.model2.plural_name.humanize}\"")
-            end
-            # SHOW
-            lines <<  "    show:"
-            model.attributes.each do |attr|
-              lines <<  "      #{attr.name}: \"#{attr.name.humanize}\""
-            end
-            model.associations.each do |assoc|
-              lines << ((assoc.belongs_to? or assoc.nested_one? or assoc.has_one?) ? "      #{assoc.model2.singular_name}: \"#{assoc.model2.singular_name.humanize}\"" : "      #{assoc.model2.singular_name}: \"#{assoc.model2.plural_name.humanize}\"")
-            end
-            lines << "\n"
 
+          lines = []
+          lines << "\n"
+          lines <<  "  #{model.plural_name}:"
+          lines <<  "    notice:"
+          lines <<  "      create: \"#{model.singular_name.humanize} created.\""
+          lines <<  "      update: \"#{model.singular_name.humanize} updated.\""
+          lines <<  "      destroy: \"#{model.singular_name.humanize} destroyed.\""
+          lines <<  "    title:"
+          lines <<  "      index: \"#{model.plural_name.humanize}\""
+          lines <<  "      show: \"#{model.singular_name.humanize}\""
+          lines <<  "      new: \"New #{model.singular_name.humanize}\""
+          lines <<  "      edit: \"Edit #{model.singular_name.humanize}\""
+          # INDEX
+          lines <<  "    index:"
+          lines <<  "      add: 'Add'"
+          lines <<  "      edit: 'Edit'"
+          lines <<  "      edit_label: 'Edit'"
+          lines <<  "      remove: 'Remove'"
+          lines <<  "      remove_label: 'Remove'"
+          lines <<  "      confirm_deletion: 'Are you sure?'"
+          model.attributes.each do |attr|
+            lines <<  "      #{attr.name}: \"#{attr.name.humanize}\""
+          end
+          model.associations.each do |assoc|
+            lines << ((assoc.belongs_to? or assoc.nested_one? or assoc.has_one?) ? "      #{assoc.model2.singular_name}: \"#{assoc.model2.singular_name.humanize}\"" : "      #{assoc.model2.singular_name}: \"#{assoc.model2.plural_name.humanize}\"")
+          end
+          # EDIT
+          lines <<  "    edit:"
+          model.attributes.each do |attr|
+            lines <<  "      #{attr.name}: \"#{attr.name.humanize}\""
+          end
+          model.associations.each do |assoc|
+            lines << ((assoc.belongs_to? or assoc.nested_one? or assoc.has_one?) ? "      #{assoc.model2.singular_name}: \"#{assoc.model2.singular_name.humanize}\"" : "      #{assoc.model2.singular_name}: \"#{assoc.model2.plural_name.humanize}\"")
+          end
+          # SHOW
+          lines <<  "    show:"
+          model.attributes.each do |attr|
+            lines <<  "      #{attr.name}: \"#{attr.name.humanize}\""
+          end
+          model.associations.each do |assoc|
+            lines << ((assoc.belongs_to? or assoc.nested_one? or assoc.has_one?) ? "      #{assoc.model2.singular_name}: \"#{assoc.model2.singular_name.humanize}\"" : "      #{assoc.model2.singular_name}: \"#{assoc.model2.plural_name.humanize}\"")
+          end
+          lines << "\n"
+
+          if !locales_content.include?( "  #{model.plural_name}:" )
             append_file locales_file, lines.join("\n"), :after => "en:"
+          end
+
+          if I18n.locale.to_sym != :en and !locales_translated_content.include?( "  #{model.plural_name}:" )
+            append_file locales_translated_file, lines.join("\n"), :after => "#{I18n.locale}:"
           end
           
         end # @entities loop
@@ -343,7 +354,7 @@ module Mdwa
           	  migration_string << "\t\t\tt.integer :#{assoc.model2.singular_name.foreign_key}"
         	  end
         	end
-          migration_string << "\n\t\tt.timestamps"
+          migration_string << "\n\t\t\tt.timestamps"
           migration_string << "\t\tend" # fim do create_table
         	generator_model.associations.each do |assoc|
             if assoc.belongs_to? or assoc.nested_one?

@@ -21,6 +21,7 @@ module Mdwa
         copy_file "br/config/initializers/inflections.rb", 'config/initializers/inflections.rb'
         copy_file "br/config/locales/devise.#{language_suffix}.yml", "config/locales/devise.#{language_suffix}.yml"
         copy_file "br/config/locales/mdwa.#{language_suffix}.yml", "config/locales/mdwa.#{language_suffix}.yml"
+        copy_file "br/config/locales/mdwa.specific.#{language_suffix}.yml", "config/locales/mdwa.specific.#{language_suffix}.yml"
 
         application "config.time_zone = 'Brasilia'"
         application "config.i18n.default_locale = 'pt-BR'"

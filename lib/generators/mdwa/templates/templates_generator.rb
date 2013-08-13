@@ -64,6 +64,7 @@ module Mdwa
           copy_with_header 'scaffold/views/destroy.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/destroy.js.erb", entity.name
           copy_with_header 'scaffold/views/edit.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/edit.html.erb", entity.name
           copy_with_header 'scaffold/views/index.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/index.html.erb", entity.name
+          copy_with_header 'scaffold/views/index.xls.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/index.xls.erb", entity.name
           copy_with_header 'scaffold/views/index.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/index.js.erb", entity.name
           copy_with_header 'scaffold/views/new.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/new.html.erb", entity.name
           copy_with_header 'scaffold/views/show.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/show.html.erb", entity.name

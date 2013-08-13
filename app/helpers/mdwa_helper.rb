@@ -44,5 +44,13 @@ module MdwaHelper
 
     return "#{path}/#{size}/#{ext}_file.png"
   end
+
+  def check_all_th
+    check_box_tag "check_all", '', false, { :onclick => "checkOrUncheckAll( $(\"#check_all\").prop( \"checked\" ) )" }
+  end
+  
+  def check_all_td( id, checked = false )
+    check_box_tag "cid[]", id, checked, { :id => "cb#{id}", :class => "cid" }
+  end
   
 end

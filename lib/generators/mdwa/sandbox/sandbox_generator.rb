@@ -161,6 +161,7 @@ module Mdwa
         copy_file 'config/initializers/mdwa_inflections.rb', 'config/initializers/mdwa_inflections.rb'
         copy_file 'config/initializers/mdwa_layout.rb', 'config/initializers/mdwa_layout.rb'
         copy_file 'config/initializers/will_paginate.rb', 'config/initializers/mdwa_will_paginate.rb'
+        copy_file 'config/initializers/mime_types.rb', 'config/initializers/mdwa_mime_types.rb'
 
         # language files
         copy_file 'config/locales/devise.en.yml', 'config/locales/devise.en.yml'
