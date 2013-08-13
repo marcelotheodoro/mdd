@@ -1,0 +1,12 @@
+<% if can? :index, A::Administrator %>
+<ul>
+  <li>
+    <%= link_to a_administrators_path do %><span><%= t 'menu.administrators' %></span><% end %>
+    <% if can? :create, A::Administrator %>
+      <ul class="submenu">
+        <li><%= link_to new_a_administrator_path do %><span><%= t( 'menu.add_administrator' ) %></span><% end %></li>
+      </ul>
+    <% end %>
+  </li>
+</ul>
+<% end %>

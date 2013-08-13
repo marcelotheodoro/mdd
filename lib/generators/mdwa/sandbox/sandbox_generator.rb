@@ -23,12 +23,15 @@ module Mdwa
       end
 
       def gem_dependencies
-        gem 'devise'
         gem 'cancan'
-        gem 'will_paginate'
+        gem 'devise'
+        gem 'delayed_job_active_record'
+        gem 'jquery-ui-rails'
         gem 'nested_form'
         gem 'require_all'
+        gem 'rails-settings-cached', '0.2.4'
         gem 'rspec-rails', :group => [:test, :development]
+        gem 'will_paginate'
 
         inside Rails.root do
           run "bundle install"
@@ -54,6 +57,12 @@ module Mdwa
             puts 'Paperclip uses ImageMagick. Install it manually.'
           end
         end
+      end
+
+      def generated_gems
+        generate 'settings Settings'
+        generate 'delayed_job:active_record'
+        rake 'db:migrate' if ask_question( "Run rake db:migrate?" )
       end
 
       def images
@@ -125,8 +134,9 @@ module Mdwa
         end
 
         if ask_question("Generate views?")
-          copy_file 'app/views/template/_leftbar.html.erb', 'app/views/template/mdwa/_leftbar.html.erb'
-          empty_directory 'app/views/template/mdwa/leftbar'
+          copy_file 'app/views/template/mdwa/_menubar.html.erb', 'app/views/template/mdwa/_menubar.html.erb'
+          copy_file 'app/views/template/mdwa/_login_text.html.erb', 'app/views/template/mdwa/_login_text.html.erb'
+          directory 'app/views/template/mdwa/menubar', 'app/views/template/mdwa/menubar'
           directory 'app/views/public', 'app/views/public'
           directory 'app/views/a/administrators', 'app/views/a/administrators'
           directory 'app/views/a/home', 'app/views/a/home'
@@ -162,7 +172,7 @@ module Mdwa
         production << "  #####################"
         production << "  assets << 'mdwa/login_manifest.css'"
         production << "  assets << 'mdwa/public_manifest.css'"
-        production << "  assets << 'mdwa/system_manifest.js'"
+        production << "  assets << 'mdwa/system_manifest.css'"
         production << "  config.assets.precompile += assets"
         production << "\n"
         inject_into_file 'config/environments/production.rb', production.join("\n"), :after => "config.assets.digest = true\n"
@@ -221,6 +231,7 @@ module Mdwa
         
         rake "db:seed" if ask_question( "Run rake db:seeds?" )
       end
+
       
       def testes
         # Install Rspec as the default testing framework

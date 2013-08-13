@@ -5,6 +5,14 @@ en:
     login_button_label: "Login"
     login_text_pre_form: "Welcome to a MDWA software. <br />Please login to access this app."
 
+  will_paginate:
+    previous_label: "Previous"
+    next_label: "Next"
+    page_gap: "&hellip;"
+    all: '- All -'
+    show_label: 'Show'
+
+
   system:
     error: "error"
     logged_info_user: "Welcome, <span>%{user}</span>."
