@@ -113,8 +113,18 @@ module Mdwa
         end
 
         if ask_question("Include layout selector in ApplicationController?")
-          inject_into_class 'app/controllers/application_controller.rb', ApplicationController do
-             "\n\n  layout :select_layout\n"
+          inject_into_class 'app/controllers/application_controller.rb', ApplicationController, after: "protect_from_forgery" do
+             "\n\n  layout :select_layout\n" + 
+             
+             "  private
+
+    def after_sign_out_path_for(user)
+      if user.to_sym.eql?(:a_user)
+        return a_root_path
+      else
+        return root_path
+      end
+    end"
           end
         end
       end
