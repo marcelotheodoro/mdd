@@ -252,7 +252,7 @@ pt-BR:
     email_label: "E-mail:"
     password_label: "Senha:"
     login_button_label: "Login"
-    login_text_pre_form: "Bem-vindo à área administrativa da Black Bull Business. <br />Faça seu login."
+    login_text_pre_form: "Bem-vindo à área administrativa da aplicação MDWA. <br />Faça seu login."
 
   system:
     sim: "Sim"
