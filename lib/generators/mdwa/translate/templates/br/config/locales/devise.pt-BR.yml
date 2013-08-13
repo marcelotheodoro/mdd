@@ -1,0 +1,59 @@
+# Additional translations at http://github.com/plataformatec/devise/wiki/I18n
+
+pt-BR:
+  errors:
+    messages:
+      expired: "expirou, por favor requisite outro"
+      not_found: "não encontrado"
+      already_confirmed: "já foi confirmado, tente acessar novamente"
+      not_locked: "não foi bloqueada"
+      not_saved:
+        one: "1 erro:"
+        other: "%{count} erros:"
+
+  devise:
+    failure:
+      already_authenticated: 'Você já está logado.'
+      unauthenticated: 'Você precisa estar registrado antes de continuar.'
+      unconfirmed: 'Você precisa confirmar sua conta antes de continuar.'
+      locked: 'Sua conta está bloqueada.'
+      invalid: 'Email ou senha incorretos.'
+      invalid_token: 'Autenticação inválida.'
+      timeout: 'Sua sessão expirou. Faça o login antes de continuar.'
+      inactive: 'Sua conta está bloqueada.'
+      usuario_cliente:
+        not_found_in_database: 'O email ou senha estão incorretos.'
+    sessions:
+      signed_in: 'Login bem sucedido.'
+      signed_out: 'Você saiu do sistema.'
+    passwords:
+      send_instructions: 'Você receberá um email com instruções de como recuperar sua senha em poucos minutos.'
+      updated: 'Sua senha foi alterada com sucesso. Você já está logado.'
+      updated_not_active: 'Senha alterada com sucesso.'
+      send_paranoid_instructions: "Se seu email já existir, você receberá um email com a recuperação da senha."
+    confirmations:
+      send_instructions: 'Você receberá um email com instruções de como confirmar a criação da sua conta em alguns minutos.'
+      send_paranoid_instructions: 'Se seu email já existir, você receberá um email com instruções de como confirmar a criação da sua conta em alguns minutos.'
+      confirmed: 'Sua conta foi confirmada. Você foi logado no sistema.'
+    registrations:
+      signed_up: 'Bem vindo. Seu cadastro foi efetuado com sucesso.'
+      signed_up_but_unconfirmed: 'Uma mensagem com o link de confirmação foi enviada para seu e-mail. Por favor, acesse o link para ativar sua conta.'
+      signed_up_but_inactive: 'Cadastro realizado com sucesso. Porém, você não pode acessar o sistema pois sua conta ainda não foi ativada.'
+      signed_up_but_locked: 'Cadastro realizado com sucesso. Porém você não pode acessar o sistema pois sua conta está travada.'
+      updated: 'Você alterou sua conta com sucesso.'
+      update_needs_confirmation: "A atualização foi realizada com sucesso, porém precisamos verificar seu novo endereço de e-mail. Por favor verifique seu e-mail e acesse o link de confirmação para validar seu novo endereço de e-mail."
+      destroyed: 'Sua conta foi cancelada com sucesso. Esperamos vê-lo novamente em breve.'
+    unlocks:
+      send_instructions: 'Você receberá um email com instruções de como desbloquear sua conta em poucos minutos.'
+      unlocked: 'Sua conta foi desbloqueada com sucesso. Você está logado.'
+      send_paranoid_instructions: 'Se sua conta existir, Você receberá um email com instruções de como desbloquear sua conta em poucos minutos.'
+    omniauth_callbacks:
+      success: 'Autorização com sucesso em sua %{kind} conta.'
+      failure: 'Autorização falhou em sua %{kind} conta porque "%{reason}".'
+    mailer:
+      confirmation_instructions:
+        subject: '[Black Bull] Instruções de confirmação de conta'
+      reset_password_instructions:
+        subject: '[Black Bull] Instruções de recuperação de senha'
+      unlock_instructions:
+        subject: '[Black Bull] Instruções de desbloqueio de conta'

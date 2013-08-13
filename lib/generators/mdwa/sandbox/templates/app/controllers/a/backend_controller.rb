@@ -27,13 +27,4 @@ class A::BackendController < ApplicationController
   end
 
 
-  private
-
-    def after_sign_out_path_for(user)
-      if user.to_sym.eql?(:a_user)
-        return a_root_path
-      else
-        return root_path
-      end
-    end
 end
