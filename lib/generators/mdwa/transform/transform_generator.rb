@@ -165,6 +165,7 @@ module Mdwa
           if entity.attributes.select{|name, attr| attr.type.to_sym == :status}.count > 0
             entity.attributes.select{|name, attr| attr.type.to_sym == :status}.each do |name, attr|
               lines <<  "    #{name}:"
+              lines <<  "      prompt_select: '- Status -'"
               attr.options[:possible_values].each_with_index do |value, index|
                 lines <<  "      #{value.to_s.underscore}: '#{value.to_s.humanize}'"
               end

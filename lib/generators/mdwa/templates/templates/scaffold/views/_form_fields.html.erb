@@ -2,13 +2,17 @@
 <%- @model.attributes.select{|a| !['id', 'created_at', 'updated_at', 'removed'].include?(a.name)}.each do |attr| -%>
 <div class="yui3-u-1-3">
 	<div class="field">
-	   	<%%= f.label :<%= attr.name %>, t('<%= @model.plural_name %>.edit.<%= attr.name %>') %> 
+   	<%%= f.label :<%= attr.name %>, t('<%= @model.plural_name %>.edit.<%= attr.name %>') %> 
 		<%- if attr.type.to_sym == :file -%>
 		<%% if !@<%= @model.singular_name %>.new_record? and !@<%= @model.singular_name %>.<%= attr.name %>.blank? %>
 			<span><%%= link_to image_tag(file_icon_path(@<%= @model.singular_name %>.<%= attr.name %>_file_name)), @<%= @model.singular_name %>.<%= attr.name %>.url, :target => '_blank' %></span>
 		<%% end %>
-		<%- end -%>
-	   	<%%= f.<%= attr.form_field %> :<%= attr.name %> %>
+			<%%= f.<%= attr.form_field %> :<%= attr.name %> %>
+		<%- elsif attr.type.to_sym == :status -%>
+			<%%= f.select :<%= attr.name %>, options_for_select(<%= @model.klass %>.<%= attr.name %>_to_select, f.object.<%= attr.name %>), :prompt => t('<%= @model.plural_name %>.<%= attr.name %>.prompt_select') %>
+		<%- else -%>
+	   	<%%= f.<%= attr.form_field %> :<%= attr.name %><%= ', class: :datepicker' if attr.type.to_sym == :date %> %>
+   	<%- end -%>
 	</div>
 </div>
 <%- end # model.attributes.each -%>

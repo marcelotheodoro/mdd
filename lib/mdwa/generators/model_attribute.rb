@@ -73,7 +73,7 @@ module MDWA
           when :file				         then 'file_field'
           when :time                 then 'time_select'
           when :datetime, :timestamp then 'datetime_select'
-          when :date                 then 'date_select'
+          when :date                 then 'text_field'
           when :text                 then 'text_area'
           when :boolean              then 'check_box'
           when :password             then 'password_field'  
@@ -99,7 +99,7 @@ module MDWA
           when :boolean then
             input << "select_tag :#{self.name}, options_for_select([[t('system.yes'), 1], [t('system.no'), 0]]), :prompt => t('system.both')"
           when :status then
-            input << "select_tag :#{self.name}, options_for_select(#{self.model.klass}.#{self.name}_to_select), :prompt => t('system.all')"
+            input << "select_tag :#{self.name}, options_for_select(#{self.model.klass}.#{self.name}_to_select), :prompt => t('#{self.model.plural_name}.#{self.name}.prompt_select')"
           else
           	input << "text_field_tag :#{self.name}"
         end

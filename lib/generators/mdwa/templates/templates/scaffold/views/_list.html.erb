@@ -36,7 +36,9 @@
   		<%% else %>
   			<%%= t 'system.no_file' %>
   		<%% end %>
-  		<%- else -%>
+  		<%- elsif attr.type.to_sym == :status -%>
+      <%%= <%= @model.singular_name %>.<%= attr.name %>_to_s %>
+      <%- else -%>
   		<%%= <%= @model.singular_name %>.<%= attr.name %> %>
   		<%- end -%>
   	</td>
