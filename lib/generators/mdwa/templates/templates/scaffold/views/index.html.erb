@@ -2,7 +2,6 @@
 <div id="<%= @model.plural_name %>_index" class="mdwa_index">
 	<div class="page_header">
 		<h1><%%= t '<%= @model.plural_name %>.title.index' %></h1>
-		<%- if @entity.ajax -%>
 		<div class="page_header_right_tab">
 			<%% if can? :destroy, <%= @model.klass %>  %>
 			<%%= link_to t('<%= @model.plural_name %>.index.remove'), <%= @model.object_name.pluralize %>_batch_update_path, attribute: :removed, value: 1, class: :batch_update %>
@@ -16,11 +15,12 @@
 			<%- end -%>
 			<%% end  %>
 
+		<%- if @entity.ajax -%>
 			<%% if can? :create, <%= @model.klass %>  %>
 			<%%= link_to t('<%= @model.plural_name %>.index.add'), new_<%= @model.object_name %>_path, :class => 'lightbox various fancybox.ajax' %>
 			<%% end  %>
-		</div>
 		<%- end -%>
+		</div>
 	</div>
 
 	<div class="inside">

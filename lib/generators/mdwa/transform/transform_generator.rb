@@ -78,6 +78,15 @@ module Mdwa
           end # if nm == 0
         end # each
       end # def
+
+      def create_menu_item
+        @entities.each do |entity|
+          generator_model = entity.generator_model
+          insert_into_file 'app/views/template/mdwa/_menubar.html.erb', before: '</ul>' do
+            "  <%= render '/template/mdwa/menubar/#{generator_model.plural_name}' %>\n"
+          end
+        end
+      end
       
       def generate_routes
         
