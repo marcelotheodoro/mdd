@@ -161,6 +161,15 @@ module Mdwa
           lines <<  "    menu:"
           lines <<  "      index: \"#{model.plural_name.humanize}\""
           lines <<  "      new: \"New #{model.singular_name.humanize}\""
+          # Status
+          if entity.attributes.select{|name, attr| attr.type.to_sym == :status}.count > 0
+            entity.attributes.select{|name, attr| attr.type.to_sym == :status}.each do |name, attr|
+              lines <<  "    #{name}:"
+              attr.options[:possible_values].each_with_index do |value, index|
+                lines <<  "      #{value.to_s.underscore}: '#{value.to_s.humanize}'"
+              end
+            end
+          end 
           # INDEX
           lines <<  "    index:"
           lines <<  "      add: 'Add'"
@@ -274,7 +283,7 @@ module Mdwa
             # attribute exists in model and entity, but changed type
             elsif entity_attribute.type.to_sym != column.type.to_sym
               # ignores files, passwords and float, decimal, integer variations
-              next if entity_attribute.type.to_sym == :password or ((column.type.to_sym == :integer or column.type.to_sym == :decimal) and entity_attribute.type.to_sym == :float)
+              next if entity_attribute.type.to_sym == :password or (entity_attribute.type.to_sym == :status and column.type.to_sym == :integer) or ((column.type.to_sym == :integer or column.type.to_sym == :decimal) and entity_attribute.type.to_sym == :float)
               @changes << {:entity => entity, :type => 'change_column', :column => column.name, :attr_type => entity_attribute.type, :from => column.type}
             end
           end
@@ -354,7 +363,6 @@ module Mdwa
           generator_model.attributes.select{|a| !['id', 'created_at', 'updated_at'].include?(a.name)}.each do |attr|
             if attr.name.to_sym == :removed
               migration_string << "\t\t\tt.#{attr.migration_field} :#{attr.name}, default: false"
-              migration_string << "\t\t\tadd_index :#{attr.name}"
             else
               migration_string << "\t\t\tt.#{attr.migration_field} :#{attr.name}"
             end

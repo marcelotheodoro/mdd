@@ -97,7 +97,9 @@ module MDWA
           	input << "text_field_tag :#{self.name}_0, '', :class => :datepicker, :onkeypress => \"mascara(this, checaData)\", :maxlength => 10"
           	input << "text_field_tag :#{self.name}_1, '', :class => :datepicker, :onkeypress => \"mascara(this, checaData)\", :maxlength => 10"
           when :boolean then
-          	input << "select_tag :#{self.name}, options_for_select([[t('system.yes'), 1], [t('system.no'), 0]]), :prompt => t('system.both')"
+            input << "select_tag :#{self.name}, options_for_select([[t('system.yes'), 1], [t('system.no'), 0]]), :prompt => t('system.both')"
+          when :status then
+            input << "select_tag :#{self.name}, options_for_select(#{self.model.klass}.#{self.name}_to_select), :prompt => t('system.all')"
           else
           	input << "text_field_tag :#{self.name}"
         end

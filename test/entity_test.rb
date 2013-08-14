@@ -181,8 +181,8 @@ describe MDWA::DSL::Entities do
     project.scaffold_name.must_equal 'a/project'
     project.model_name.must_equal 'a/project'
     
-    project.generate.must_equal "mdwa:scaffold a/project nome:string ativo:boolean situacao_atual:text id:integer created_at:datetime updated_at:datetime destroyed:boolean group:a/group:nome:belongs_to --ajax"
-    group.generate.must_equal "mdwa:scaffold a/group nome:string ativo:boolean id:integer created_at:datetime updated_at:datetime destroyed:boolean --ajax --force"
+    project.generate.must_equal "mdwa:scaffold a/project nome:string ativo:boolean situacao_atual:text id:integer created_at:datetime updated_at:datetime removed:boolean group:a/group:nome:belongs_to --ajax"
+    group.generate.must_equal "mdwa:scaffold a/group nome:string ativo:boolean id:integer created_at:datetime updated_at:datetime removed:boolean --ajax --force"
   end
   
   it "should not generate non-resource entities" do

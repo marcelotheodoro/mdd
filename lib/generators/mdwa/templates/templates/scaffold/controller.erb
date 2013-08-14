@@ -17,7 +17,7 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
     -%>
     <%- if !atributos_com_filtro.count.zero? -%>
       <%- atributos_com_filtro.each do |atributo| -%>
-        <%- if [:integer, :float, :decimal, :boolean].include? atributo.type.to_sym  -%>
+        <%- if [:integer, :float, :decimal, :boolean, :status].include? atributo.type.to_sym  -%>
     conditions << "(<%= @model.plural_name %>.<%= atributo.name %> = '#{params[:<%= atributo.name %>]}')" unless params[:<%= atributo.name %>].blank?
         <%- elsif [:string, :text].include? atributo.type.to_sym  -%>
     conditions << "(<%= @model.plural_name %>.<%= atributo.name %> LIKE '%#{params[:<%= atributo.name %>]}%')" unless params[:<%= atributo.name %>].blank?

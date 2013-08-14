@@ -54,10 +54,44 @@ class <%= @model.klass %> < <%= !@entity.user? ? 'ActiveRecord::Base' : 'User' %
 
   scope :not_removed, -> {where('removed != 1')}
 
-  <%- # create boolean methods for all boolean attributes %>
-  <%- @model.attributes.select{|attr| attr.type.to_sym == :boolean}.each do |attr| -%>
+<%- # create the status attributes %>
+<%- if @entity.attributes.select{|name, attr| attr.type.to_sym == :status}.count > 0 -%>
+<%- @entity.attributes.select{|name, attr| attr.type.to_sym == :status}.each do |name, attr| -%>
+  <%- attr.options[:possible_values].each_with_index do |value, index| -%>
+  <%= value.to_s.underscore.upcase %> = <%= index %>
+  <%- end -%>
+  
+<%- end -%>
+<%- @entity.attributes.select{|name, attr| attr.type.to_sym == :status}.each do |name, attr| -%>
+  <%- attr.options[:possible_values].each do |value| -%>
+  def <%= attr.name.to_s + '_' + value.to_s.underscore %>?
+    <%= attr.name.to_s %> == <%= value.to_s.underscore.upcase %>
+  end
+  <%- end -%>
+
+  def <%= attr.name.to_s %>_to_s
+  <%- attr.options[:possible_values].each do |value| -%>
+    return I18n.t('<%= @model.plural_name %>.<%= attr.name %>.<%= value.to_s.underscore %>') if <%= attr.name.to_s + '_' + value.to_s.underscore %>?
+  <%- end -%>
+  end
+<%- end -%>
+
+<%- @entity.attributes.select{|name, attr| attr.type.to_sym == :status}.each do |name, attr| -%>
+  def self.<%= attr.name.to_s %>_to_select
+    [
+  <%- attr.options[:possible_values].each do |value| -%>
+      [I18n.t('<%= @model.plural_name %>.<%= attr.name %>.<%= value.to_s.underscore %>'), <%= value.to_s.underscore.upcase %>],
+  <%- end -%>
+    ]
+  end
+<%- end -%>
+<%- end -%>
+
+<%- # create boolean methods for all boolean attributes %>
+<%- @model.attributes.select{|attr| attr.type.to_sym == :boolean}.each do |attr| -%>
   def <%= attr.name %>?
     <%= attr.name %>
   end
-  <%- end -%>
+<%- end -%>
+
 end
