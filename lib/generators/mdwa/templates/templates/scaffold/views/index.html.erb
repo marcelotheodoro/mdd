@@ -36,7 +36,7 @@
 				<%- if !atributos_com_filtro.count.zero? or !associacoes_com_filtro.count.zero? -%>
 					<%- atributos_com_filtro.each do |atributo| -%>
 						<div class="yui3-u-1-5">
-							<div class="field">
+							<div class="field <%= 'datas' if atributo.type.to_sym == :date %>">
 								<%%= label_tag :<%= atributo.name %>, t('<%= @model.plural_name %>.filtros.<%= atributo.name %>') %>
 								<%- atributo.to_model_attribute.filter_input.each do |input| -%>
 									<%%= <%= input %> %>

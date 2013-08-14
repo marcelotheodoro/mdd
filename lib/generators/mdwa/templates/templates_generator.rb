@@ -61,6 +61,7 @@ module Mdwa
           copy_with_header 'scaffold/views/_form.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/_form.html.erb", entity.name
           copy_with_header 'scaffold/views/_list.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/_list.html.erb", entity.name
           copy_with_header 'scaffold/views/create.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/create.js.erb", entity.name
+          copy_with_header 'scaffold/views/batch_update.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/batch_update.js.erb", entity.name
           copy_with_header 'scaffold/views/destroy.js.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/destroy.js.erb", entity.name
           copy_with_header 'scaffold/views/edit.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/edit.html.erb", entity.name
           copy_with_header 'scaffold/views/index.html.erb', "#{MDWA::DSL::TEMPLATES_PATH}#{entity.file_name}/#{model.space + '/'}views/index.html.erb", entity.name
