@@ -109,6 +109,7 @@ module Mdwa
             route_str = []
             route_str << "\n  namespace :#{generator_model.space} do" if generator_model.namespace?
             route_str << "    controller :#{generator_model.plural_name} do"
+            route_str << "      post '#{generator_model.plural_name}/batch_update' => :batch_update, as: :#{generator_model.plural_name}_batch_update"
             route_str << "    end"
             route_str << "    resources :#{generator_model.plural_name}"
             route_str << "  end\n" if generator_model.namespace?
@@ -153,6 +154,7 @@ module Mdwa
           lines <<  "      create: \"#{model.singular_name.humanize} created.\""
           lines <<  "      update: \"#{model.singular_name.humanize} updated.\""
           lines <<  "      destroy: \"#{model.singular_name.humanize} destroyed.\""
+          lines <<  "      batch_update: \"#{model.singular_name.humanize} updated.\""
           lines <<  "    title:"
           lines <<  "      index: \"#{model.plural_name.humanize}\""
           lines <<  "      show: \"#{model.singular_name.humanize}\""
@@ -168,6 +170,7 @@ module Mdwa
               lines <<  "      prompt_select: '- Status -'"
               attr.options[:possible_values].each_with_index do |value, index|
                 lines <<  "      #{value.to_s.underscore}: '#{value.to_s.humanize}'"
+                lines <<  "      #{value.to_s.underscore}_alter: 'Change #{name} to #{value.to_s.humanize}'"
               end
             end
           end 
