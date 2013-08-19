@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Marcelo Theodoro"]
   s.email       = ["marcelo.theodorojr@gmail.com"]
   s.homepage    = "http://qw3.com.br"
+  s.license     = 'MIT'
   s.summary     = %q{Model-driven development for Ruby on Rails.}
   s.description = %q{Implements the MDWA approach for Ruby on Rails.}
 
