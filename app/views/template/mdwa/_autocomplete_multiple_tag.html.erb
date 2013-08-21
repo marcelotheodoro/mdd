@@ -40,9 +40,9 @@
 			}
 	    });
 	
-	  $(document).on('click', ".<%= dom_element_id %>_remove_autocomplete", function() {
-	    $(this).parent().remove();
-	  });
+    $(document).on('click', "<%= ul %> a", function() {
+      $(this).parent().remove();
+    });
   });
 
 </script>

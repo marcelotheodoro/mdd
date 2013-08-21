@@ -21,7 +21,10 @@
       source: function( request, response ) {
         // delegate back to autocomplete, but extract the last term
         $.getJSON( '<%= source_path %>', {
-          term: extractLastAutocompleteRemoteMultiple( request.term )
+          term: extractLastAutocompleteRemoteMultiple( request.term ),
+          <% if defined? additional_params %>
+            <%= additional_params.collect{|key, value| "#{key.to_s}: $(\"##{value.to_s}\").val()".html_safe}.join(',').html_safe %>
+          <% end %>
         }, response );
       },
       focus: function() {
@@ -41,7 +44,7 @@
       }
       });
   
-    $( ".<%= dom_element_id %>_remove_autocomplete").on( "click", function() {
+    $(document).on('click', "<%= ul %> a", function() {
       $(this).parent().remove();
     });
   });

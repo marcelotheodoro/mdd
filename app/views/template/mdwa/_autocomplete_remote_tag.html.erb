@@ -2,7 +2,26 @@
   $(function() {
     $('<%= dom_element %>').autocomplete({
         minLength: 0,
-        source: '<%= source_path %>',
+        source: function(request, response) {
+          $.ajax({
+            url: '<%= source_path %>',
+            dataType: 'json',
+            data: {
+              term: request.term,
+              <% if defined? additional_params %>
+                <%= additional_params.collect{|key, value| "#{key.to_s}: $(\"##{value.to_s}\").val()".html_safe}.join(',').html_safe %>
+              <% end %>
+            },
+            success: function(data) {
+              response($.map(data, function(item) {
+                return {
+                  label: item.label,
+                  value: item.value
+                }
+              }));
+            }
+          });
+        },
         focus: function( event, ui ) {
           $( '<%= dom_element %>' ).val( ui.item.label );
           return false;
@@ -19,6 +38,7 @@
         $('<%= dom_element_id %>').val("").trigger('change');
       }
     });
+
   });
 
 </script>
