@@ -1,11 +1,12 @@
 module MdwaHelper
   
-  def pagination_footer( object_list )
+  def pagination_footer( object_list, parameters = {} )
 
+    parameters[:per_page] = WillPaginate.per_page if parameters[:per_page].blank?
     options = [
-      [WillPaginate.per_page, WillPaginate.per_page],
-      [(WillPaginate.per_page*2.5).to_i, (WillPaginate.per_page*2.5).to_i],
-      [(WillPaginate.per_page*5).to_i, (WillPaginate.per_page*5).to_i],
+      [parameters[:per_page], parameters[:per_page]],
+      [(parameters[:per_page]*2.5).to_i, (parameters[:per_page]*2.5).to_i],
+      [(parameters[:per_page]*5).to_i, (parameters[:per_page]*5).to_i],
       [I18n.t('will_paginate.all'), object_list.count]
     ]
 
