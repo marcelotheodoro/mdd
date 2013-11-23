@@ -169,7 +169,7 @@ class <%= @model.controller_name %>Controller < <%= (@model.space == 'a') ? 'A::
 
   def batch_update
     <%= @model.klass %>.where(id: params[:ids]).each do |<%= @model.singular_name %>|
-      <%= @model.singular_name %>.update_column( params[:attribute], params[:value] )
+      <%= @model.singular_name %>.update_attributes({ params[:attribute] => params[:value] })
     end
 
     @system_notice = t('<%= @model.plural_name %>.notice.batch_update')

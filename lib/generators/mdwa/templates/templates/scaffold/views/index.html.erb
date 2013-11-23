@@ -4,9 +4,10 @@
 		<h1><%%= t '<%= @model.plural_name %>.title.index' %></h1>
 		<div class="page_header_right_tab">
 			<%% if can? :destroy, <%= @model.klass %>  %>
-			<%%= link_to t('<%= @model.plural_name %>.index.remove'), <%= @model.object_name.pluralize %>_batch_update_path, attribute: :removed, value: 1, class: :batch_update %>
+			<%%= link_to t('<%= @model.plural_name %>.index.remove'), <%= @model.object_name.pluralize %>_batch_update_path, attribute: :removed, value: 1, class: :batch_update, confirm_batch_update: t('<%= @model.plural_name %>.index.remove_label') %>
 			<%% end  %>
 
+			<%- if @entity.attributes.select{|name, attr| attr.type.to_sym == :status}.count > 0 -%>
 			<%% if can? :update, <%= @model.klass %>  %>
 			<%- @entity.attributes.select{|name, attr| attr.type.to_sym == :status}.each do |name, attr| -%>
 			  <%- attr.options[:possible_values].each do |value| -%>
@@ -14,6 +15,7 @@
 			  <%- end -%>
 			<%- end -%>
 			<%% end  %>
+			<%- end -%>
 
 		<%- if @entity.ajax -%>
 			<%% if can? :create, <%= @model.klass %>  %>

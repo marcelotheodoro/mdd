@@ -1,3 +1,4 @@
 ===entity_code===
 $('#<%= @model.plural_name %>_filter_form').submit();
+$.fancybox.close();
 $('body').append("<%%= j( render '/template/mdwa/notice', :notice => @system_notice )%>");
