@@ -21,8 +21,7 @@ module MdwaHelper
   end
 
   def local_url(request, params)
-    glue = !request.url.include?("?") ? "?" : "&"
-    return (request.url + glue + params.select{|k,v| k != :per_page}.collect {|k, v| "#{k}=#{v}"}.join('&'))
+    request.protocol + request.host_with_port + request.path + '?' + params.select{|k,v| k != :per_page}.collect {|k, v| "#{k}=#{v}"}.join('&')
   end
 
   def encode_results_to_autocomplete(results, field_name)
